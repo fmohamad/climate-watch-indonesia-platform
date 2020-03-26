@@ -8,7 +8,9 @@ class ImportIndicators
   INDICATORS_FILEPATH = "#{CW_FILES_PREFIX}indicators/indicators.csv"
   INDICATORS_ID_FILEPATH = "#{CW_FILES_PREFIX}indicators/indicators_id.csv"
   INDICATOR_VALUE_FILEPATHS = %W(
-    #{CW_FILES_PREFIX}indicators/socioeconomics.csv
+    #{CW_FILES_PREFIX}indicators/population.csv
+    #{CW_FILES_PREFIX}indicators/economic.csv
+    #{CW_FILES_PREFIX}indicators/social.csv
     #{CW_FILES_PREFIX}indicators/pc_forest.csv
     #{CW_FILES_PREFIX}indicators/pc_agriculture.csv
     #{CW_FILES_PREFIX}indicators/pc_energy.csv
