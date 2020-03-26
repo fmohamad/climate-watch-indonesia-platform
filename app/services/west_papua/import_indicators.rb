@@ -17,7 +17,6 @@ class WestPapua::ImportIndicators
     return unless all_headers_valid?
 
     ActiveRecord::Base.transaction do
-
       import_indicators
       import_indicators_id
       indicator_values_csv_hash.each do |filepath, csv|
@@ -59,15 +58,15 @@ class WestPapua::ImportIndicators
   end
 
   def import_indicators
-    I18n.with_locale(:en) do
-      import_each_with_logging(indicators_csv, INDICATORS_FILEPATH) do |row|
-        Indicator.create!(
-          code: row[:ind_code],
-          section: section(row),
-          name: row[:indicator],
-          unit: row[:unit]
-        )
-      end
+    import_each_with_logging(indicators_csv, INDICATORS_FILEPATH) do |row|
+      code = row[:ind_code]
+      indicator = Indicator.where(code: code).first_or_initialize
+      indicator.update_attributes!(
+        code: code,
+        section: section(row),
+        name: row[:indicator],
+        unit: row[:unit]
+      )
     end
   end
 
@@ -80,40 +79,18 @@ class WestPapua::ImportIndicators
     end
   end
 
-  def indicator_attributes(row)
-    {
-      code: row[:ind_code],
-      section: section(row),
-      name: row[:indicator],
-      unit: row[:unit]
-    }
-  end
-
-  def create_or_update(attributes)
-    iso_code3 = attributes[:iso_code3]
-    location = Location.find_or_initialize_by(iso_code3: iso_code3)
-    location.update_attributes!(attributes)
-  end
-
-  # def import_adaptation_included
-  #   import_each_with_logging(adapt_included_csv, ADAPTATION_INCLUDED_FILEPATH) do |row|
-  #     IndicatorValue.create!(
-  #       location: Location.find_by(iso_code3: row[:geoid]),
-  #       indicator: Indicator.find_by(code: row[:ind_code]),
-  #       source: row[:source],
-  #       values: [{value: row[:value]&.titleize}]
-  #     )
-  #   end
-  # end
-
   def import_indicator_values(csv, filename)
     import_each_with_logging(csv, filename) do |row|
       category = IndicatorCategory.find_or_create_by!(name: row[:category]) if row[:category]
-      IndicatorValue.create!(
-        location: Location.find_by(iso_code3: row[:geoid]),
-        indicator: Indicator.find_by(code: row[:ind_code]),
+      location = Location.find_by(iso_code3: row[:geoid])
+      indicator = Indicator.find_by(code: row[:ind_code])
+      source = row[:source]
+      indicator_value = IndicatorValue.where(location: location, indicator: indicator, category: category, source: source).first_or_initialize
+      indicator_value.update_attributes!(
+        location: location,
+        indicator: indicator,
         category: category,
-        source: row[:source],
+        source: source,
         values: values(row)
       )
     end
@@ -130,15 +107,10 @@ class WestPapua::ImportIndicators
 
   def values(row)
     row.headers.grep(/\d{4}/).map do |year|
-      {year: year.to_s.sub('_', '-'), value: row[year]&.delete('%,', ',')&.to_f}
-      # {
-      #   year: year.to_s.sub('_', '-'),
-      #   value: vulnerability_class_indicator?(row) ? row[year] : row[year]&.delete('%,', ',')&.to_f
-      # }
+      {
+        year: year.to_s.sub('_', '-'),
+        value: row[year]&.delete('%,', ',')&.to_f
+      }
     end
   end
-
-  # def vulnerability_class_indicator?(row)
-  #   row[:ind_code] == VULNERABILITY_CLASS_INDICATOR
-  # end
 end

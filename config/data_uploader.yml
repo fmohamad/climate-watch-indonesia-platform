@@ -46,12 +46,12 @@ platforms:
         datasets:
           - indicators
           - indicators_id
-          - socioeconomics
+          - population
+          - economic
+          - social
           - pc_forest
           - pc_energy
           - pc_agriculture
-          - vulnerability_adaptivity
-          - adaptation_included
       - name: metadata
         menu: Indonesia Platform
         importer: ImportDataSources
