@@ -20,5 +20,10 @@ export default [
     slug: 'climate-sectoral-plan',
     path: '/:locale/regions/:region/sectoral-plan',
     province: true
+  },
+  {
+    slug: 'economy',
+    path: '/:locale/regions/:region/economy',
+    member: 'ID.PB'
   }
 ];

@@ -46,4 +46,12 @@ en:
             sector: sector
             sub_sector: Sub sector
             mitigation_activities: Mitigation activities
+        economy:
+          title: Economy
+          description: Economy pages for west papua
+          labels:
+            indicator: Indicator 
+            regency: Regency
+            sector: Sector
+            chart-type: Chart Type
 
