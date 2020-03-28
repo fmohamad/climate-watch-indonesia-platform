@@ -130,11 +130,6 @@ class RegionsGhgEmissions extends PureComponent {
   render() {
     const { emissionParams, selectedYear, provinceISO, t, query } = this.props;
 
-    const sources = [ 'RADGRK', 'SIGNSa' ];
-    const downloadURI = `emissions/download?source=${sources.join(
-      ','
-    )}&location=${provinceISO}`;
-
     return (
       <div className={styles.page}>
         <SectionTitle
