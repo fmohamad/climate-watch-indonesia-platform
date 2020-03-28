@@ -3,13 +3,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Component from './economy-component';
-import { getGHGEmissions } from './economy-selectors';
+import { getEconomy } from './economy-selectors';
 
 import * as actions from './economy-actions';
 
-const mapStateToProps = getGHGEmissions;
+const mapStateToProps = getEconomy;
 
-class RegionsGHGEmissionsContainer extends PureComponent {
+class EconomyContainer extends PureComponent {
   constructor() {
     super();
     this.state = { year: null };
@@ -47,12 +47,12 @@ class RegionsGHGEmissionsContainer extends PureComponent {
   }
 }
 
-RegionsGHGEmissionsContainer.propTypes = {
+EconomyContainer.propTypes = {
   updateFiltersSelected: PropTypes.func.isRequired,
   query: PropTypes.object,
   provinceISO: PropTypes.string
 };
 
-RegionsGHGEmissionsContainer.defaultProps = { query: {}, provinceISO: '' };
+EconomyContainer.defaultProps = { query: {}, provinceISO: '' };
 
-export default connect(mapStateToProps, actions)(RegionsGHGEmissionsContainer);
+export default connect(mapStateToProps, actions)(EconomyContainer);

@@ -340,7 +340,7 @@ export const getChartData = createStructuredSelector({
   dataSelected: getLegendDataSelected
 });
 
-export const getGHGEmissions = createStructuredSelector({
+export const getEconomy = createStructuredSelector({
   chartData: getChartData,
   emissionParams: getEmissionParams,
   emissionTargets: getEmissionTargetsForCharts,
