@@ -10,20 +10,18 @@ import Component from './region-population-component';
 const mapStateToProps = getRegionPopulation;
 
 class RegionPopulationContainer extends PureComponent {
-  /*onFilterChange = filter => {
+  /* onFilterChange = filter => {
     const { updateFiltersSelected, query } = this.props;
 
     updateFiltersSelected({ query: { ...query, ...filter } });
-  };*/
-
-  /*updateIndicatorFilter = newFilter => {
+  }; */
+  /* updateIndicatorFilter = newFilter => {
     this.onFilterChange({
       popNationalIndicator: newFilter.value,
       popProvince: undefined
     });
-  };*/
-
-  /*updateLegendFilter = newFilter => {
+  }; */
+  /* updateLegendFilter = newFilter => {
     let values;
     if (isArray(newFilter)) {
       values = newFilter.map(v => v.value).join(',');
@@ -31,16 +29,15 @@ class RegionPopulationContainer extends PureComponent {
       values = newFilter.value;
     }
     this.onFilterChange({ popProvince: values });
-  };*/
-
+  }; */
   render() {
-    console.log("region-population", this.props);
+    console.log('region-population', this.props);
     return (
       <Component
         {...this.props}
-        // onFilterChange={this.onFilterChange}
-        // onIndicatorChange={this.updateIndicatorFilter}
-        // onLegendChange={this.updateLegendFilter}
+        /* onFilterChange={this.onFilterChange} */
+        /* onIndicatorChange={this.updateIndicatorFilter} */
+        /* onLegendChange={this.updateLegendFilter} */
       />
     );
   }

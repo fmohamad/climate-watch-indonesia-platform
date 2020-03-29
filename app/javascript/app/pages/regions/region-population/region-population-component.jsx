@@ -10,13 +10,9 @@ import styles from './region-population-styles';
 
 class RegionPopulation extends PureComponent {
   render() {
-    const {
-      t,
-      chartData,
-      selectedIndicator,
-    } = this.props;
-    
-    /*renderSwitch() {
+    const { t, chartData, selectedIndicator } = this.props;
+
+    /* renderSwitch() {
       const { filterOptions, selectedOptions } = this.props;
       
       return selectedOptions.source && (
@@ -35,15 +31,12 @@ class RegionPopulation extends PureComponent {
           </div>
         </div>
       );
-    }*/
-    
+    } */
     return (
       <div className={styles.page}>
         <SectionTitle
           title={t('pages.regions.region-population.title')}
-          description={t(
-            'pages.regions.region-population.description'
-          )}
+          description={t('pages.regions.region-population.description')}
         />
         <div className={styles.container}>
           <div>
@@ -60,7 +53,7 @@ class RegionPopulation extends PureComponent {
 RegionPopulation.propTypes = {
   t: PropTypes.func.isRequired,
   chartData: PropTypes.object,
-  selectedIndicator: PropTypes.object,
+  selectedIndicator: PropTypes.object
 };
 
 RegionPopulation.defaultProps = { selectedIndicator: {}, chartData: null };

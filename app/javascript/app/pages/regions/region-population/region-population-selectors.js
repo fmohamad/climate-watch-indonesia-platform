@@ -21,5 +21,5 @@ const POPULATION_INDICATOR_CODES = [
 ];
 
 export const getRegionPopulation = createStructuredSelector({
-  t: getTranslate,
+  t: getTranslate
 });
