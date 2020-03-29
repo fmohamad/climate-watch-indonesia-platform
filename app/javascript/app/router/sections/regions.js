@@ -25,5 +25,10 @@ export default [
     slug: 'economy',
     path: '/:locale/regions/:region/economy',
     member: 'ID.PB'
+  },
+  {
+    slug: 'region-population',
+    path: '/:locale/regions/:region/region-population',
+    member: 'ID.PB'
   }
 ];

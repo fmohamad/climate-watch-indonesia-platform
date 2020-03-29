@@ -35,7 +35,7 @@ class EconomyContainer extends PureComponent {
 
   render() {
     const { year } = this.state;
-
+    console.log('economy', this.props);
     return (
       <Component
         {...this.props}
