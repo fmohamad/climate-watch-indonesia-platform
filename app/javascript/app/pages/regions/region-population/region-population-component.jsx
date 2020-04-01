@@ -9,9 +9,31 @@ import { TabletLandscape } from 'components/responsive';
 import dropdownStyles from 'styles/dropdown';
 import styles from './region-population-styles';
 
-const selectedOptions = {"source":{"label":"POPULASI","name":"POPULASI","value":"POPULATION","api":"INDO"},"chartType":{"label":"line","value":"line"},"breakBy":{"label":"Region - Absolute","value":"region-absolute"},"region":{"label":"National","value":"1","code":"IDN","override":true},"sector":{"value":"all-selected","label":"All Selected","override":true},"gas":{"label":"All GHG","value":"3","code":"ALL_GHG"}}
+const selectedOptions = {
+  source: {
+    label: 'POPULASI',
+    name: 'POPULASI',
+    value: 'POPULATION',
+    api: 'INDO'
+  },
+  chartType: { label: 'line', value: 'line' },
+  breakBy: { label: 'Region - Absolute', value: 'region-absolute' },
+  region: { label: 'National', value: '1', code: 'IDN', override: true },
+  sector: { value: 'all-selected', label: 'All Selected', override: true },
+  gas: { label: 'All GHG', value: '3', code: 'ALL_GHG' }
+};
 
-const filterOptions = {"source":[{"label":"POPULASI","name":"POPULASI","value":"POPULATION","api":"INDO"},{"label":"DISTRIBUSI KELOMPOK UMUR","name":"DISTRIBUSI KELOMPOK UMUR","value":"AGE","api":"CW"}]}
+const filterOptions = {
+  source: [
+    { label: 'POPULASI', name: 'POPULASI', value: 'POPULATION', api: 'INDO' },
+    {
+      label: 'DISTRIBUSI KELOMPOK UMUR',
+      name: 'DISTRIBUSI KELOMPOK UMUR',
+      value: 'AGE',
+      api: 'CW'
+    }
+  ]
+};
 
 const cardTheme = {
   card: styles.card,
@@ -21,27 +43,25 @@ const cardTheme = {
 };
 
 class RegionPopulation extends PureComponent {
-
   renderSwitch() {
     // const { filterOptions, selectedOptions } = this.props;
-    
     return selectedOptions.source && (
-      <div className={styles.switch}>
-        <div className="switch-container">
-          <Switch
-            options={filterOptions.source}
-            onClick={value => this.handleFilterChange('source', value)}
-            selectedOption={String(selectedOptions.source.value)}
-            theme={{
-                  wrapper: styles.switchWrapper,
-                  option: styles.option,
-                  checkedOption: styles.checkedOption
-                }}
-          />
-        </div>
+    <div className={styles.switch}>
+      <div className="switch-container">
+        <Switch
+          options={filterOptions.source}
+          onClick={value => this.handleFilterChange('source', value)}
+          selectedOption={String(selectedOptions.source.value)}
+          theme={{
+                wrapper: styles.switchWrapper,
+                option: styles.option,
+                checkedOption: styles.checkedOption
+              }}
+        />
       </div>
-    );
-  } 
+    </div>
+      );
+  }
 
   render() {
     const { t, chartData, selectedIndicator, provinceISO } = this.props;
@@ -73,32 +93,40 @@ class RegionPopulation extends PureComponent {
               <div className={styles.dropdowns}>
                 {this.renderSwitch()}
               </div>
-              <div className={styles.chartContainer}>
-              </div>
+              <div className={styles.chartContainer} />
             </div>
             <div className={styles.cardContainer}>
-              <Card theme={cardTheme} title={'Total Populasi Penduduk (Kabupaten)'}>
+              <Card
+                theme={cardTheme}
+                title="Total Populasi Penduduk (Kabupaten)"
+              >
                 <div className={styles.cardContent}>
                   <p>
                     2.7 Juta
                   </p>
                 </div>
               </Card>
-              <Card theme={cardTheme} title={'Laju pertumbuhan penduduk per tahun'}>
+              <Card
+                theme={cardTheme}
+                title="Laju pertumbuhan penduduk per tahun"
+              >
                 <div className={styles.cardContent}>
                   <p>
                     1.03%
                   </p>
                 </div>
               </Card>
-              <Card theme={cardTheme} title={'Kepadatan penduduk'}>
+              <Card theme={cardTheme} title="Kepadatan penduduk">
                 <div className={styles.cardContent}>
                   <p>
                     10.7 Jiwa/ Km<sup>2</sup>
                   </p>
                 </div>
               </Card>
-              <Card theme={cardTheme} title={'Rasio Jenis Kelamin (Perempuan/ Laki-lai)'}>
+              <Card
+                theme={cardTheme}
+                title="Rasio Jenis Kelamin (Perempuan/ Laki-lai)"
+              >
                 <div className={styles.cardContent}>
                   <p>
                     80/30
