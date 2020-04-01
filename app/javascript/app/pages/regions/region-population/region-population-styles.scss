@@ -23,11 +23,96 @@ $dropdown-min-width: 265px;
   max-width: $dropdown-min-width;
 }
 
-.buttonWrapper {
+/*.buttonWrapper {
   align-self: flex-end;
   max-width: 100px;
-}
+}*/
 
 .legend {
   margin-top: 15px;
+}
+
+.dropdowns {
+  @include columns();
+
+  @media #{$tablet-landscape} {
+    @include columns($columns: (3,3,3.8,2.1));
+  }
+}
+
+.buttonWrapper {
+  margin-top: 22px;
+  max-width: 100px;
+}
+
+.chartMapContainer {
+  @include columns();
+
+  @media #{$tablet-landscape} {
+    @include columns($columns: (7.5,4.5));
+  }
+}
+
+.chartContainer {
+  min-height: 500px;
+}
+
+.legend {
+  margin-top: $gutter-padding;
+}
+
+.projectedLegend {
+  margin-left: 0;
+}
+
+.targetChartsContainer {
+  @include columns();
+
+  margin-top: 50px;
+
+  @media #{$tablet-landscape} {
+    @include columns(6);
+  }
+}
+
+.switch {
+  .switchWrapper {
+    width: 383px;
+    margin-left: $gutter-padding / 2;
+    margin-bottom: $gutter-padding + 10px;
+  }
+
+  .checkedOption {
+    background-color: $dark-blue;
+  }
+}
+
+.card {
+  text-align: center;
+  height: 200px;
+}
+
+.cardContainer {
+  @media #{$tablet-landscape} {
+    @include columns($columns: (6,6,6,6));
+    height: 450px;
+  }
+}
+
+.data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardContent {
+  font-size: 24px;
+}
+
+.contentContainer {
+  padding: 10px;
+}
+
+.title {
+  font-size: 14px;
 }

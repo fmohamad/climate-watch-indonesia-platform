@@ -31,7 +31,6 @@ class RegionPopulationContainer extends PureComponent {
     this.onFilterChange({ popProvince: values });
   }; */
   render() {
-    console.log('region-population', this.props);
     return (
       <Component
         {...this.props}
