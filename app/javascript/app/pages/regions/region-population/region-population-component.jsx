@@ -10,27 +10,16 @@ import dropdownStyles from 'styles/dropdown';
 import styles from './region-population-styles';
 
 const selectedOptions = {
-  source: {
-    label: 'POPULASI',
-    name: 'POPULASI',
-    value: 'POPULATION',
-    api: 'INDO'
-  },
-  chartType: { label: 'line', value: 'line' },
-  breakBy: { label: 'Region - Absolute', value: 'region-absolute' },
-  region: { label: 'National', value: '1', code: 'IDN', override: true },
-  sector: { value: 'all-selected', label: 'All Selected', override: true },
-  gas: { label: 'All GHG', value: '3', code: 'ALL_GHG' }
+  source: { label: 'POPULASI', name: 'population', value: 'population' }
 };
 
 const filterOptions = {
   source: [
-    { label: 'POPULASI', name: 'POPULASI', value: 'POPULATION', api: 'INDO' },
+    { label: 'POPULASI', name: 'population', value: 'population' },
     {
       label: 'DISTRIBUSI KELOMPOK UMUR',
-      name: 'DISTRIBUSI KELOMPOK UMUR',
-      value: 'AGE',
-      api: 'CW'
+      name: 'distribution',
+      value: 'distribution'
     }
   ]
 };
@@ -43,23 +32,27 @@ const cardTheme = {
 };
 
 class RegionPopulation extends PureComponent {
+  handleFilterChange = (field, selected) => {
+    const { onFilterChange } = this.props;
+    onFilterChange({ [field]: selected });
+  };
+
   renderSwitch() {
-    // const { filterOptions, selectedOptions } = this.props;
     return selectedOptions.source && (
-    <div className={styles.switch}>
-      <div className="switch-container">
-        <Switch
-          options={filterOptions.source}
-          onClick={value => this.handleFilterChange('source', value)}
-          selectedOption={String(selectedOptions.source.value)}
-          theme={{
+        <div className={styles.switch}>
+          <div className="switch-container">
+            <Switch
+              options={filterOptions.source}
+              onClick={value => this.handleFilterChange('source', value)}
+              selectedOption={String(selectedOptions.source.value)}
+              theme={{
                 wrapper: styles.switchWrapper,
                 option: styles.option,
                 checkedOption: styles.checkedOption
               }}
-        />
-      </div>
-    </div>
+            />
+          </div>
+        </div>
       );
   }
 
@@ -69,7 +62,7 @@ class RegionPopulation extends PureComponent {
     const downloadURI = `emissions/download?source=${sources.join(
       ','
     )}&location=${provinceISO}`;
-
+    console.log(selectedOptions);
     return (
       <div className={styles.page}>
         <div className={styles.chartMapContainer}>
