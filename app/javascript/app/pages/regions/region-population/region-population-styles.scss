@@ -19,8 +19,13 @@ $dropdown-min-width: 265px;
   margin-bottom: 20px;
 }
 
+.dropdownContainer {
+  display: flex;
+}
+
 .dropdown {
   max-width: $dropdown-min-width;
+  margin-right: 10px;
 }
 
 /*.buttonWrapper {
