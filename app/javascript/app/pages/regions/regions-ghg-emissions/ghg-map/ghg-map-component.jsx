@@ -54,7 +54,7 @@ class GHGMap extends PureComponent {
     const { paths, buckets, mapCenter, unit, mapLegendTitle } = this.props;
     const { mapZoom } = this.state;
     const mapStyle = { width: '100%', height: '100%' };
-    console.log("paths", paths);
+
     return (
       <div className={styles.mapContainer}>
         <Map

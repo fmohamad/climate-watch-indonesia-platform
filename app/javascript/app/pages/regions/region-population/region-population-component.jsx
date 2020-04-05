@@ -422,6 +422,7 @@ class RegionPopulation extends PureComponent {
 
   render() {
     const { t, chartData, selectedIndicator, provinceISO } = this.props;
+    const { selectedOption } = this.state
     const sources = [ 'RADGRK', 'SIGNSa' ];
     const downloadURI = `emissions/download?source=${sources.join(
       ','
@@ -432,11 +433,11 @@ class RegionPopulation extends PureComponent {
         <div className={styles.chartMapContainer}>
           <div>
             <SectionTitle
-              title={t('pages.regions.region-population.title')}
+              title={selectedOption.name}
               description={t('pages.regions.region-population.description')}
             />
           </div>
-          <div>
+          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
             <InfoDownloadToolbox
               className={{ buttonWrapper: styles.buttonWrapper }}
               slugs={sources}
