@@ -49,9 +49,7 @@ class RegionsGhgEmissions extends PureComponent {
     const value = selectedOptions && selectedOptions[field];
     const options = filterOptions[field] || [];
 
-    const label = t(
-      `pages.regions.economy.labels.${kebabCase(field)}`
-    );
+    const label = t(`pages.regions.economy.labels.${kebabCase(field)}`);
 
     if (multi) {
       const values = castArray(value).filter(v => v);
@@ -129,6 +127,7 @@ class RegionsGhgEmissions extends PureComponent {
 
   render() {
     const { emissionParams, selectedYear, provinceISO, t, query } = this.props;
+    console.log('this.props', this.props);
 
     return (
       <div className={styles.page}>

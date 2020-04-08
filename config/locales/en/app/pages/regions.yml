@@ -54,4 +54,20 @@ en:
             regency: Regency
             sector: Sector
             chart-type: Chart Type
+        region-population:
+          title: Population
+          description: Population pages for west papua
+          labels:
+            indicator: Indicator 
+            regency: Regency
+            sector: Sector
+            chart-type: Chart Type
+        social:
+          title: Social
+          description: Social pages for west papua
+          labels:
+            indicator: Indicator 
+            regency: Regency
+            sector: Sector
+            chart-type: Chart Type
 
