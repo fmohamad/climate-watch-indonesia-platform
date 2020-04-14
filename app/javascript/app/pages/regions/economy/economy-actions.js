@@ -1,4 +1,4 @@
 import { createAction } from 'redux-tools';
-import { REGIONS } from 'router';
+import { NATIONAL_CONTEXT } from 'router';
 
-export const updateFiltersSelected = createAction(REGIONS);
+export const updateFiltersSelected = createAction(NATIONAL_CONTEXT);

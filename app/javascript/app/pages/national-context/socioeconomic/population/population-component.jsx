@@ -22,6 +22,8 @@ class Population extends PureComponent {
       downloadURI
     } = this.props;
 
+    console.log( this.props )
+
     const nationalIndLabel = t(
       'pages.national-context.socioeconomic.labels.national-indicators'
     );

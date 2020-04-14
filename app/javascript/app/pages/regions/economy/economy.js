@@ -1,58 +1,38 @@
-import { connect } from 'react-redux';
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
+import { updateQueryParams } from 'utils';
 import Component from './economy-component';
-import { getEconomy } from './economy-selectors';
-
 import * as actions from './economy-actions';
-
-const mapStateToProps = getEconomy;
+import {
+  getGHGEmissions
+} from './economy-selectors/economy-selectors';
 
 class EconomyContainer extends PureComponent {
-  constructor() {
-    super();
-    this.state = { year: null };
-  }
-
-  onYearChange = year => {
-    // weird workaround chart onmousemove invokes twice this function
-    // first time with normal chart onmousemove object param from recharts
-    if (typeof year === 'number') {
-      this.setState({ year });
-    }
-  };
-
   onFilterChange = filter => {
-    const { updateFiltersSelected, query, provinceISO } = this.props;
+    const { updateFiltersSelected, query } = this.props;
+
+    if (filter.source) {
+      Object.assign(filter, { gas: null, region: null, sector: null });
+    }
 
     updateFiltersSelected({
-      section: 'regions-ghg-emissions',
-      region: provinceISO,
-      query: { ...query, ...filter }
+      section: 'historical-emissions',
+      query: updateQueryParams(query, filter)
     });
   };
 
   render() {
-    const { year } = this.state;
-    console.log('economy', this.props);
-    return (
-      <Component
-        {...this.props}
-        selectedYear={year}
-        onYearChange={this.onYearChange}
-        onFilterChange={this.onFilterChange}
-      />
-    );
+    return <Component {...this.props} onFilterChange={this.onFilterChange} />;
   }
 }
 
 EconomyContainer.propTypes = {
   updateFiltersSelected: PropTypes.func.isRequired,
-  query: PropTypes.object,
-  provinceISO: PropTypes.string
+  query: PropTypes.object
 };
 
-EconomyContainer.defaultProps = { query: {}, provinceISO: '' };
+EconomyContainer.defaultProps = { query: {} };
 
-export default connect(mapStateToProps, actions)(EconomyContainer);
+export default connect(getGHGEmissions, actions)(EconomyContainer);

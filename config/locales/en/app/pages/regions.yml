@@ -54,6 +54,10 @@ en:
             regency: Regency
             sector: Sector
             chart-type: Chart Type
+          indicator:
+            grdp: GRDP
+            grdp_capita: GRDP Per Capita
+            grdp_growth: Economy Growth
         region-population:
           title: Population
           description: Population pages for west papua
@@ -70,4 +74,3 @@ en:
             regency: Regency
             sector: Sector
             chart-type: Chart Type
-

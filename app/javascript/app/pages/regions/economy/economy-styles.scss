@@ -5,15 +5,17 @@
   @include row();
 
   margin-top: $gutter-padding;
-  margin-bottom: $gutter-padding * 3;
 }
 
-.dropdowns {
-  @include columns();
+.filtersGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 25px;
+}
 
-  @media #{$tablet-landscape} {
-    @include columns($columns: (3,3,3,3));
-  }
+.filters {
+  @include columns($columns: 12);
 }
 
 .buttonWrapper {
@@ -21,8 +23,26 @@
   max-width: 100px;
 }
 
-.chartMapContainer {
-  @include columns();
+.switch {
+  @include columns($columns: 12);
+
+  .switchWrapper {
+    margin-left: $gutter-padding / 2;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px $box-shadow;
+    border: 2px solid $border-color;
+    color: $black;
+    margin-bottom: $gutter-padding + 10px;
+  }
+
+  .option {
+    border-radius: 4px;
+    box-shadow: $box-shadow;
+  }
+
+  .checkedOption {
+    background-color: $dark-blue;
+  }
 }
 
 .chartContainer {
@@ -37,12 +57,16 @@
   margin-left: 0;
 }
 
-.targetChartsContainer {
-  @include columns();
+@media #{$tablet-landscape} {
+  .filters {
+    @include columns($columns: (3,2,2,2,1.5,2));
+  }
 
-  margin-top: 50px;
+  .switch {
+    @include columns($columns: 4);
+  }
 
-  @media #{$tablet-landscape} {
-    @include columns(6);
+  .filtersGroup {
+    flex-direction: row;
   }
 }
