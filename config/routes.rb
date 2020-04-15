@@ -19,6 +19,9 @@ Rails.application.routes.draw do
       namespace :province do
         resources :climate_plans, only: [:index]
         resources :development_plans, only: [:index]
+        resources :economies do
+          get 'meta', on: :collection
+        end
       end
     end
   end
