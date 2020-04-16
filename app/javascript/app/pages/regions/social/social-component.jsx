@@ -222,7 +222,7 @@ RegionPopulation.defaultProps = {
     },
     dataOptions: [
       { label: 'Indonesia', value: 'IDN' },
-      { label: 'asd', value: 'ID.AC' },
+      { label: 'Aceh', value: 'ID.AC' },
       { label: 'Bali', value: 'ID.BA' },
       { label: 'Bangka Belitung Islands', value: 'ID.BB' },
       { label: 'Bengkulu', value: 'ID.BE' },
