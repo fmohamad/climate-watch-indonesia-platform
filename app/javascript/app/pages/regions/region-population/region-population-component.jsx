@@ -53,13 +53,13 @@ const chartData = {
 };
 
 const yearOptions = [
-  { value: 'all-selected', label: 'All Selected', override: true },
-  { label: '2015', value: '2015', code: '2015' },
-  { label: '2016', value: '2016', code: '2016' },
-  { label: '2017', value: '2017', code: '2017' },
-  { label: '2018', value: '2018', code: '2018' },
-  { label: '2019', value: '2019', code: '2019' },
-  { label: '2020', value: '2020', code: '2020' }
+  { value: 'all-selected', label: 'Tahun', override: true },
+  { label: '2015', value: '2015' },
+  { label: '2016', value: '2016' },
+  { label: '2017', value: '2017' },
+  { label: '2018', value: '2018' },
+  { label: '2019', value: '2019' },
+  { label: '2020', value: '2020' }
 ];
 
 const genderOptions = [
@@ -79,17 +79,46 @@ class RegionPopulation extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { selectedOption: { name: 'Populasi', value: 'population' } };
+    this.state = { 
+      selectedOption: { 
+        name: 'Populasi', 
+        value: 'population' 
+      },
+      selectedYear: { 
+        value: 'all-selected', 
+        label: 'Tahun', 
+        override: true 
+      },
+      selectedGender: { 
+        value: 'all-selected', 
+        label: 'Jenis Kelamin', 
+        override: true 
+      }
+    };
   }
 
   getOptions = () => [
-      { name: 'Populasi', value: 'population' },
-      { name: 'Distribusi Kelompok Umur', value: 'distribution' }
+      { 
+        name: 'Populasi', 
+        value: 'population' 
+      },
+      { 
+        name: 'Distribusi Kelompok Umur', 
+        value: 'distribution' 
+      }
     ];
 
   handleFilterChange = (field, selected) => {
     this.setState({ selectedOption: selected });
   };
+
+  handleYearChange = (selected) => {
+    this.setState({ selectedYear: selected });
+  }
+
+  handleGenderChange = (selected) => {
+    this.setState({ selectedGender: selected });
+  }
 
   renderSwitch() {
     const { selectedOption } = this.state;
@@ -113,7 +142,7 @@ class RegionPopulation extends PureComponent {
 
   renderContent() {
     const { t } = this.props;
-    const { selectedOption } = this.state;
+    const { selectedOption, selectedYear, selectedGender } = this.state;
 
     if (selectedOption.value === 'population') {
       return (
@@ -169,8 +198,8 @@ class RegionPopulation extends PureComponent {
                   label="Tahun"
                   placeholder="Filter by"
                   options={yearOptions}
-                  /* onValueChange={onIndicatorChange} */
-                  /* value={selectedIndicator} */
+                  onValueChange={value => this.handleYearChange(value)}
+                  value={selectedYear}
                   theme={{ select: dropdownStyles.select }}
                   hideResetButton
                 />
@@ -181,8 +210,8 @@ class RegionPopulation extends PureComponent {
                   label="Indikator"
                   placeholder="Filter by"
                   options={genderOptions}
-                  /* onValueChange={onIndicatorChange} */
-                  /* value={selectedIndicator} */
+                  onValueChange={value => this.handleGenderChange(value)}
+                  value={selectedGender}
                   theme={{ select: dropdownStyles.select }}
                   hideResetButton
                 />

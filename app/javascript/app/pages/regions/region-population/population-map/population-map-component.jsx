@@ -2136,6 +2136,26 @@ const paths = [
           ]
         ]
       ]
+    },
+    style: {
+      default: {
+        fill: '#ffc735',
+        stroke: '#ffc735',
+        strokeWidth: 0.05,
+        outline: 'none'
+      },
+      hover: {
+        fill: '#ffc735',
+        stroke: '#ffc735',
+        strokeWidth: 0.05,
+        outline: 'none'
+      },
+      pressed: {
+        fill: '#ffc735',
+        stroke: '#ffc735',
+        strokeWidth: 0.5,
+        outline: 'none'
+      }
     }
   }
 ];
@@ -2172,7 +2192,7 @@ class PopulationMap extends PureComponent {
   render() {
     const { buckets } = this.props;
     const { mapZoom } = this.state;
-    const mapStyle = { width: '100%', height: '100%' };
+    const mapStyle = { width: '100%', height: '100%', fill: '#FFFFFF' };
 
     return (
       <div className={styles.mapContainer}>

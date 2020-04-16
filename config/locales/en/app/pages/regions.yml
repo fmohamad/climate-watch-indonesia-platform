@@ -56,7 +56,7 @@ en:
             chart-type: Chart Type
         region-population:
           title: Population
-          description: Population pages for west papua
+          description: Penduduk Papua Barat berjumlah 963.000 jiwa pada 2019. Jumlah tersebut terdiri atas 457.200 jiwa penduduk perempuan dan 506.400 jiwa laki-laki.
           labels:
             indicator: Indicator 
             regency: Regency
@@ -64,7 +64,7 @@ en:
             chart-type: Chart Type
         social:
           title: Social
-          description: Social pages for west papua
+          description: Papua Barat dalam angka partisipasi kasar, mulai dari tingkat SD, SMP hingga SMA. Hal itu terlihat misalnya dari nilai ujian nasional dan kapasitas guru.
           labels:
             indicator: Indicator 
             regency: Regency

@@ -4,6 +4,8 @@ import cx from 'classnames';
 import { ButtonGroup, Button, Icon } from 'cw-components';
 import iconInfo from 'assets/icons/info';
 import downloadIcon from 'assets/icons/download';
+import downloadFileIcon from 'assets/icons/download-file';
+import shareIcon from 'assets/icons/share';
 import buttonThemes from 'styles/themes/button';
 import ReactTooltip from 'react-tooltip';
 import ModalMetadata from 'components/modal-metadata';
@@ -134,7 +136,7 @@ class InfoDownloadToolbox extends PureComponent {
               button: cx(buttonThemes.outline, styles.button, theme.infobutton)
             }}
         >
-          <Icon icon={downloadIcon} />
+          <Icon icon={downloadFileIcon} />
         </Button>
       </div>
       );
@@ -147,7 +149,7 @@ class InfoDownloadToolbox extends PureComponent {
               button: cx(buttonThemes.outline, styles.button, theme.infobutton)
             }}
         >
-          <Icon icon={downloadIcon} />
+          <Icon icon={shareIcon} />
         </Button>
       </div>
       );
