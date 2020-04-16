@@ -72,7 +72,9 @@ class InfoDownloadToolbox extends PureComponent {
       noDownload,
       infoTooltipdata,
       downloadTooltipdata,
-      downloadOptions
+      downloadOptions,
+      pdfUri,
+      shareableLink
     } = this.props;
 
     const { opened } = this.state;
@@ -121,6 +123,35 @@ class InfoDownloadToolbox extends PureComponent {
 );
     };
 
+    const renderPdfButton = () => (
+      <div
+        data-for="blueTooltip"
+        data-tip={downloadTooltipdata || 'Download pdf'}
+      >
+        <Button
+          onClick={this.handleDownloadClick}
+          theme={{
+              button: cx(buttonThemes.outline, styles.button, theme.infobutton)
+            }}
+        >
+          <Icon icon={downloadIcon} />
+        </Button>
+      </div>
+      );
+
+    const renderShareButton = () => (
+      <div data-for="blueTooltip" data-tip={downloadTooltipdata || 'Share'}>
+        <Button
+          onClick={this.handleDownloadClick}
+          theme={{
+              button: cx(buttonThemes.outline, styles.button, theme.infobutton)
+            }}
+        >
+          <Icon icon={downloadIcon} />
+        </Button>
+      </div>
+      );
+
     return (
       <ButtonGroup
         theme={{
@@ -145,7 +176,13 @@ class InfoDownloadToolbox extends PureComponent {
           </Button>
         </div>
         <div>
+          {shareableLink && renderShareButton()}
+        </div>
+        <div>
           {!noDownload && renderDownloadButton()}
+        </div>
+        <div>
+          {pdfUri && renderPdfButton()}
         </div>
         <ReactTooltip
           id="blueTooltip"
@@ -172,7 +209,9 @@ InfoDownloadToolbox.propTypes = {
   setModalMetadata: PropTypes.func.isRequired,
   noDownload: PropTypes.bool,
   downloadOptions: PropTypes.array,
-  locale: PropTypes.string.isRequired
+  locale: PropTypes.string.isRequired,
+  pdfUri: PropTypes.string,
+  shareableLink: PropTypes.string
 };
 
 InfoDownloadToolbox.defaultProps = {
@@ -183,7 +222,9 @@ InfoDownloadToolbox.defaultProps = {
   infoTooltipdata: null,
   downloadTooltipdata: null,
   downloadOptions: [],
-  noDownload: false
+  noDownload: false,
+  pdfUri: null,
+  shareableLink: null
 };
 
 export default InfoDownloadToolbox;

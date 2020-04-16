@@ -30,9 +30,11 @@ class Nav extends PureComponent {
                 onTouchStart={undefined}
                 onMouseDown={undefined}
               >
-                {parent
-                  ? t(`pages.${parent.slug}.${route.slug}.title`)
-                  : t(`pages.${route.slug}.title`)}
+                {
+                  parent
+                    ? t(`pages.${parent.slug}.${route.slug}.title`)
+                    : t(`pages.${route.slug}.title`)
+                }
               </NavLink>
             );
           }
@@ -47,12 +49,31 @@ class Nav extends PureComponent {
                 onTouchStart={undefined}
                 onMouseDown={undefined}
               >
-                {parent
-                  ? t(`pages.${parent.slug}.${route.slug}.title`)
-                  : t(`pages.${route.slug}.title`)}
+                {
+                  parent
+                    ? t(`pages.${parent.slug}.${route.slug}.title`)
+                    : t(`pages.${route.slug}.title`)
+                }
               </NavLink>
             );
           }
+          return (
+            <NavLink
+              exact={route.exact || false}
+              className={cx(styles.link, theme.link)}
+              key={route.slug}
+              to={`/${locale}${route.link || route.path}`}
+              activeClassName={styles.active}
+              onTouchStart={undefined}
+              onMouseDown={undefined}
+            >
+              {
+                parent
+                  ? t(`pages.${parent.slug}.${route.slug}.title`)
+                  : t(`pages.${route.slug}.title`)
+              }
+            </NavLink>
+          );
         })}
         {renderActions()}
       </nav>
@@ -66,7 +87,7 @@ Nav.propTypes = {
   parent: PropTypes.object,
   theme: PropTypes.shape({ nav: PropTypes.string, link: PropTypes.string }),
   provinceInfo: PropTypes.object,
-  locale: PropTypes.string,
+  locale: PropTypes.string
 };
 
 Nav.defaultProps = { theme: {}, parent: null, provinceInfo: null, locale: '' };

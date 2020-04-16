@@ -19,7 +19,6 @@ class CustomTooltip extends PureComponent {
         .keys(payload)
         .filter(k => k !== 'x')
         .sort((a, b) => payload[b] - payload[a]);
-
     return (
       <div className={styles.tooltip}>
         {
@@ -27,27 +26,16 @@ class CustomTooltip extends PureComponent {
             <div>
               <div className={styles.tooltipHeader}>
                 <span>
-                  {payload.x}
+                  {tooltipConfig.indicator}
                 </span>
                 <span>
-                  {tooltipConfig.indicator}
+                  {payload.x}
                 </span>
               </div>
               <div className={styles.content}>
                 {
                   yKeys && yKeys.map(k => (
                     <div className={styles.yDataContainer}>
-                      {
-                          tooltipConfig.theme &&
-                            (
-                              <span
-                                style={{
-                                  backgroundColor: tooltipConfig.theme[k].fill
-                                }}
-                                className={styles.dot}
-                              />
-                            )
-                        }
                       <span className={styles.yLabel}>
                         {tooltipConfig[k].label}
                       </span>

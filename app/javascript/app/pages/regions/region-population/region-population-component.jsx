@@ -5,254 +5,68 @@ import InfoDownloadToolbox from 'components/info-download-toolbox';
 import Chart from 'components/chart';
 import { Switch, Card, Dropdown } from 'cw-components';
 import { TabletLandscape } from 'components/responsive';
-
 import dropdownStyles from 'styles/dropdown';
+import CustomTooltip from './bar-chart-tooltip';
+import PopulationMap from './population-map';
+
 import styles from './region-population-styles';
 
 const chartData = {
-  "data": [
-    {
-      "x": 2010,
-      "yIdn": 238500
-    },
-    {
-      "x": 2011,
-      "yIdn": 242000
-    },
-    {
-      "x": 2012,
-      "yIdn": 245400
-    },
-    {
-      "x": 2013,
-      "yIdn": 248800
-    },
-    {
-      "x": 2014,
-      "yIdn": 252200
-    },
-    {
-      "x": 2015,
-      "yIdn": 255500
-    },
-    {
-      "x": 2016,
-      "yIdn": 258700
-    },
-    {
-      "x": 2017,
-      "yIdn": 261890.9
-    }
+  data: [
+    { x: '0-4', yIdn: 5583682 },
+    { x: '5-9', yIdn: 5299279 },
+    { x: '10-14', yIdn: 3697297 },
+    { x: '15-18', yIdn: 3797290 },
+    { x: '19-24', yIdn: 3208892 },
+    { x: '25-29', yIdn: 3088927 },
+    { x: '30-34', yIdn: 2618909 },
+    { x: '35-39', yIdn: 2818909 },
+    { x: '40-44', yIdn: 2518909 },
+    { x: '45-49', yIdn: 2089793 },
+    { x: '50-54', yIdn: 1984982 },
+    { x: '55-59', yIdn: 1298374 },
+    { x: '60-64', yIdn: 1193794 },
+    { x: '65-69', yIdn: 1108380 },
+    { x: '70-74', yIdn: 1079497 },
+    { x: '75-79', yIdn: 983973 },
+    { x: '80+', yIdn: 863281 }
   ],
-  "domain": {
-    "x": [
-      "auto",
-      "auto"
-    ],
-    "y": [
-      0,
-      "auto"
-    ]
-  },
-  "config": {
-    "axes": {
-      "xBottom": {
-        "name": "Year",
-        "unit": "",
-        "format": "string"
-      },
-      "yLeft": {
-        "name": "People",
-        "unit": "",
-        "format": "number"
-      }
+  domain: { x: [ 'auto', 'auto' ], y: [ 0, 'auto' ] },
+  config: {
+    axes: {
+      xBottom: { name: 'Age', unit: '', format: 'string' },
+      yLeft: { name: 'People', unit: '', format: 'number' }
     },
-    "tooltip": {
-      "yIdn": {
-        "label": "Indonesia"
-      },
-      "x": {
-        "label": "Year"
-      },
-      "indicator": "People",
-      "theme": {
-        "yIdn": {
-          "stroke": "#00B4D2",
-          "fill": "#00B4D2"
-        }
-      }
+    tooltip: {
+      yIdn: { label: 'People' },
+      x: { label: 'Age' },
+      indicator: 'Age',
+      theme: { yIdn: { stroke: '#ffc735', fill: '#ffc735' } }
     },
-    "animation": false,
-    "columns": {
-      "x": [
-        {
-          "label": "year",
-          "value": "x"
-        }
-      ],
-      "y": [
-        {
-          "label": "Indonesia",
-          "value": "yIdn"
-        }
-      ]
+    animation: false,
+    columns: {
+      x: [ { label: 'age', value: 'x' } ],
+      y: [ { label: 'people', value: 'yIdn' } ]
     },
-    "theme": {
-      "yIdn": {
-        "stroke": "#00B4D2",
-        "fill": "#00B4D2"
-      }
-    }
-  },
-  "dataOptions": [
-    {
-      "label": "Indonesia",
-      "value": "IDN"
-    },
-    {
-      "label": "Aceh",
-      "value": "ID.AC"
-    },
-    {
-      "label": "Bali",
-      "value": "ID.BA"
-    },
-    {
-      "label": "Bangka Belitung Islands",
-      "value": "ID.BB"
-    },
-    {
-      "label": "Bengkulu",
-      "value": "ID.BE"
-    },
-    {
-      "label": "Banten",
-      "value": "ID.BT"
-    },
-    {
-      "label": "Gorontalo",
-      "value": "ID.GO"
-    },
-    {
-      "label": "Jambi",
-      "value": "ID.JA"
-    },
-    {
-      "label": "West Java",
-      "value": "ID.JB"
-    },
-    {
-      "label": "East Java",
-      "value": "ID.JI"
-    },
-    {
-      "label": "Special Capitol Region of Jakarta",
-      "value": "ID.JK"
-    },
-    {
-      "label": "Central Java",
-      "value": "ID.JT"
-    },
-    {
-      "label": "West Kalimantan",
-      "value": "ID.KB"
-    },
-    {
-      "label": "East Kalimantan",
-      "value": "ID.KI"
-    },
-    {
-      "label": "Riau Islands",
-      "value": "ID.KR"
-    },
-    {
-      "label": "South Kalimantan",
-      "value": "ID.KS"
-    },
-    {
-      "label": "Central Kalimantan",
-      "value": "ID.KT"
-    },
-    {
-      "label": "North Kalimantan",
-      "value": "ID.KU"
-    },
-    {
-      "label": "Lampung",
-      "value": "ID.LA"
-    },
-    {
-      "label": "Maluku",
-      "value": "ID.MA"
-    },
-    {
-      "label": "North Maluku",
-      "value": "ID.MU"
-    },
-    {
-      "label": "West Nusa Tenggara",
-      "value": "ID.NB"
-    },
-    {
-      "label": "East Nusa Tenggara Timur",
-      "value": "ID.NT"
-    },
-    {
-      "label": "Papua",
-      "value": "ID.PA"
-    },
-    {
-      "label": "West Papua",
-      "value": "ID.PB"
-    },
-    {
-      "label": "Riau",
-      "value": "ID.RI"
-    },
-    {
-      "label": "North Sulawesi",
-      "value": "ID.SA"
-    },
-    {
-      "label": "West Sumatera",
-      "value": "ID.SB"
-    },
-    {
-      "label": "Southeast Sulawesi",
-      "value": "ID.SG"
-    },
-    {
-      "label": "South Sulawesi",
-      "value": "ID.SN"
-    },
-    {
-      "label": "West Sulawesi",
-      "value": "ID.SR"
-    },
-    {
-      "label": "South Sumatera",
-      "value": "ID.SS"
-    },
-    {
-      "label": "Central Sulawesi",
-      "value": "ID.ST"
-    },
-    {
-      "label": "North Sumatera",
-      "value": "ID.SU"
-    },
-    {
-      "label": "Special Region of Yogyakarta",
-      "value": "ID.YO"
-    }
-  ],
-  "dataSelected": [
-    {
-      "value": "IDN",
-      "label": "Indonesia"
-    }
-  ]
-}
+    theme: { yIdn: { stroke: '#ffc735', fill: '#ffc735' } }
+  }
+};
+
+const yearOptions = [
+  { value: 'all-selected', label: 'All Selected', override: true },
+  { label: '2015', value: '2015', code: '2015' },
+  { label: '2016', value: '2016', code: '2016' },
+  { label: '2017', value: '2017', code: '2017' },
+  { label: '2018', value: '2018', code: '2018' },
+  { label: '2019', value: '2019', code: '2019' },
+  { label: '2020', value: '2020', code: '2020' }
+];
+
+const genderOptions = [
+  { value: 'all-selected', label: 'Jenis Kelamin', override: true },
+  { label: 'Laki-laki', value: 'male' },
+  { label: 'Perempuan', value: 'female' }
+];
 
 const cardTheme = {
   card: styles.card,
@@ -264,37 +78,21 @@ const cardTheme = {
 class RegionPopulation extends PureComponent {
   constructor(props) {
     super(props);
-  
-    this.state = {
-      selectedOption: {
-        name: 'Populasi', 
-        value: 'population'
-      }
-    };
+
+    this.state = { selectedOption: { name: 'Populasi', value: 'population' } };
   }
 
-  getOptions = () => {
-    return [
-      {
-        name: 'Populasi', 
-        value: 'population'
-      },
-      {
-        name: 'Distribusi Kelompok Umur',
-        value: 'distribution'
-      }
+  getOptions = () => [
+      { name: 'Populasi', value: 'population' },
+      { name: 'Distribusi Kelompok Umur', value: 'distribution' }
     ];
-  };
 
   handleFilterChange = (field, selected) => {
-    this.setState({
-      selectedOption: selected
-    })
+    this.setState({ selectedOption: selected });
   };
 
   renderSwitch() {
-    const { selectedOption } = this.state
-    console.log('selectedOption', selectedOption);
+    const { selectedOption } = this.state;
     return (
       <div className={styles.switch}>
         <div className="switch-container">
@@ -314,30 +112,26 @@ class RegionPopulation extends PureComponent {
   }
 
   renderContent() {
-    const { t } = this.props
-    const { selectedOption } = this.state
+    const { t } = this.props;
+    const { selectedOption } = this.state;
 
-    if(selectedOption.value === 'population') {
-      return(
+    if (selectedOption.value === 'population') {
+      return (
         <div className={styles.chartMapContainer}>
           <div className={styles.filtersChartContainer}>
-            <div className={styles.chartContainer}>map</div>
+            <div className={styles.chartContainer}>
+              <PopulationMap />
+            </div>
           </div>
           <div className={styles.cardContainer}>
-            <Card
-              theme={cardTheme}
-              title="Total Populasi Penduduk (Kabupaten)"
-            >
+            <Card theme={cardTheme} title="Total Populasi Penduduk (Kabupaten)">
               <div className={styles.cardContent}>
                 <p>
                   2.7 Juta
                 </p>
               </div>
             </Card>
-            <Card
-              theme={cardTheme}
-              title="Laju pertumbuhan penduduk per tahun"
-            >
+            <Card theme={cardTheme} title="Laju pertumbuhan penduduk per tahun">
               <div className={styles.cardContent}>
                 <p>
                   1.03%
@@ -363,32 +157,32 @@ class RegionPopulation extends PureComponent {
             </Card>
           </div>
         </div>
-      )
-    } else {
-      return(
+      );
+    } 
+      return (
         <div className={styles.container}>
           <div className={styles.toolbox}>
             <div className={styles.dropdownContainer}>
               <div className={styles.dropdown}>
                 <Dropdown
-                  key={'year'}
-                  label={'Tahun'}
-                  placeholder={`Filter by`}
-                  // options={nationalIndicatorsOptions}
-                  // onValueChange={onIndicatorChange}
-                  // value={selectedIndicator}
+                  key="year"
+                  label="Tahun"
+                  placeholder="Filter by"
+                  options={yearOptions}
+                  /* onValueChange={onIndicatorChange} */
+                  /* value={selectedIndicator} */
                   theme={{ select: dropdownStyles.select }}
                   hideResetButton
                 />
               </div>
               <div className={styles.dropdown}>
                 <Dropdown
-                  key={'year'}
-                  label={'Indikator'}
-                  placeholder={`Filter by`}
-                  // options={nationalIndicatorsOptions}
-                  // onValueChange={onIndicatorChange}
-                  // value={selectedIndicator}
+                  key="year"
+                  label="Indikator"
+                  placeholder="Filter by"
+                  options={genderOptions}
+                  /* onValueChange={onIndicatorChange} */
+                  /* value={selectedIndicator} */
                   theme={{ select: dropdownStyles.select }}
                   hideResetButton
                 />
@@ -396,8 +190,10 @@ class RegionPopulation extends PureComponent {
             </div>
             <InfoDownloadToolbox
               className={{ buttonWrapper: styles.buttonWrapper }}
-              // slugs={sources}
-              // downloadUri={downloadURI}
+              /* slugs={sources} */
+              /* downloadUri={downloadURI} */
+              pdfUri="pdfuri"
+              shareableLink="link"
             />
           </div>
           <Chart
@@ -405,7 +201,7 @@ class RegionPopulation extends PureComponent {
             config={chartData.config}
             data={chartData.data}
             theme={{ legend: styles.legend }}
-            // customTooltip={<CustomTooltip />}
+            customTooltip={<CustomTooltip />}
             getCustomYLabelFormat={chartData.config.yLabelFormat}
             domain={chartData.domain}
             dataOptions={chartData.dataOptions}
@@ -413,16 +209,16 @@ class RegionPopulation extends PureComponent {
             height={300}
             barSize={30}
             customMessage={t('common.chart-no-data')}
-            // onLegendChange={onLegendChange}
+            /* onLegendChange={onLegendChange} */
           />
         </div>
-      )
-    }
+      );
+    
   }
 
   render() {
     const { t, chartData, selectedIndicator, provinceISO } = this.props;
-    const { selectedOption } = this.state
+    const { selectedOption } = this.state;
     const sources = [ 'RADGRK', 'SIGNSa' ];
     const downloadURI = `emissions/download?source=${sources.join(
       ','
@@ -437,12 +233,19 @@ class RegionPopulation extends PureComponent {
               description={t('pages.regions.region-population.description')}
             />
           </div>
-          <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-            <InfoDownloadToolbox
-              className={{ buttonWrapper: styles.buttonWrapper }}
-              slugs={sources}
-              downloadUri={downloadURI}
-            />
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            {
+              selectedOption.value === 'population' &&
+                (
+                  <InfoDownloadToolbox
+                    className={{ buttonWrapper: styles.buttonWrapper }}
+                    slugs={sources}
+                    downloadUri={downloadURI}
+                    pdfUri="pdfuri"
+                    shareableLink="link"
+                  />
+                )
+            }
           </div>
         </div>
         <div>

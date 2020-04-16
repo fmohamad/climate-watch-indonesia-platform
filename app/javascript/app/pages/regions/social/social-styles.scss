@@ -1,7 +1,8 @@
 @import '~styles/settings.scss';
 @import '~styles/layout.scss';
 
-$dropdown-min-width: 265px;
+$dropdown-min-width: 150px;
+$dropdown-max-width: 265px;
 
 .page {
   @include row();
@@ -24,7 +25,8 @@ $dropdown-min-width: 265px;
 }
 
 .dropdown {
-  max-width: $dropdown-min-width;
+  min-width: $dropdown-min-width;
+  max-width: $dropdown-max-width;
   margin-right: 10px;
 }
 
@@ -87,7 +89,7 @@ $dropdown-min-width: 265px;
   }
 
   .checkedOption {
-    background-color: $dark-blue;
+    background-color: '#213244';
   }
 }
 
@@ -123,4 +125,8 @@ $dropdown-min-width: 265px;
 
 .title {
   font-size: 14px;
+}
+
+.button {
+  align-self: flex-end;
 }

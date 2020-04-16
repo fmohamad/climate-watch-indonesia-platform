@@ -127,7 +127,6 @@ class RegionsGhgEmissions extends PureComponent {
 
   render() {
     const { emissionParams, selectedYear, provinceISO, t, query } = this.props;
-    console.log('this.props', this.props);
 
     return (
       <div className={styles.page}>
