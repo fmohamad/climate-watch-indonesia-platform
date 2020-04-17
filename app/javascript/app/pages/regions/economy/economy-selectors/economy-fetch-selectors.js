@@ -4,7 +4,7 @@ import { ALL_SELECTED } from 'constants/constants';
 import { findOption } from 'selectors/filters-selectors';
 import { getSelectedOptions } from './economy-filter-selectors';
 
-import { getMetadataData } from './economy-get-selectors';
+import { getMetadata} from './economy-get-selectors';
 
 const { COUNTRY_ISO } = process.env;
 
@@ -17,7 +17,7 @@ const getParam = (fieldName, data) => {
 };
 
 export const getEmissionParams = createSelector(
-  [ getSelectedOptions, getMetadataData ],
+  [ getSelectedOptions, getMetadata],
   (options, metadata) => {
     if (!options || !options.source || !metadata) return null;
     const { source: selectedSource, gas } = options;

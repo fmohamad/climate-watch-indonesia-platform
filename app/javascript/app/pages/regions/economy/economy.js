@@ -6,7 +6,7 @@ import { updateQueryParams } from 'utils';
 import Component from './economy-component';
 import * as actions from './economy-actions';
 import {
-  getGHGEmissions
+  getEconomies
 } from './economy-selectors/economy-selectors';
 
 class EconomyContainer extends PureComponent {
@@ -35,4 +35,4 @@ EconomyContainer.propTypes = {
 
 EconomyContainer.defaultProps = { query: {} };
 
-export default connect(getGHGEmissions, actions)(EconomyContainer);
+export default connect(getEconomies, actions)(EconomyContainer);

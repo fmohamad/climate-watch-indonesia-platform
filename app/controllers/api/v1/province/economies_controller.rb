@@ -2,6 +2,8 @@ module Api
   module V1
     module Province
       class EconomiesController < ApiController
+        before_action :fetch_values, only: :meta
+
         EconomiesMetadata = Struct.new(
           :indicators,
           :sectors,
@@ -27,10 +29,6 @@ module Api
 
         def location
           params[:location]
-        end
-
-        def codes
-          params[:code]&.split(',')
         end
 
         def sections
@@ -77,11 +75,10 @@ module Api
         def fetch_values
           values = ::IndicatorValue.includes(:location, :indicator, :category)
           values = values.where(locations: {iso_code3: location}) if location
-          values = values.where(indicators: {code: codes}) if codes
         end
         
         def category_ids
-          fetch_values.pluck(:category_id).uniq
+          fetch_values.pluck(:category_id).compact.uniq
         end
       end
     end

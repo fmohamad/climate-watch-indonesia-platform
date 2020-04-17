@@ -1,12 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import MetadataProvider from 'providers/metadata-provider';
-import GHGEmissionsProvider from 'providers/ghg-emissions-provider';
-import GHGTargetEmissionsProvider from 'providers/ghg-target-emissions-provider';
-import WorldBankProvider from 'providers/world-bank-provider';
+import ProvinceMetaProvider from 'providers/province-meta-provider';
 import SectionTitle from 'components/section-title';
-import { Switch, Chart, Dropdown, Multiselect } from 'cw-components';
-import { METRIC_OPTIONS } from 'constants';
+import { Switch, Chart, Dropdown } from 'cw-components';
 import { format } from 'd3-format';
 import startCase from 'lodash/startCase';
 import kebabCase from 'lodash/kebabCase';
@@ -19,6 +15,11 @@ import dropdownStyles from 'styles/dropdown.scss';
 import lineIcon from 'assets/icons/line_chart.svg';
 import areaIcon from 'assets/icons/area_chart.svg';
 import styles from './economy-styles.scss';
+
+const code = {
+  section: 'economic',
+  location: 'ID.PB'
+}
 
 class Economy extends PureComponent {
   handleFilterChange = (field, selected) => {
@@ -45,44 +46,21 @@ class Economy extends PureComponent {
     onFilterChange({ [field]: values });
   };
 
-  renderDropdown(field, multi, icons) {
+  renderDropdown(field, icons) {
     const {
       selectedOptions,
       filterOptions,
-      metricSelected,
       t
     } = this.props;
 
     const value = selectedOptions && selectedOptions[field];
     const options = filterOptions[field] || [];
     const iconsProp = icons ? { icons } : {};
-    const isChartReady = filterOptions.source;
-    if (!isChartReady) return null;
 
     const label = t(
       `pages.regions.economy.labels.${kebabCase(field)}`
     );
-
-    if (multi) {
-      const absoluteMetric = metricSelected === METRIC_OPTIONS.ABSOLUTE_VALUE;
-      const disabled = field === 'sector' && !absoluteMetric;
-
-      const values = castArray(value).filter(v => v);
-
-      return (
-        <Multiselect
-          key={field}
-          label={label}
-          placeholder={`Filter by ${startCase(field)}`}
-          options={options}
-          onValueChange={selected => this.handleFilterChange(field, selected)}
-          values={values}
-          theme={{ wrapper: dropdownStyles.select }}
-          hideResetButton
-          disabled={disabled}
-        />
-      );
-    }
+    
     return (
       <Dropdown
         key={field}
@@ -120,9 +98,6 @@ class Economy extends PureComponent {
 
   render() {
     const {
-      downloadURI,
-      metadataSources,
-      emissionParams,
       selectedOptions,
       chartData,
       fieldToBreakBy,
@@ -140,17 +115,11 @@ class Economy extends PureComponent {
         />
         <div className={styles.filtersGroup}>
           <div className={styles.filters}>
-            {/* {this.renderDropdown('indicator')} */}
-            {this.renderDropdown('regency', true)}
-            {/* {this.renderDropdown('sector', true)} */}
-            {/* {this.renderDropdown('gas', true)} */}
-            {/* {this.renderDropdown('chartType', false, icons)} */}
+            {this.renderDropdown('indicators')}
+            {this.renderDropdown('locations')}
+            {this.renderDropdown('sectors')}
+            {this.renderDropdown('chartType', icons)}
           </div>
-          <InfoDownloadToolbox
-            className={{ buttonWrapper: styles.buttonWrapper }}
-            slugs={metadataSources}
-            downloadUri={downloadURI}
-          />
         </div>
         <div className={styles.chartContainer}>
           {
@@ -183,11 +152,7 @@ class Economy extends PureComponent {
               )
           }
         </div>
-        <MetadataProvider meta="ghgindo" />
-        <MetadataProvider meta="ghgcw" />
-        <WorldBankProvider />
-        {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
-        {emissionParams && <GHGTargetEmissionsProvider />}
+        <ProvinceMetaProvider metaParams={code} />
       </div>
     );
   }

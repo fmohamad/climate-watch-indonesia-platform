@@ -22,12 +22,7 @@ import {
 import { getTranslate } from 'selectors/translation-selectors';
 import { findOption } from 'selectors/filters-selectors';
 import {
-  getEmissionsData,
   getMetadata,
-  getMetadataData,
-  getSelectedAPI,
-  getTargetEmissionsData,
-  getWBData
 } from './economy-get-selectors';
 import {
   getSelectedOptions,
@@ -41,7 +36,7 @@ const { CW_API_URL } = process.env;
 
 const FRONTEND_FILTERED_FIELDS = [ 'region', 'sector' ];
 
-const getUnit = createSelector([ getMetadataData, getMetricSelected ], (
+const getUnit = createSelector([ getMetadata, getMetricSelected ], (
   meta,
   metric
 ) =>
@@ -109,18 +104,6 @@ const getYColumnOptions = createSelector(
   }
 );
 
-const getCalculationData = createSelector([ getWBData ], data => {
-  if (!data || isEmpty(data)) return null;
-  const yearData = {};
-  Object.keys(data).forEach(iso => {
-    data[iso].forEach(d => {
-      if (!yearData[d.year]) yearData[d.year] = {};
-      yearData[d.year][iso] = { population: d.population, gdp: d.gdp };
-    });
-  });
-  return yearData;
-});
-
 const calculateValue = (currentValue, value, scale, metricData) => {
   const metricRatio = metricData || 1;
   const updatedValue = value || value === 0
@@ -176,102 +159,8 @@ const filterBySelectedOptions = (
       );
   };
 
-const parseChartData = createSelector(
-  [
-    getEmissionsData,
-    getSelectedAPI,
-    getMetricSelected,
-    getModelSelected,
-    getYColumnOptions,
-    getSelectedOptions,
-    getFilterOptions,
-    getCorrectedUnit,
-    getScale,
-    getCalculationData
-  ],
-  (
-    emissionsData,
-    api,
-    metricSelected,
-    modelSelected,
-    yColumnOptions,
-    selectedOptions,
-    filterOptions,
-    unit,
-    scale,
-    calculationData
-  ) =>
-    {
-      if (
-        !emissionsData ||
-          isEmpty(emissionsData) ||
-          !metricSelected ||
-          !yColumnOptions
-      )
-        return null;
-
-      const yearValues = emissionsData[0].emissions.map(d => d.year);
-
-      // for CW API we don't have precalculated data per metric, all values provided
-      // are absolute metric, we are going to calculate per gdp, per capita
-      // using wb data
-      const filteredData = filterBySelectedOptions(
-        emissionsData,
-        api === API.indo ? metricSelected : 'absolute',
-        selectedOptions,
-        filterOptions
-      );
-
-      const metricField = ({
-        per_capita: 'population',
-        per_gdp: 'gdp'
-      })[metricSelected];
-
-      const dataParsed = [];
-      yearValues.forEach(x => {
-        const yItems = {};
-
-        // metricData for calculation, only for CW API
-        let metricData = api === API.cw &&
-          metricField &&
-          calculationData &&
-          calculationData[x] &&
-          calculationData[x][COUNTRY_ISO] &&
-          calculationData[x][COUNTRY_ISO][metricField];
-
-        // GDP is in dollars and we want to display it in million dollars
-        if (metricField === 'gdp' && metricData) metricData /= 1000000;
-
-        filteredData.forEach(d => {
-          const columnObject = yColumnOptions.find(
-            c => c.code === getDFilterValue(d, modelSelected)
-          );
-          const yKey = columnObject && columnObject.value;
-
-          if (yKey) {
-            const yData = d.emissions.find(e => e.year === x);
-            if (yData && yData.value) {
-              yItems[yKey] = calculateValue(
-                yItems[yKey],
-                yData.value,
-                scale,
-                metricData
-              );
-            }
-          }
-        });
-        const item = { x, ...yItems };
-        if (!isEmpty({ ...yItems })) dataParsed.push(item);
-      });
-      return dataParsed;
-    }
-);
-
-let colorCache = {};
-
 const parseTargetEmissionsData = createSelector(
   [
-    getTargetEmissionsData,
     getSelectedOptions,
     getModelSelected,
     getMetricSelected
@@ -340,7 +229,6 @@ const getProjectedChartConfig = createSelector(
 
 export const getChartConfig = createSelector(
   [
-    getEmissionsData,
     getMetricSelected,
     getProjectedChartConfig,
     getCorrectedUnit,
@@ -360,7 +248,6 @@ export const getChartConfig = createSelector(
 
     const config = {
       axes,
-      theme: colorCache,
       tooltip,
       animation: false,
       columns: { x: [ { label: 'year', value: 'x' } ], y: yColumnOptions }
@@ -378,34 +265,22 @@ const getChartLoading = createSelector(
 );
 
 const getDataLoading = createSelector(
-  [ getChartLoading, parseChartData ],
+  [ getChartLoading],
   (loading, data) => loading || !data || false
 );
 
-export const getMetadataSources = createSelector(
-  [ getSelectedAPI ],
-  api => api === API.indo ? [ 'SIGNSa', 'NDC' ] : [ 'CWI', 'NDC' ]
-);
 
 export const getDownloadURI = createSelector(
-  [ getSelectedAPI, getMetadataData, getMetadataSources ],
-  (api, metadata, metadataSources) => {
-    if (!api || !metadataSources || !metadata) return null;
+  [getMetadata],
+  (metadata) => {
 
-    if (api === API.indo) {
       return `emissions/download?location=${COUNTRY_ISO}&source=${metadataSources.join(
         ','
       )}`;
-    }
-
-    const caitId = (findOption(metadata.dataSource, 'CAIT') || {}).value;
-
-    return `${CW_API_URL}/data/historical_emissions/download.csv?regions[]=${COUNTRY_ISO}&source_ids[]=${caitId}`;
   }
 );
 
 export const getChartData = createStructuredSelector({
-  data: parseChartData,
   projectedData: parseTargetEmissionsData,
   config: getChartConfig,
   loading: getDataLoading,

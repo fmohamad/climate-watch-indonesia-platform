@@ -9,7 +9,6 @@ export const fetchLocationsFail = createAction('fetchLocationsFail');
 export const fetchLocations = createThunkAction('fetchLocations', params =>
   (dispatch, state) => {
     const { provinces } = state();
-    console.log(params)
     if (!provinces.loading) {
       dispatch(fetchLocationsInit());
       INDOAPI

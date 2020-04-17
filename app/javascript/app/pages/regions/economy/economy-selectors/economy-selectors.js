@@ -3,28 +3,27 @@ import { getTranslate } from 'selectors/translation-selectors';
 import { getQuery } from 'selectors/filters-selectors';
 import {
   getSelectedOptions,
-  getFilterOptions,
-  getModelSelected,
-  getMetricSelected
+  getFilterOptions
+  // getModelSelected,
+  // getMetricSelected
 } from './economy-filter-selectors';
-import { getEmissionParams } from './economy-fetch-selectors';
-import {
-  getChartData,
-  getMetadataSources,
-  getDownloadURI
-} from './economy-data-selectors';
-import { getSelectedAPI } from './economy-get-selectors';
+// import { getEmissionParams } from './economy-fetch-selectors';
+// import {
+//   getChartData,
+//   getMetadataSources,
+//   getDownloadURI
+// } from './economy-data-selectors';
+function empty(){}
 
-export const getGHGEmissions = createStructuredSelector({
+export const getEconomies = createStructuredSelector({
   selectedOptions: getSelectedOptions,
-  fieldToBreakBy: getModelSelected,
-  metricSelected: getMetricSelected,
-  apiSelected: getSelectedAPI,
-  metadataSources: getMetadataSources,
-  downloadURI: getDownloadURI,
+  fieldToBreakBy: empty,
+  metricSelected: empty,
+  metadataSources: empty,
+  downloadURI: empty,
   filterOptions: getFilterOptions,
   query: getQuery,
-  emissionParams: getEmissionParams,
-  chartData: getChartData,
+  emissionParams: empty,
+  chartData: empty,
   t: getTranslate
 });

@@ -50,11 +50,11 @@ en:
           title: Economy
           description: Economy pages for west papua
           labels:
-            indicator: Indicator 
-            regency: Regency
-            sector: Sector
+            indicators: Indicator 
+            locations: Regency
+            sectors: Sector
             chart-type: Chart Type
-          indicator:
+          indicators:
             grdp: GRDP
             grdp_capita: GRDP Per Capita
             grdp_growth: Economy Growth
