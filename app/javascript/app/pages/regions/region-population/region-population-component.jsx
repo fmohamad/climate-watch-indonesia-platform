@@ -109,16 +109,8 @@ class RegionPopulation extends PureComponent {
     ];
 
   handleFilterChange = (field, selected) => {
-    this.setState({ selectedOption: selected });
+    this.setState({ [field]: selected });
   };
-
-  handleYearChange = (selected) => {
-    this.setState({ selectedYear: selected });
-  }
-
-  handleGenderChange = (selected) => {
-    this.setState({ selectedGender: selected });
-  }
 
   renderSwitch() {
     const { selectedOption } = this.state;
@@ -127,7 +119,7 @@ class RegionPopulation extends PureComponent {
         <div className="switch-container">
           <Switch
             options={this.getOptions()}
-            onClick={value => this.handleFilterChange('source', value)}
+            onClick={value => this.handleFilterChange('selectedOption', value)}
             selectedOption={String(selectedOption.value)}
             theme={{
               wrapper: styles.switchWrapper,
@@ -198,7 +190,7 @@ class RegionPopulation extends PureComponent {
                   label="Tahun"
                   placeholder="Filter by"
                   options={yearOptions}
-                  onValueChange={value => this.handleYearChange(value)}
+                  onValueChange={value => this.handleFilterChange('selectedYear', value)}
                   value={selectedYear}
                   theme={{ select: dropdownStyles.select }}
                   hideResetButton
@@ -210,7 +202,7 @@ class RegionPopulation extends PureComponent {
                   label="Indikator"
                   placeholder="Filter by"
                   options={genderOptions}
-                  onValueChange={value => this.handleGenderChange(value)}
+                  onValueChange={value => this.handleFilterChange('selectedGender', value)}
                   value={selectedGender}
                   theme={{ select: dropdownStyles.select }}
                   hideResetButton

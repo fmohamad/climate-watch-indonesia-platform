@@ -51,7 +51,24 @@ class RegionPopulation extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { selectedOption: { name: 'Pendidikan', value: 'education' } };
+    this.state = { 
+      selectedOption: { 
+        name: 'Pendidikan', 
+        value: 'education' 
+      },
+      selectedIndicator: {
+        value: 'all-selected', 
+        label: 'Indikator'
+      },
+      selectedKabupaten: {
+         value: 'all-selected',
+        label: 'Kabupaten'
+      },
+      selectedSector: {
+        value: 'all-selected', 
+        label: 'Sektor'
+      }
+    };
   }
 
   getOptions = () => [
@@ -61,7 +78,7 @@ class RegionPopulation extends PureComponent {
     ];
 
   handleFilterChange = (field, selected) => {
-    this.setState({ selectedOption: selected });
+    this.setState({ [field]: selected });
   };
 
   renderSwitch() {
@@ -72,7 +89,7 @@ class RegionPopulation extends PureComponent {
         <div className="switch-container">
           <Switch
             options={this.getOptions()}
-            onClick={value => this.handleFilterChange('source', value)}
+            onClick={value => this.handleFilterChange('selectedOption', value)}
             selectedOption={String(selectedOption.value)}
             theme={{
               wrapper: styles.switchWrapper,
@@ -86,8 +103,8 @@ class RegionPopulation extends PureComponent {
   }
 
   render() {
-    const { t, chartData, selectedIndicator, provinceISO } = this.props;
-    const { selectedOption } = this.state;
+    const { t, chartData, provinceISO } = this.props;
+    const { selectedOption, selectedIndicator, selectedKabupaten, selectedSector } = this.state;
     const sources = [ 'RADGRK', 'SIGNSa' ];
     const downloadURI = `emissions/download?source=${sources.join(
       ','
@@ -107,6 +124,8 @@ class RegionPopulation extends PureComponent {
               className={{ buttonWrapper: styles.buttonWrapper }}
               slugs={sources}
               downloadUri={downloadURI}
+              pdfUri="pdfuri"
+              shareableLink="link"
             />
           </div>
         </div>
@@ -123,8 +142,8 @@ class RegionPopulation extends PureComponent {
                     label="Indikator"
                     placeholder="Filter by"
                     options={indicatorOptions}
-                    /* onValueChange={onIndicatorChange} */
-                    /* value={selectedIndicator} */
+                    onValueChange={value => this.handleFilterChange('selectedIndicator', value)}
+                    value={selectedIndicator}
                     theme={{ select: dropdownStyles.select }}
                     hideResetButton
                   />
@@ -135,8 +154,8 @@ class RegionPopulation extends PureComponent {
                     label="Kabupaten"
                     placeholder="Filter by"
                     options={kabupatenOptions}
-                    /* onValueChange={onIndicatorChange} */
-                    /* value={selectedIndicator} */
+                    onValueChange={value => this.handleFilterChange('selectedKabupaten', value)}
+                    value={selectedKabupaten}
                     theme={{ select: dropdownStyles.select }}
                     hideResetButton
                   />
@@ -147,8 +166,8 @@ class RegionPopulation extends PureComponent {
                     label="Sektor"
                     placeholder="Filter by"
                     options={sectorOptions}
-                    /* onValueChange={onIndicatorChange} */
-                    /* value={selectedIndicator} */
+                    onValueChange={value => this.handleFilterChange('selectedSector', value)}
+                    value={selectedSector}
                     theme={{ select: dropdownStyles.select }}
                     hideResetButton
                   />
@@ -184,12 +203,10 @@ class RegionPopulation extends PureComponent {
 RegionPopulation.propTypes = {
   t: PropTypes.func.isRequired,
   chartData: PropTypes.object,
-  selectedIndicator: PropTypes.object,
   provinceISO: PropTypes.string
 };
 
 RegionPopulation.defaultProps = {
-  selectedIndicator: {},
   chartData: {
     data: [
       { x: 2010, yIdn: 238500 },
