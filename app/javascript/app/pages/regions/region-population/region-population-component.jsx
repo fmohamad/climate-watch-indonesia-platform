@@ -8,55 +8,11 @@ import { TabletLandscape } from 'components/responsive';
 import dropdownStyles from 'styles/dropdown';
 import CustomTooltip from './bar-chart-tooltip';
 import PopulationMap from './population-map';
+import populationData from './populationData'
 
 import styles from './region-population-styles';
 
-const chartData = {
-  data: [
-    { x: '0-4', yIdn: 5583682 },
-    { x: '5-9', yIdn: 5299279 },
-    { x: '10-14', yIdn: 3697297 },
-    { x: '15-18', yIdn: 3797290 },
-    { x: '19-24', yIdn: 3208892 },
-    { x: '25-29', yIdn: 3088927 },
-    { x: '30-34', yIdn: 2618909 },
-    { x: '35-39', yIdn: 2818909 },
-    { x: '40-44', yIdn: 2518909 },
-    { x: '45-49', yIdn: 2089793 },
-    { x: '50-54', yIdn: 1984982 },
-    { x: '55-59', yIdn: 1298374 },
-    { x: '60-64', yIdn: 1193794 },
-    { x: '65-69', yIdn: 1108380 },
-    { x: '70-74', yIdn: 1079497 },
-    { x: '75-79', yIdn: 983973 },
-    { x: '80+', yIdn: 863281 }
-  ],
-  domain: { x: [ 'auto', 'auto' ], y: [ 0, 'auto' ] },
-  config: {
-    axes: {
-      xBottom: { name: 'Age', unit: '', format: 'string' },
-      yLeft: { name: 'People', unit: '', format: 'number' }
-    },
-    tooltip: {
-      yIdn: { label: 'People' },
-      x: { label: 'Age' },
-      indicator: 'Age',
-      theme: { yIdn: { stroke: '#ffc735', fill: '#ffc735' } }
-    },
-    animation: false,
-    columns: {
-      x: [ { label: 'age', value: 'x' } ],
-      y: [ { label: 'people', value: 'yIdn' } ]
-    },
-    theme: { yIdn: { stroke: '#ffc735', fill: '#ffc735' } }
-  }
-};
-
 const yearOptions = [
-  { value: 'all-selected', label: 'Tahun', override: true },
-  { label: '2015', value: '2015' },
-  { label: '2016', value: '2016' },
-  { label: '2017', value: '2017' },
   { label: '2018', value: '2018' },
   { label: '2019', value: '2019' },
   { label: '2020', value: '2020' }
@@ -85,16 +41,67 @@ class RegionPopulation extends PureComponent {
         value: 'population' 
       },
       selectedYear: { 
-        value: 'all-selected', 
-        label: 'Tahun', 
-        override: true 
+        value: '2018', 
+        label: '2018'
       },
       selectedGender: { 
         value: 'all-selected', 
         label: 'Jenis Kelamin', 
         override: true 
+      },
+      chartData: [],
+      chart: {
+        domain: { x: [ 'auto', 'auto' ], y: [ 0, 'auto' ] },
+        config: {
+          axes: {
+            xBottom: { name: 'Age', unit: '', format: 'string' },
+            yLeft: { name: 'People', unit: '', format: 'number' }
+          },
+          tooltip: {
+            yIdn: { label: 'People' },
+            x: { label: 'Age' },
+            indicator: 'Age',
+            theme: { yIdn: { stroke: '#ffc735', fill: '#ffc735' } }
+          },
+          animation: false,
+          columns: {
+            x: [ { label: 'age', value: 'x' } ],
+            y: [ { label: 'people', value: 'yIdn' } ]
+          },
+          theme: { yIdn: { stroke: '#ffc735', fill: '#ffc735' } }
+        }
       }
     };
+  }
+
+  componentDidMount() {
+    this.getChartData()
+  }
+
+  getChartData() {
+    console.log("test");
+    const { selectedGender, selectedYear } = this.state
+    let data = []
+    populationData.filter(annualData => {
+      if(selectedYear.value === annualData.year) {
+        if(selectedGender.value === 'all-selected') {
+          annualData.male.map((item, index) => {
+            let dataObject = {}
+            dataObject.x = item.ageRange
+            dataObject.yIdn = item.quantity + annualData.female[index].quantity
+            data.push(dataObject)
+          })
+        } else {
+          annualData[selectedGender.value].map((item, index) => {
+            let dataObject = {}
+            dataObject.x = item.ageRange
+            dataObject.yIdn = item.quantity
+            data.push(dataObject)
+          })
+        }
+      }
+    })
+    this.setState({chartData: data})
   }
 
   getOptions = () => [
@@ -109,7 +116,13 @@ class RegionPopulation extends PureComponent {
     ];
 
   handleFilterChange = (field, selected) => {
-    this.setState({ [field]: selected });
+    if(field === 'selectedGender' || field === 'selectedYear') {
+      this.setState({ [field]: selected }, () => {
+        this.getChartData()
+      });
+    } else {
+      this.setState({ [field]: selected });
+    }
   };
 
   renderSwitch() {
@@ -134,7 +147,7 @@ class RegionPopulation extends PureComponent {
 
   renderContent() {
     const { t } = this.props;
-    const { selectedOption, selectedYear, selectedGender } = this.state;
+    const { selectedOption, selectedYear, selectedGender, chart, chartData } = this.state;
 
     if (selectedOption.value === 'population') {
       return (
@@ -219,14 +232,14 @@ class RegionPopulation extends PureComponent {
           </div>
           <Chart
             type="bar"
-            config={chartData.config}
-            data={chartData.data}
+            config={chart.config}
+            data={chartData}
             theme={{ legend: styles.legend }}
             customTooltip={<CustomTooltip />}
-            getCustomYLabelFormat={chartData.config.yLabelFormat}
-            domain={chartData.domain}
-            dataOptions={chartData.dataOptions}
-            dataSelected={chartData.dataSelected}
+            getCustomYLabelFormat={chart.config.yLabelFormat}
+            domain={chart.domain}
+            dataOptions={chart.dataOptions}
+            dataSelected={chart.dataSelected}
             height={300}
             barSize={30}
             customMessage={t('common.chart-no-data')}
@@ -238,7 +251,7 @@ class RegionPopulation extends PureComponent {
   }
 
   render() {
-    const { t, chartData, selectedIndicator, provinceISO } = this.props;
+    const { t, selectedIndicator, provinceISO } = this.props;
     const { selectedOption } = this.state;
     const sources = [ 'RADGRK', 'SIGNSa' ];
     const downloadURI = `emissions/download?source=${sources.join(
@@ -282,11 +295,12 @@ class RegionPopulation extends PureComponent {
 
 RegionPopulation.propTypes = {
   t: PropTypes.func.isRequired,
-  chartData: PropTypes.object,
   selectedIndicator: PropTypes.object,
   provinceISO: PropTypes.string
 };
 
-RegionPopulation.defaultProps = { selectedIndicator: {}, chartData: null };
+RegionPopulation.defaultProps = { 
+  selectedIndicator: {}
+};
 
 export default RegionPopulation;

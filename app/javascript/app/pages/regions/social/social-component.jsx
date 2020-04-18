@@ -19,7 +19,7 @@ const cardTheme = {
 };
 
 const indicatorOptions = [
-  { value: 'all-selected', label: 'Indikator', override: true },
+  { value: 'all-selected', label: 'All Selected', override: true },
   { label: 'PDRB', value: '1' },
   { label: 'PDRB per kapita', value: '2' },
   { label: 'Pertumbuhan Ekonomi', value: '3' },
@@ -28,7 +28,7 @@ const indicatorOptions = [
 ];
 
 const kabupatenOptions = [
-  { value: 'all-selected', label: 'Kabupaten', override: true },
+  { value: 'all-selected', label: 'All Selected', override: true },
   { label: 'Fakfak', value: 'fakfak' },
   { label: 'Kaimana', value: 'kaimana' },
   { label: 'Manokwari', value: 'manokwari' },
@@ -40,7 +40,7 @@ const kabupatenOptions = [
 ];
 
 const sectorOptions = [
-  { value: 'all-selected', label: 'Sektor', override: true },
+  { value: 'all-selected', label: 'All Selected', override: true },
   { label: 'Pertanian, kehutanan dan perikanan', value: '1' },
   { label: 'Pertambangan dan penggalian', value: '2' },
   { label: 'Industri pengolahan', value: '3' },
