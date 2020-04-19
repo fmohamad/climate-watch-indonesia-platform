@@ -55,10 +55,8 @@ class RegionsGhgEmissions extends PureComponent {
     const label = t(
       `pages.regions.regions-ghg-emissions.labels.${kebabCase(field)}`
     );
-
     if (multi) {
       const values = castArray(value).filter(v => v);
-
       return (
         <Multiselect
           key={field}
@@ -86,7 +84,6 @@ class RegionsGhgEmissions extends PureComponent {
 
   renderChart() {
     const { chartData, onYearChange } = this.props;
-
     if (!chartData || !chartData.data) return null;
 
     return (

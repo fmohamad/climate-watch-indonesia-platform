@@ -79,7 +79,6 @@ class RegionPopulation extends PureComponent {
   }
 
   getChartData() {
-    console.log("test");
     const { selectedGender, selectedYear } = this.state
     let data = []
     populationData.filter(annualData => {
