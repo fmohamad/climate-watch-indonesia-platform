@@ -50,10 +50,14 @@ en:
           title: Economy
           description: Economy pages for west papua
           labels:
-            indicator: Indicator 
-            regency: Regency
-            sector: Sector
+            indicators: Indicator 
+            locations: Regency
+            sectors: Sector
             chart-type: Chart Type
+          indicators:
+            grdp: GRDP
+            grdp_capita: GRDP Per Capita
+            grdp_growth: Economy Growth
         region-population:
           title: Population
           description: Penduduk Papua Barat berjumlah 963.000 jiwa pada 2019. Jumlah tersebut terdiri atas 457.200 jiwa penduduk perempuan dan 506.400 jiwa laki-laki.
@@ -70,4 +74,3 @@ en:
             regency: Regency
             sector: Sector
             chart-type: Chart Type
-

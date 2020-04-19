@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import cx from 'classnames';
-import { NavLink } from 'redux-first-router-link';
-import styles from './nav-styles.scss';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import cx from 'classnames'
+import { NavLink } from 'redux-first-router-link'
+import styles from './nav-styles.scss'
 
 const renderActions = () => {
   // return (
@@ -10,15 +10,15 @@ const renderActions = () => {
   //     Download and about links
   //   </div>
   // );
-};
+}
 
 class Nav extends PureComponent {
   render() {
-    const { routes, theme, parent, provinceInfo, t, locale } = this.props;
+    const { routes, theme, parent, provinceInfo, t, locale } = this.props
     return (
       <nav className={theme.nav}>
-        {routes.map(route => {
-          const isoCode = provinceInfo && provinceInfo.iso_code3;
+        {routes.map((route) => {
+          const isoCode = provinceInfo && provinceInfo.iso_code3
           if (route.province) {
             return (
               <NavLink
@@ -36,7 +36,7 @@ class Nav extends PureComponent {
                     : t(`pages.${route.slug}.title`)
                 }
               </NavLink>
-            );
+            )
           }
           if (isoCode === route.member) {
             return (
@@ -55,7 +55,7 @@ class Nav extends PureComponent {
                     : t(`pages.${route.slug}.title`)
                 }
               </NavLink>
-            );
+            )
           }
           return (
             <NavLink
@@ -67,17 +67,15 @@ class Nav extends PureComponent {
               onTouchStart={undefined}
               onMouseDown={undefined}
             >
-              {
-                parent
-                  ? t(`pages.${parent.slug}.${route.slug}.title`)
-                  : t(`pages.${route.slug}.title`)
-              }
+              {parent
+                ? t(`pages.${parent.slug}.${route.slug}.title`)
+                : t(`pages.${route.slug}.title`)}
             </NavLink>
-          );
+          )
         })}
         {renderActions()}
       </nav>
-    );
+    )
   }
 }
 

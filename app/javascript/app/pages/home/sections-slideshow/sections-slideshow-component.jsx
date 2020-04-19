@@ -72,6 +72,7 @@ class SectionsSlideshowComponent extends Component {
 
   render() {
     const { t, locale } = this.props;
+    console.log(this.props)
 
     const slideOne = t('pages.homepage.slide-one') || {};
     const slideTwo = t('pages.homepage.slide-two') || {};
@@ -129,16 +130,14 @@ TopSlide.propTypes = {
   title: PropTypes.string,
   text: PropTypes.string,
   buttonText: PropTypes.string,
-  routerAction: PropTypes.string,
-  routeSection: PropTypes.string
+  routerAction: PropTypes.object
 };
 
 TopSlide.defaultProps = {
   title: null,
   text: null,
   buttonText: null,
-  routerAction: null,
-  routeSection: null
+  routerAction: null
 };
 
 BottomSlide.propTypes = {

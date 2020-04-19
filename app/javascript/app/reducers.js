@@ -15,6 +15,7 @@ import {
 
 // Providers
 import { reduxModule as indicators } from 'providers/indicators-provider';
+import { reduxModule as provinceMeta } from 'providers/province-meta-provider';
 import {
   reduxModule as emissionActivites
 } from 'providers/emission-activities-provider';
@@ -47,6 +48,7 @@ const componentsReducers = {
 const providerReducers = {
   translations: handleModule(translations),
   indicators: handleModule(indicators),
+  provinceMeta: handleModule(provinceMeta),
   emissionActivities: handleModule(emissionActivites),
   adaptation: handleModule(adaptation),
   provinces: handleModule(locations),

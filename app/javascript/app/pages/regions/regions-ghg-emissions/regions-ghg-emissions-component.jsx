@@ -84,6 +84,7 @@ class RegionsGhgEmissions extends PureComponent {
 
   renderChart() {
     const { chartData, onYearChange } = this.props;
+
     if (!chartData || !chartData.data) return null;
 
     return (
@@ -129,6 +130,7 @@ class RegionsGhgEmissions extends PureComponent {
 
   render() {
     const { emissionParams, selectedYear, provinceISO, t, query } = this.props;
+    console.log(this.props)
 
     const sources = [ 'RADGRK', 'SIGNSa' ];
     const downloadURI = `emissions/download?source=${sources.join(
