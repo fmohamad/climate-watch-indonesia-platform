@@ -54,7 +54,7 @@ class RegionPopulation extends PureComponent {
         label: 'All Selected'
       },
       selectedKabupaten: {
-         value: 'all-selected',
+        value: 'all-selected',
         label: 'All Selected'
       },
       selectedSector: {
@@ -114,7 +114,6 @@ class RegionPopulation extends PureComponent {
 
   getChartData() {
     const { selectedSector, selectedKabupaten, selectedIndicator, chartDataSelected, chartConfig } = this.state
-
     let arrayData = []
     educationData.filter(annualData => {
       let objectData = {}
@@ -269,10 +268,18 @@ class RegionPopulation extends PureComponent {
 
   handleFilterChange = (field, selected) => {
     if(field === 'selectedOption') {
-      this.setState({ [field]: selected });
+      this.setState({ 
+        [field]: selected,
+        selectedSector: {value: 'all-selected', 'label': 'All Selected'},
+        selectedKabupaten: {value: 'all-selected', 'label': 'All Selected'},
+        selectedIndicator: {value: 'all-selected', 'label': 'All Selected'}
+      }, () => {
+        this.getChartData()
+      });
     } else {
-      this.setState({ [field]: selected });
-      this.getChartData()
+      this.setState({ [field]: selected }, () => {
+        this.getChartData()
+      });
     }
   };
 
