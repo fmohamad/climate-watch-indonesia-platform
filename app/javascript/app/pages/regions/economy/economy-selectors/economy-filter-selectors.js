@@ -1,12 +1,10 @@
 import { createStructuredSelector, createSelector } from 'reselect'
-import { ALL_SELECTED, SECTOR_TOTAL } from 'constants'
+import { ALL_SELECTED } from 'constants'
 
-import { getTranslate } from 'selectors/translation-selectors'
 import {
   getAllSelectedOption,
   getFieldQuery,
-  findOption,
-  withAllSelected,
+  findOption
 } from 'selectors/filters-selectors'
 
 import { getMetadata } from './economy-get-selectors'

@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { getProvince } from 'selectors/provinces-selectors';
 
 const _getMetadata = ({ provinceMeta }) => provinceMeta
 
@@ -9,5 +10,12 @@ export const getMetadata = createSelector(
   meta => {
     if (!meta) return null
     return meta && meta.data
+  }
+)
+
+export const getProvinceData = createSelector(
+  getProvince, province => {
+    if (!province) return null
+    return province
   }
 )

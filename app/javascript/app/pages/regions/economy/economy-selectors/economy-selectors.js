@@ -7,12 +7,14 @@ import {
   // getModelSelected,
   // getMetricSelected
 } from './economy-filter-selectors';
+import { getProvinceData } from './economy-get-selectors';
 // import { getEmissionParams } from './economy-fetch-selectors';
 import {
   getChartData
   // getMetadataSources,
   // getDownloadURI
 } from './economy-data-selectors';
+
 function empty(){}
 
 export const getEconomies = createStructuredSelector({
@@ -21,6 +23,7 @@ export const getEconomies = createStructuredSelector({
   filterOptions: getFilterOptions,
   query: getQuery,
   emissionParams: empty,
+  provinceISO: getProvinceData,
   chartData: getChartData,
   t: getTranslate
 });

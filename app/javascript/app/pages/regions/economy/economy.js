@@ -11,14 +11,15 @@ import {
 
 class EconomyContainer extends PureComponent {
   onFilterChange = filter => {
-    const { updateFiltersSelected, query } = this.props;
+    const { updateFiltersSelected, provinceISO, query } = this.props;
 
     if (filter.source) {
       Object.assign(filter, { gas: null, region: null, sector: null });
     }
 
     updateFiltersSelected({
-      section: 'historical-emissions',
+      section: 'economy',
+      region: provinceISO,
       query: updateQueryParams(query, filter)
     });
   };

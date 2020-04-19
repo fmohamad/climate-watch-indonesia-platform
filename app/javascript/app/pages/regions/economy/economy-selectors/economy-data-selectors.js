@@ -1,14 +1,8 @@
 import { createStructuredSelector, createSelector } from 'reselect'
-import isArray from 'lodash/isArray'
 import castArray from 'lodash/castArray'
 import isEmpty from 'lodash/isEmpty'
 import uniqBy from 'lodash/uniqBy'
-import {
-  ALL_SELECTED,
-  API_TARGET_DATA_SCALE,
-  METRIC,
-  SECTOR_TOTAL,
-} from 'constants'
+import { ALL_SELECTED, METRIC, SECTOR_TOTAL } from 'constants'
 
 import {
   DEFAULT_AXES_CONFIG,
@@ -32,9 +26,9 @@ const getUnit = createSelector(
   [getMetadata, getSelectedOptions],
   (metadata, options) => {
     if (!metadata || !metadata.indicators) return null
-    const unit = metadata.indicators.find(
+    const { unit } = metadata.indicators.find(
       (meta) => meta.code === options.indicators.value
-    ).unit
+    )
 
     return unit
   }
@@ -74,16 +68,6 @@ const getYColumnOptions = createSelector(
     return value
   }
 )
-
-const calculateValue = (currentValue, value, scale, metricData) => {
-  const metricRatio = metricData || 1
-  const updatedValue =
-    value || value === 0 ? (value * scale) / metricRatio : null
-  if (updatedValue && (currentValue || currentValue === 0)) {
-    return updatedValue + currentValue
-  }
-  return updatedValue || currentValue
-}
 
 const getDFilterValue = (d, modelSelected) =>
   modelSelected === 'region' ? d.iso_code3 : d[modelSelected]
@@ -144,28 +128,27 @@ const parseValues = createSelector(
       )
     })
 
+    if (isEmpty(dataFiltered)) return null
+
     const dataParsed = []
 
-    if (dataFiltered !== undefined) {
-      const yValue = yColumnOptions.find(option => {
-        return option.code === locations.value
-      }).value
+    const yValue = yColumnOptions.find((option) => {
+      return option.code === locations.value
+    }).value
 
-      dataFiltered[0].values.map(data => {
-        const item = {}
-        item['x'] = data.year
-        item[yValue] = data.value
+    dataFiltered[0].values.map((data) => {
+      const item = {}
+      item.x = data.year
+      item[yValue] = data.value
 
-        dataParsed.push(item)
-      })
-    }
-
+      dataParsed.push(item)
+    })
 
     return dataParsed
   }
 )
 
-let colorCache = {};
+let colorCache = {}
 
 export const getChartConfig = createSelector(
   [getUnit, getYColumnOptions, getTranslate],
@@ -193,15 +176,15 @@ export const getChartConfig = createSelector(
 )
 
 const getChartLoading = createSelector(
-  [ getMetadata, getIndicatorValues ],
+  [getMetadata, getIndicatorValues],
   (metadata, indicatorValue) =>
-    metadata && metadata.loading || indicatorValue && indicatorValue.loading
-);
+    (metadata && metadata.loading) || (indicatorValue && indicatorValue.loading)
+)
 
 const getDataLoading = createSelector(
-  [ getChartLoading],
-  (loading, data) =>  false
-);
+  [getChartLoading],
+  (loading, data) => false
+)
 
 export const getDownloadURI = createSelector([getMetadata], (metadata) => {
   return `emissions/download?location=${COUNTRY_ISO}&source=${metadataSources.join(

@@ -4,7 +4,6 @@ import ProvinceMetaProvider from 'providers/province-meta-provider';
 import IndicatorProvider from 'providers/indicators-provider';
 import SectionTitle from 'components/section-title';
 import { Switch, Chart, Dropdown } from 'cw-components';
-import { format } from 'd3-format';
 import startCase from 'lodash/startCase';
 import kebabCase from 'lodash/kebabCase';
 import castArray from 'lodash/castArray';
@@ -76,31 +75,10 @@ class Economy extends PureComponent {
     );
   }
 
-  renderSwitch() {
-    const { filterOptions, selectedOptions } = this.props;
-    return selectedOptions.source && (
-    <div className={styles.switch}>
-      <div className="switch-container">
-        <Switch
-          options={filterOptions.source}
-          onClick={value => this.handleFilterChange('source', value)}
-          selectedOption={String(selectedOptions.source.value)}
-          theme={{
-                wrapper: styles.switchWrapper,
-                option: styles.option,
-                checkedOption: styles.checkedOption
-              }}
-        />
-      </div>
-    </div>
-      );
-  }
-
   render() {
     const {
       selectedOptions,
       chartData,
-      fieldToBreakBy,
       t
     } = this.props;
 
@@ -167,7 +145,8 @@ Economy.propTypes = {
   filterOptions: PropTypes.object,
   metricSelected: PropTypes.string,
   onFilterChange: PropTypes.func.isRequired,
-  selectedOptions: PropTypes.object
+  selectedOptions: PropTypes.object,
+  provinceISO: PropTypes.string
 };
 
 Economy.defaultProps = {
@@ -179,7 +158,8 @@ Economy.defaultProps = {
   fieldToBreakBy: undefined,
   filterOptions: undefined,
   metricSelected: undefined,
-  selectedOptions: undefined
+  selectedOptions: undefined,
+  provinceISO: ''
 };
 
 export default Economy;
