@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ProvinceMetaProvider from 'providers/province-meta-provider';
+import IndicatorProvider from 'providers/indicators-provider';
 import SectionTitle from 'components/section-title';
 import { Switch, Chart, Dropdown } from 'cw-components';
 import { format } from 'd3-format';
@@ -9,7 +10,6 @@ import kebabCase from 'lodash/kebabCase';
 import castArray from 'lodash/castArray';
 import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
-import InfoDownloadToolbox from 'components/info-download-toolbox';
 
 import dropdownStyles from 'styles/dropdown.scss';
 import lineIcon from 'assets/icons/line_chart.svg';
@@ -17,7 +17,7 @@ import areaIcon from 'assets/icons/area_chart.svg';
 import styles from './economy-styles.scss';
 
 const code = {
-  section: 'economic',
+  section: 'wp_economic',
   location: 'ID.PB'
 }
 
@@ -144,15 +144,13 @@ class Economy extends PureComponent {
                   dataSelected={chartData.dataSelected}
                   height={500}
                   loading={chartData.loading}
-                  onLegendChange={v =>
-                    this.handleFilterChange(fieldToBreakBy, v)}
-                  getCustomYLabelFormat={value => format('.3s')(value)}
                   showUnit
                 />
               )
           }
         </div>
         <ProvinceMetaProvider metaParams={code} />
+        <IndicatorProvider />
       </div>
     );
   }

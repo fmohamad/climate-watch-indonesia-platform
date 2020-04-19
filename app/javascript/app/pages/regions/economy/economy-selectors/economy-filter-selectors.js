@@ -28,7 +28,7 @@ const getFieldOptions = (field) =>
 
     const transformToOption = (o) => ({
       label: o.name,
-      value: String(o.id),
+      value: o.iso_code3 || o.code,
       code: o.iso_code3 || o.code || o.label
     })
 
@@ -72,20 +72,3 @@ export const getSelectedOptions = createStructuredSelector({
   locations: getFieldSelected('locations'),
   sectors: getFieldSelected('sectors')
 })
-
-const getBreakBySelected = createSelector(getSelectedOptions, (options) => {
-  if (!options || !options.breakBy) return null
-  const breakByArray = options.breakBy.value.split('-')
-  return { modelSelected: breakByArray[0], metricSelected: breakByArray[1] }
-})
-
-export const getModelSelected = createSelector(
-  getBreakBySelected,
-  (breakBySelected) =>
-    (breakBySelected && breakBySelected.modelSelected) || null
-)
-export const getMetricSelected = createSelector(
-  getBreakBySelected,
-  (breakBySelected) =>
-    (breakBySelected && breakBySelected.metricSelected) || null
-)
