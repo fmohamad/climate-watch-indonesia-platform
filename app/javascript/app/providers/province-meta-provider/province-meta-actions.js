@@ -9,7 +9,7 @@ export const fetchProvinceMetas = createThunkAction(
   'fetchProvinceMetas',
   (params) => (dispatch) => {
     dispatch(fetchProvinceMetasInit())
-    INDOAPI.get('province/economies/meta', {...params.metaParams})
+    INDOAPI.get('province/metadata', {...params.metaParams})
       .then((data = {}) => {
         dispatch(fetchProvinceMetasReady(data))
       })
