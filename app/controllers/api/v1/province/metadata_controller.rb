@@ -1,17 +1,17 @@
 module Api
   module V1
     module Province
-      class EconomiesController < ApiController
+      class MetadataController < ApiController
         before_action :fetch_values, only: :meta
 
-        EconomiesMetadata = Struct.new(
+        ProvinceMetadata = Struct.new(
           :indicators,
           :sectors,
           :locations
         )
 
-        def meta
-          economies_metadata = EconomiesMetadata.new(
+        def index 
+          province_metadata = ProvinceMetadata.new(
             fetch_meta_indicators,
             fetch_meta_sectors,
             fetch_locations
@@ -19,8 +19,8 @@ module Api
 
           respond_to do |format|
             format.json do
-              render json: economies_metadata,
-                each_serializer: Api::V1::Province::EconomyMetadataSerializer
+              render json: province_metadata,
+                each_serializer: Api::V1::Province::MetadataSerializer
             end
           end
         end
