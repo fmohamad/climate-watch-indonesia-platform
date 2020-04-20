@@ -74,3 +74,11 @@ en:
             regency: Regency
             sector: Sector
             chart-type: Chart Type
+        policy:
+          title: Policy Tracking
+          description: Upaya-upaya Papua Barat dalam rangka penurunan emisi diwujudkan dengan dikeluarkannya berbagai instrumen kebijakan.
+          labels:
+            indicator: Indicator 
+            regency: Regency
+            sector: Sector
+            chart-type: Chart Type

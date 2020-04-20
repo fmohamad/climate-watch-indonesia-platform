@@ -35,5 +35,10 @@ export default [
     slug: 'social',
     path: '/:locale/regions/:region/social',
     member: 'ID.PB'
+  },
+  {
+    slug: 'policy',
+    path: '/:locale/regions/:region/policy',
+    member: 'ID.PB'
   }
 ];
