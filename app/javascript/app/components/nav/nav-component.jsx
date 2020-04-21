@@ -4,41 +4,22 @@ import cx from 'classnames'
 import { NavLink } from 'redux-first-router-link'
 import styles from './nav-styles.scss'
 
-const renderActions = () => {
-  // return (
-  //   <div className={styles.actions}>
-  //     Download and about links
-  //   </div>
-  // );
-}
-
 class Nav extends PureComponent {
   render() {
     const { routes, theme, parent, provinceInfo, t, locale } = this.props
+    console.log('parent', parent)
+
+    const filteredRoutes = routes.filter(route => {
+      if (!parent || parent.slug !== 'regions') return route
+
+      return (route.member === 'all' || route.member === provinceInfo.iso_code3)
+    }) 
+
     return (
       <nav className={theme.nav}>
-        {routes.map((route) => {
+        {filteredRoutes.map((route) => {
           const isoCode = provinceInfo && provinceInfo.iso_code3
           if (route.province) {
-            return (
-              <NavLink
-                exact={route.exact || false}
-                className={cx(styles.link, theme.link)}
-                key={route.slug}
-                to={`/${locale}/regions/${isoCode}/${route.slug}`}
-                activeClassName={styles.active}
-                onTouchStart={undefined}
-                onMouseDown={undefined}
-              >
-                {
-                  parent
-                    ? t(`pages.${parent.slug}.${route.slug}.title`)
-                    : t(`pages.${route.slug}.title`)
-                }
-              </NavLink>
-            )
-          }
-          if (isoCode === route.member) {
             return (
               <NavLink
                 exact={route.exact || false}
@@ -73,7 +54,6 @@ class Nav extends PureComponent {
             </NavLink>
           )
         })}
-        {renderActions()}
       </nav>
     )
   }
