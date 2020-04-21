@@ -129,4 +129,11 @@ $dropdown-max-width: 265px;
 
 .button {
   align-self: flex-end;
+  a {
+    color: #ffffff !important;
+  }
+}
+
+.active {
+  color: #ffffff !important; 
 }

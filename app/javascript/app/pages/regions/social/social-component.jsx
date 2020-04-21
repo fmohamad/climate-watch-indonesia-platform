@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { NavLink } from 'redux-first-router-link'
 import SectionTitle from 'components/section-title';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import Chart from 'components/chart';
@@ -7,6 +8,8 @@ import { Switch, Card, Dropdown, Button, Multiselect } from 'cw-components';
 import { TabletLandscape } from 'components/responsive';
 import cx from 'classnames';
 import educationData from './educationData';
+import healthData from './healthData';
+import employmentData from './employmentData';
 
 import dropdownStyles from 'styles/dropdown';
 import button from 'styles/themes/button';
@@ -113,9 +116,17 @@ class RegionPopulation extends PureComponent {
   }
 
   getChartData() {
-    const { selectedSector, selectedKabupaten, selectedIndicator, chartDataSelected, chartConfig } = this.state
+    const { selectedOption, selectedSector, selectedKabupaten, selectedIndicator, chartDataSelected, chartConfig } = this.state
     let arrayData = []
-    educationData.filter(annualData => {
+    let selectedData = []
+    if(selectedOption.value === 'health') {
+      selectedData = healthData
+    } else if(selectedOption.value === 'employment') {
+      selectedData = employmentData
+    } else {
+      selectedData = educationData
+    }
+    selectedData.filter(annualData => {
       let objectData = {}
       objectData.x = annualData.year
       objectData.y1 = 0
@@ -386,7 +397,16 @@ class RegionPopulation extends PureComponent {
                 {}
               </div>
               <Button theme={{ button: cx(button.darkBlue, styles.button) }}>
-                Jelajahi di Tingkat Nasional
+                <NavLink
+                  exact={'/en/national-context' || false}
+                  key={'/en/national-context'}
+                  to={`/en/national-context`}
+                  activeClassName={styles.active}
+                  onTouchStart={undefined}
+                  onMouseDown={undefined}
+                >
+                  Jelajahi di Tingkat Nasional
+                </NavLink>
               </Button>
             </div>
             <Chart

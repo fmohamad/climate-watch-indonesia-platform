@@ -31,6 +31,66 @@ const cardTheme = {
   title: styles.title
 };
 
+const populationCardData = [
+  {
+    'year': '2018',
+    'data': {
+      'total_population': '2.7 Juta',
+      'male': {
+        'total': '810 Ribu',
+        'growth': '0.3%',
+        'density': '3.3'
+      },
+      'female': {
+        'total': '1.89 Juta',
+        'growth': '0.7%',
+        'density': '7.4'
+      },
+      'growth': '1.03%',
+      'density': '10.7',
+      'ratio': '70/30'
+    }
+  },
+  {
+    'year': '2019',
+    'data': {
+      'total_population': '2.9 Juta',
+      'male': {
+        'total': '957 Ribu',
+        'growth': '1.5%',
+        'density': '5.6'
+      },
+      'female': {
+        'total': '1.943 Juta',
+        'growth': '3.6%',
+        'density': '8.7'
+      },
+      'growth': '5.1%',
+      'density': '13.3',
+      'ratio': '67/33'
+    }
+  },
+  {
+    'year': '2020',
+    'data': {
+      'total_population': '3.2 Juta',
+      'male': {
+        'total': '1.312 Juta',
+        'growth': '3.3%',
+        'density': '6.2'
+      },
+      'female': {
+        'total': '1.888 Juta',
+        'growth': '4.8%',
+        'density': '8.0'
+      },
+      'growth': '8.1%',
+      'density': '14.2',
+      'ratio': '59/41'
+    }
+  }
+]
+
 class RegionPopulation extends PureComponent {
   constructor(props) {
     super(props);
@@ -49,6 +109,7 @@ class RegionPopulation extends PureComponent {
         label: 'Jenis Kelamin', 
         override: true 
       },
+      selectedPopulationData: {},
       chartData: [],
       chart: {
         domain: { x: [ 'auto', 'auto' ], y: [ 0, 'auto' ] },
@@ -76,6 +137,7 @@ class RegionPopulation extends PureComponent {
 
   componentDidMount() {
     this.getChartData()
+    this.getPopulationData()
   }
 
   getChartData() {
@@ -103,6 +165,17 @@ class RegionPopulation extends PureComponent {
     this.setState({chartData: data})
   }
 
+  getPopulationData() {
+    const { selectedYear } = this.state;
+    populationCardData.filter(annualData => {
+      if(selectedYear.value === annualData.year) {
+        this.setState({
+          selectedPopulationData: annualData.data
+        })
+      }
+    })
+  }
+
   getOptions = () => [
       { 
         name: 'Populasi', 
@@ -115,13 +188,10 @@ class RegionPopulation extends PureComponent {
     ];
 
   handleFilterChange = (field, selected) => {
-    if(field === 'selectedGender' || field === 'selectedYear') {
-      this.setState({ [field]: selected }, () => {
-        this.getChartData()
-      });
-    } else {
-      this.setState({ [field]: selected });
-    }
+    this.setState({ [field]: selected }, () => {
+      this.getChartData();
+      this.getPopulationData();
+    });
   };
 
   renderSwitch() {
@@ -144,14 +214,47 @@ class RegionPopulation extends PureComponent {
     );
   }
 
+  renderDropdown() {
+    const { selectedYear, selectedGender } = this.state;
+    return (
+      <div className={styles.dropdownContainer}>
+        <div className={styles.dropdown}>
+          <Dropdown
+            key="year"
+            label="Tahun"
+            placeholder="Filter by"
+            options={yearOptions}
+            onValueChange={value => this.handleFilterChange('selectedYear', value)}
+            value={selectedYear}
+            theme={{ select: dropdownStyles.select }}
+            hideResetButton
+          />
+        </div>
+        <div className={styles.dropdown}>
+          <Dropdown
+            key="year"
+            label="Indikator"
+            placeholder="Filter by"
+            options={genderOptions}
+            onValueChange={value => this.handleFilterChange('selectedGender', value)}
+            value={selectedGender}
+            theme={{ select: dropdownStyles.select }}
+            hideResetButton
+          />
+        </div>
+      </div>
+    )
+  }
+
   renderContent() {
     const { t } = this.props;
-    const { selectedOption, selectedYear, selectedGender, chart, chartData } = this.state;
+    const { selectedOption, selectedYear, selectedGender, chart, chartData, selectedPopulationData } = this.state;
 
     if (selectedOption.value === 'population') {
       return (
         <div className={styles.chartMapContainer}>
           <div className={styles.filtersChartContainer}>
+            {this.renderDropdown()}
             <div className={styles.chartContainer}>
               <PopulationMap />
             </div>
@@ -159,32 +262,53 @@ class RegionPopulation extends PureComponent {
           <div className={styles.cardContainer}>
             <Card theme={cardTheme} title="Total Populasi Penduduk (Kabupaten)">
               <div className={styles.cardContent}>
-                <p>
-                  2.7 Juta
-                </p>
+                {
+                  selectedGender.value === 'all-selected' ?
+                    <p>
+                      {selectedPopulationData.total_population}
+                    </p>
+                  :
+                    <p>
+                      {selectedPopulationData[selectedGender.value].total}
+                    </p>
+                }
               </div>
             </Card>
             <Card theme={cardTheme} title="Laju pertumbuhan penduduk per tahun">
               <div className={styles.cardContent}>
-                <p>
-                  1.03%
-                </p>
+                {
+                  selectedGender.value === 'all-selected' ?
+                    <p>
+                      {selectedPopulationData.growth}
+                    </p>
+                  :
+                    <p>
+                      {selectedPopulationData[selectedGender.value].growth}
+                    </p>
+                }
               </div>
             </Card>
             <Card theme={cardTheme} title="Kepadatan penduduk">
               <div className={styles.cardContent}>
-                <p>
-                  10.7 Jiwa/ Km<sup>2</sup>
-                </p>
+                {
+                  selectedGender.value === 'all-selected' ?
+                    <p>
+                    {selectedPopulationData.density} Jiwa/Km<sup>2</sup>
+                  </p>
+                  :
+                    <p>
+                      {selectedPopulationData[selectedGender.value].density} Jiwa/Km<sup>2</sup>
+                    </p>
+                }
               </div>
             </Card>
             <Card
               theme={cardTheme}
-              title="Rasio Jenis Kelamin (Perempuan/ Laki-lai)"
+              title="Rasio Jenis Kelamin (Perempuan/ Laki-laki)"
             >
               <div className={styles.cardContent}>
                 <p>
-                  80/30
+                  {selectedPopulationData.ratio}
                 </p>
               </div>
             </Card>
@@ -195,32 +319,7 @@ class RegionPopulation extends PureComponent {
       return (
         <div className={styles.container}>
           <div className={styles.toolbox}>
-            <div className={styles.dropdownContainer}>
-              <div className={styles.dropdown}>
-                <Dropdown
-                  key="year"
-                  label="Tahun"
-                  placeholder="Filter by"
-                  options={yearOptions}
-                  onValueChange={value => this.handleFilterChange('selectedYear', value)}
-                  value={selectedYear}
-                  theme={{ select: dropdownStyles.select }}
-                  hideResetButton
-                />
-              </div>
-              <div className={styles.dropdown}>
-                <Dropdown
-                  key="year"
-                  label="Indikator"
-                  placeholder="Filter by"
-                  options={genderOptions}
-                  onValueChange={value => this.handleFilterChange('selectedGender', value)}
-                  value={selectedGender}
-                  theme={{ select: dropdownStyles.select }}
-                  hideResetButton
-                />
-              </div>
-            </div>
+            {this.renderDropdown()}
             <InfoDownloadToolbox
               className={{ buttonWrapper: styles.buttonWrapper }}
               /* slugs={sources} */
