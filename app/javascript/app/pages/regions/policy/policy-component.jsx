@@ -28,27 +28,27 @@ class Policy extends PureComponent {
       chartData: {
         "data": [
           {
-            "x": 2010,
+            "x": 2016,
             "y3": -14069940,
             "y4": 94960
           },
           {
-            "x": 2011,
+            "x": 2017,
             "y3": -14702640,
             "y4": 114610
           },
           {
-            "x": 2012,
+            "x": 2018,
             "y3": -18262560,
             "y4": 125920
           },
           {
-            "x": 2013,
+            "x": 2019,
             "y3": -11824590,
             "y4": 135910
           },
           {
-            "x": 2014,
+            "x": 2020,
             "y3": -11824590,
             "y4": 102220
           }
@@ -153,16 +153,80 @@ class Policy extends PureComponent {
           "value": "3",
         }
       ],
-      indicatorSelected: {
+      selectedIndicator: {
        "label": "All Selected",
         "value": "1",
       }
     };
   }
 
+  setChartData() {
+    const { selectedIndicator, chartData } = this.state;
+    let config = chartData.config
+    if(selectedIndicator.value === '2') {
+      config.columns = {
+        "x": [
+          {
+            "label": "year",
+            "value": "x"
+          }
+        ],
+        "y": [
+          {
+            "label": "Indeks Lingkungan Hidup",
+            "value": "y4",
+          }
+        ]
+      }
+      this.setState({ config })
+    } else if(selectedIndicator.value === '3') {
+      config.columns = {
+        "x": [
+          {
+            "label": "year",
+            "value": "x"
+          }
+        ],
+        "y": [
+          {
+            "label": "Indeks Kualitas Air",
+            "value": "y3",
+          }
+        ]
+      }
+      this.setState({ config })
+    } else {
+      config.columns = {
+        "x": [
+          {
+            "label": "year",
+            "value": "x"
+          }
+        ],
+        "y": [
+          {
+            "label": "Indeks Lingkungan Hidup",
+            "value": "y4",
+          },
+          {
+            "label": "Indeks Kualitas Air",
+            "value": "y3",
+          }
+        ]
+      }
+      this.setState({ config })
+    }
+  }
+
+  handleFilterChange = (field, selected) => {
+    this.setState({ [field]: selected }, () => {
+      this.setChartData()
+    });
+  };
+
   render() {
-    const { t, selectedIndicator, provinceISO } = this.props;
-    const { chartData, indicatorOptions, indicatorSelected } = this.state;
+    const { t, provinceISO } = this.props;
+    const { chartData, indicatorOptions, selectedIndicator } = this.state;
 
     return (
       <div className={styles.page}>
@@ -300,8 +364,8 @@ class Policy extends PureComponent {
               label="Indikator"
               placeholder="Filter by"
               options={indicatorOptions}
-              // onValueChange={value => this.handleFilterChange('selectedGender', value)}
-              value={indicatorSelected}
+              onValueChange={value => this.handleFilterChange('selectedIndicator', value)}
+              value={selectedIndicator}
               theme={{ select: dropdownStyles.select }}
               hideResetButton
             />
@@ -374,12 +438,10 @@ class Policy extends PureComponent {
 
 Policy.propTypes = {
   t: PropTypes.func.isRequired,
-  selectedIndicator: PropTypes.object,
   provinceISO: PropTypes.string
 };
 
 Policy.defaultProps = { 
-  selectedIndicator: {},
 };
 
 export default Policy;

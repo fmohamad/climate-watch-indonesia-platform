@@ -5,6 +5,7 @@ import { NavLink } from 'redux-first-router-link'
 import styles from './nav-styles.scss'
 
 class Nav extends PureComponent {
+
   render() {
     const { routes, theme, parent, provinceInfo, t, locale } = this.props
     console.log('parent', parent)
@@ -25,16 +26,12 @@ class Nav extends PureComponent {
                 exact={route.exact || false}
                 className={cx(styles.link, theme.link)}
                 key={route.slug}
-                to={`/${locale}/regions/${isoCode}/${route.slug}`}
+                to={`/${locale}${route.link || route.path}`}
                 activeClassName={styles.active}
                 onTouchStart={undefined}
                 onMouseDown={undefined}
               >
-                {
-                  parent
-                    ? t(`pages.${parent.slug}.${route.slug}.title`)
-                    : t(`pages.${route.slug}.title`)
-                }
+                { t(`pages.${route.slug}.title`) }
               </NavLink>
             )
           }
