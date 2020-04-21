@@ -21,6 +21,6 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 append :linked_dirs, '.bundle'
 
 # Default value for keep_releases is 5
-set :keep_releases, 4
+set :keep_releases, 2
 
 set :rvm_ruby_version, 'ruby-2.5.1' 
