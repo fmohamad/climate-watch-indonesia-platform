@@ -4,7 +4,8 @@ export default [
     path: '/:locale/regions/:region/regions-ghg-emissions',
     exact: true,
     province: true,
-    default: true
+    default: true,
+    member: 'ID.PB'
   },
   {
     slug: 'sectoral-circumstances',
@@ -24,7 +25,7 @@ export default [
   {
     slug: 'economy',
     path: '/:locale/regions/:region/economy',
-    member: 'ID.PB'
+    member: 'ID.PB',
   },
   {
     slug: 'region-population',
