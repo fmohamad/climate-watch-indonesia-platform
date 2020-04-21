@@ -17,5 +17,8 @@ append :linked_files, "config/database.yml", ".env", "config/secrets.yml"
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
 
+# Bundle install application
+append :linked_dirs, '.bundle'
+
 # Default value for keep_releases is 5
 set :keep_releases, 4

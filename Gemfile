@@ -66,6 +66,7 @@ group :development do
   gem 'rubocop', require: false
   # capistrano for deploying
   gem 'capistrano', '3.11.2'
+  gem 'capistrano-bundler', '~> 1.6'
   gem 'capistrano-rails', '~> 1.4'
   gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rvm'
