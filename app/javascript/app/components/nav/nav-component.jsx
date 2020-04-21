@@ -7,10 +7,10 @@ import styles from './nav-styles.scss'
 class Nav extends PureComponent {
   render() {
     const { routes, theme, parent, provinceInfo, t, locale } = this.props
-    console.log('parent', parent)
 
     const filteredRoutes = routes.filter(route => {
       if (!parent || parent.slug !== 'regions') return route
+      if (!provinceInfo || !provinceInfo.iso_code3) return route
 
       return (route.member === 'all' || route.member === provinceInfo.iso_code3)
     }) 
