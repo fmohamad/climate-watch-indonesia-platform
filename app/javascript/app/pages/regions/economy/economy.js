@@ -13,10 +13,6 @@ class EconomyContainer extends PureComponent {
   onFilterChange = filter => {
     const { updateFiltersSelected, provinceISO, query } = this.props;
 
-    if (filter.source) {
-      Object.assign(filter, { gas: null, region: null, sector: null });
-    }
-
     updateFiltersSelected({
       section: 'economy',
       region: provinceISO,
@@ -31,9 +27,10 @@ class EconomyContainer extends PureComponent {
 
 EconomyContainer.propTypes = {
   updateFiltersSelected: PropTypes.func.isRequired,
-  query: PropTypes.object
+  query: PropTypes.object,
+  provinceISO: PropTypes.string
 };
 
-EconomyContainer.defaultProps = { query: {} };
+EconomyContainer.defaultProps = { query: {}, provinceISO: '' };
 
 export default connect(getEconomies, actions)(EconomyContainer);

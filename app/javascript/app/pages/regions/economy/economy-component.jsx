@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ProvinceMetaProvider from 'providers/province-meta-provider';
 import IndicatorProvider from 'providers/indicators-provider';
 import SectionTitle from 'components/section-title';
-import { Switch, Chart, Dropdown } from 'cw-components';
+import { Chart, Dropdown, Multiselect } from 'cw-components';
 import startCase from 'lodash/startCase';
 import kebabCase from 'lodash/kebabCase';
 import castArray from 'lodash/castArray';
@@ -14,11 +14,6 @@ import dropdownStyles from 'styles/dropdown.scss';
 import lineIcon from 'assets/icons/line_chart.svg';
 import areaIcon from 'assets/icons/area_chart.svg';
 import styles from './economy-styles.scss';
-
-const code = {
-  section: 'wp_economic',
-  location: 'ID.PB'
-}
 
 class Economy extends PureComponent {
   handleFilterChange = (field, selected) => {
@@ -45,7 +40,7 @@ class Economy extends PureComponent {
     onFilterChange({ [field]: values });
   };
 
-  renderDropdown(field, icons) {
+  renderDropdown(field, multi, icons) {
     const {
       selectedOptions,
       filterOptions,
@@ -59,6 +54,22 @@ class Economy extends PureComponent {
     const label = t(
       `pages.regions.economy.labels.${kebabCase(field)}`
     );
+
+    if (multi) {
+      const values = castArray(value).filter(v => v);
+      return (
+        <Multiselect
+          key={field}
+          label={label}
+          placeholder={`Filter by ${startCase(field)}`}
+          options={options}
+          onValueChange={selected => this.handleFilterChange(field, selected)}
+          values={values}
+          theme={{ wrapper: dropdownStyles.select }}
+          hideResetButton
+        />
+      );
+    }
     
     return (
       <Dropdown
@@ -77,12 +88,14 @@ class Economy extends PureComponent {
 
   render() {
     const {
+      metaParams,
       selectedOptions,
       chartData,
       t
     } = this.props;
 
     const icons = { line: lineIcon, area: areaIcon };
+
     return (
       <div className={styles.page}>
         <SectionTitle
@@ -94,7 +107,7 @@ class Economy extends PureComponent {
         <div className={styles.filtersGroup}>
           <div className={styles.filters}>
             {this.renderDropdown('indicators')}
-            {this.renderDropdown('locations')}
+            {this.renderDropdown('locations', true)}
             {this.renderDropdown('sectors')}
             {this.renderDropdown('chartType', icons)}
           </div>
@@ -127,7 +140,7 @@ class Economy extends PureComponent {
               )
           }
         </div>
-        <ProvinceMetaProvider metaParams={code} />
+        <ProvinceMetaProvider metaParams={metaParams} />
         <IndicatorProvider />
       </div>
     );
@@ -140,7 +153,7 @@ Economy.propTypes = {
   metadataSources: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
   downloadURI: PropTypes.string,
   chartData: PropTypes.object,
-  emissionParams: PropTypes.object,
+  metaParams: PropTypes.object,
   fieldToBreakBy: PropTypes.string,
   filterOptions: PropTypes.object,
   metricSelected: PropTypes.string,
@@ -154,7 +167,7 @@ Economy.defaultProps = {
   chartData: undefined,
   metadataSources: undefined,
   downloadURI: undefined,
-  emissionParams: undefined,
+  metaParams: {},
   fieldToBreakBy: undefined,
   filterOptions: undefined,
   metricSelected: undefined,

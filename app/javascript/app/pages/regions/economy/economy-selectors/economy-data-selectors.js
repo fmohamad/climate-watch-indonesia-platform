@@ -1,55 +1,60 @@
 import { createStructuredSelector, createSelector } from 'reselect'
 import castArray from 'lodash/castArray'
 import isEmpty from 'lodash/isEmpty'
-import uniqBy from 'lodash/uniqBy'
+import filter from 'lodash/filter'
+import concat from 'lodash/concat'
+import flatten from 'lodash/flatten'
 import { ALL_SELECTED, METRIC, SECTOR_TOTAL } from 'constants'
 
 import {
-  DEFAULT_AXES_CONFIG,
   getThemeConfig,
   getYColumnValue,
   getTooltipConfig,
 } from 'utils/graphs'
 
-import { getTranslate } from 'selectors/translation-selectors'
 import { getMetadata, getIndicatorValues } from './economy-get-selectors'
 import {
   getSelectedOptions,
   getFilterOptions,
 } from './economy-filter-selectors'
 
-const { COUNTRY_ISO } = process.env
-
-const FRONTEND_FILTERED_FIELDS = ['region', 'sector']
+const getAxes = (xName, unit, yName) => ({
+  xBottom: { name: xName, unit, format: 'string' },
+  yLeft: { name: yName, unit, format: 'number' },
+})
 
 const getUnit = createSelector(
   [getMetadata, getSelectedOptions],
   (metadata, options) => {
     if (!metadata || !metadata.indicators) return null
-    const { unit } = metadata.indicators.find(
+    const indicator = metadata.indicators.find(
       (meta) => meta.code === options.indicators.value
     )
 
-    return unit
+    if (!indicator) return null
+
+    return {
+      name: indicator.name,
+      unit: indicator.unit,
+    }
   }
 )
 
 const outAllSelectedOption = (o) => o.value !== ALL_SELECTED
 
-const getLegendDataOptions = createSelector(
-  [getFilterOptions],
-  (modelSelected, options) => {
-    if (!options || !modelSelected || !options[modelSelected]) return null
-    return options[modelSelected].filter(outAllSelectedOption)
-  }
-)
+const getLegendDataOptions = createSelector([getFilterOptions], (options) => {
+  if (!options || !options.locations) return null
+  return options.locations.filter(outAllSelectedOption)
+})
 
 const getLegendDataSelected = createSelector(
   [getSelectedOptions, getFilterOptions],
   (selectedOptions, options) => {
-    if (!selectedOptions || !options) return null
+    if (!selectedOptions || isEmpty(selectedOptions) || !options) return null
 
-    return [selectedOptions.locations]
+    const dataSelected = castArray(selectedOptions.locations)
+
+    return dataSelected
   }
 )
 
@@ -57,15 +62,17 @@ const getYColumnOptions = createSelector(
   [getLegendDataSelected],
   (legendDataSelected) => {
     if (!legendDataSelected) return null
-    const getYOption = (columns) =>
-      columns &&
-      columns.map((d) => ({
-        label: d && d.label,
-        value: d && getYColumnValue(`${d.value}`),
-        code: d && (d.code || d.label),
-      }))
-    const value = uniqBy(getYOption(legendDataSelected), 'value')
-    return value
+    const columns = legendDataSelected.map((data) => {
+      if (!data) return null
+
+      return {
+        label: data && data.label,
+        value: getYColumnValue(data && data.value),
+        code: data && data.code,
+      }
+    })
+
+    return columns
   }
 )
 
@@ -120,48 +127,60 @@ const parseValues = createSelector(
 
     const { locations, indicators, sectors } = selectedOptions
 
-    const dataFiltered = indicatorsData.values.filter((data) => {
+    const location = castArray(locations)
+    const { values } = indicatorsData
+
+    const filterByLocations = flatten(
+      concat(
+        location.map((loc) => filter(values, { location_iso_code3: loc.value }))
+      )
+    )
+
+    const dataFiltered = filterByLocations.filter((data) => {
       return (
-        data.location_iso_code3 === locations.value &&
         data.indicator_code === indicators.value &&
         data.category === sectors.label
       )
     })
 
-    if (isEmpty(dataFiltered)) return null
+    if (isEmpty(dataFiltered) || !dataFiltered) return null
+
+    const yearValues = dataFiltered[0].values.map(d => d.year)
+
+    if (!yearValues) return null
 
     const dataParsed = []
 
-    const yValue = yColumnOptions.find((option) => {
-      return option.code === locations.value
-    }).value
-
-    dataFiltered[0].values.map((data) => {
+    yearValues.forEach(x => {
       const item = {}
-      item.x = data.year
-      item[yValue] = data.value
+      dataFiltered.forEach(data => {
 
+        const yValue = yColumnOptions.find(column => column.code === data.location_iso_code3).value
+
+        item.x = x
+        item[yValue] = data.values.find(d => d.year === x).value
+
+      })
       dataParsed.push(item)
-    })
+    });
 
     return dataParsed
+
   }
 )
 
 let colorCache = {}
 
 export const getChartConfig = createSelector(
-  [getUnit, getYColumnOptions, getTranslate],
-  (unit, yColumnOptions, t) => {
+  [getUnit, getYColumnOptions],
+  (ind, yColumnOptions) => {
     if (!yColumnOptions) return null
+    if (!ind || !ind.name || !ind.unit) return null
 
     const tooltip = getTooltipConfig(yColumnOptions)
     const theme = getThemeConfig(yColumnOptions)
     colorCache = { ...theme, ...colorCache }
-    const axes = {
-      ...DEFAULT_AXES_CONFIG,
-      yLeft: { ...DEFAULT_AXES_CONFIG.yLeft, unit },
-    }
+    const axes = getAxes('year', ind.unit, ind.name)
 
     const config = {
       axes,
@@ -182,8 +201,8 @@ const getChartLoading = createSelector(
 )
 
 const getDataLoading = createSelector(
-  [getChartLoading],
-  (loading, data) => false
+  [getChartLoading, parseValues],
+  (loading, data) => loading || !data || false
 )
 
 export const getDownloadURI = createSelector([getMetadata], (metadata) => {
@@ -196,6 +215,6 @@ export const getChartData = createStructuredSelector({
   data: parseValues,
   config: getChartConfig,
   loading: getDataLoading,
-  // dataOptions: getLegendDataOptions,
+  dataOptions: getLegendDataOptions,
   dataSelected: getLegendDataSelected,
 })

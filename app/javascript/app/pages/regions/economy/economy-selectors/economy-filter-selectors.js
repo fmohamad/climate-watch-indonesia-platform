@@ -11,12 +11,14 @@ import { getMetadata } from './economy-get-selectors'
 
 // OPTIONS
 const CHART_TYPE_OPTIONS = [
-  { label: 'percent', value: 'percent' },
+  { label: 'area', value: 'area' },
   { label: 'line', value: 'line' },
 ]
 
 const DEFAULTS = {
-  indicator: 'grdp_capita',
+  indicators: 'grdp_capita',
+  locations: 'ID.PB.FA',
+  sectors: 'EDUCATION_SERVICES',
   chartType: 'line',
 }
 
@@ -26,7 +28,7 @@ const getFieldOptions = (field) =>
 
     const transformToOption = (o) => ({
       label: o.name,
-      value: o.iso_code3 || o.code,
+      value: o.iso_code3 || o.code || o.id,
       code: o.iso_code3 || o.code || o.label
     })
 
