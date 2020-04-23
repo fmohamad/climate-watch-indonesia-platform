@@ -8,8 +8,9 @@ export const fetchProvinceMetasFail = createAction('fetchProvinceMetasFail')
 export const fetchProvinceMetas = createThunkAction(
   'fetchProvinceMetas',
   (params) => (dispatch) => {
+    const { metaParams, locale } = params;
     dispatch(fetchProvinceMetasInit())
-    INDOAPI.get('province/metadata', {...params.metaParams})
+    INDOAPI.get('province/metadata', {...metaParams, locale})
       .then((data = {}) => {
         dispatch(fetchProvinceMetasReady(data))
       })

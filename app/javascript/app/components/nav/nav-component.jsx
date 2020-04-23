@@ -12,7 +12,10 @@ class Nav extends PureComponent {
       if (!parent || parent.slug !== 'regions') return route
       if (!provinceInfo || !provinceInfo.iso_code3) return route
 
-      return route.member === 'all' || route.member === provinceInfo.iso_code3
+      return (
+        (route.member === 'all' || route.member === provinceInfo.iso_code3) &&
+        route.exclude !== provinceInfo.iso_code3
+      )
     })
 
     return (

@@ -8,7 +8,7 @@ import {
   // getMetricSelected
 } from './economy-filter-selectors';
 import { getProvinceData } from './economy-get-selectors';
-// import { getEmissionParams } from './economy-fetch-selectors';
+import { getMetaParams } from './economy-fetch-selectors';
 import {
   getChartData
   // getMetadataSources,
@@ -22,7 +22,7 @@ export const getEconomies = createStructuredSelector({
   downloadURI: empty,
   filterOptions: getFilterOptions,
   query: getQuery,
-  emissionParams: empty,
+  metaParams: getMetaParams,
   provinceISO: getProvinceData,
   chartData: getChartData,
   t: getTranslate
