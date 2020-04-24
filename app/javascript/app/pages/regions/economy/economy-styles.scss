@@ -15,7 +15,7 @@
 }
 
 .filters {
-  @include columns($columns: 12);
+  @include columns($columns: full);
 }
 
 .buttonWrapper {
@@ -81,4 +81,13 @@
   .filtersGroup {
     flex-direction: row;
   }
+}
+
+.noData {
+  font-size: $font-size-m;
+  text-align: center;
+  vertical-align: middle;
+  color: $midnight-blue;
+  line-height: 1.38;
+  margin-top: 100px;
 }
