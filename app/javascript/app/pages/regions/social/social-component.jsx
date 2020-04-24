@@ -9,7 +9,7 @@ import { TabletLandscape } from 'components/responsive';
 import cx from 'classnames';
 import educationData from './educationData';
 import healthData from './healthData';
-import employmentData from './employmentData';
+// import employmentData from './employmentData';
 
 import dropdownStyles from 'styles/dropdown';
 import button from 'styles/themes/button';
@@ -22,27 +22,6 @@ const cardTheme = {
   title: styles.title
 };
 
-const indicatorOptions = [
-  { value: 'all-selected', label: 'All Selected', override: true },
-  { label: 'PDRB', value: 'pdrb' },
-  { label: 'PDRB per kapita', value: 'pdrb_per_kapita' },
-  { label: 'Pertumbuhan Ekonomi', value: 'economy' },
-];
-
-const kabupatenOptions = [
-  { value: 'all-selected', label: 'All Selected', override: true },
-  { label: 'Fakfak', value: 'fakfak' },
-  { label: 'Kaimana', value: 'kaimana' },
-  
-];
-
-const sectorOptions = [
-  { value: 'all-selected', label: 'All Selected', override: true },
-  { label: 'Pertanian, kehutanan dan perikanan', value: 'farm' },
-  { label: 'Pertambangan dan penggalian', value: 'mine' },
-  { label: 'Industri pengolahan', value: 'industry' },
-];
-
 class RegionPopulation extends PureComponent {
   constructor(props) {
     super(props);
@@ -52,6 +31,28 @@ class RegionPopulation extends PureComponent {
         name: 'Pendidikan', 
         value: 'education' 
       },
+      indicatorOptions: [
+        { value: 'all-selected', label: 'All Selected', override: true },
+        { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
+        { label: 'Angka Melek Huruf', value: 'literate' },
+        { label: 'Angka Buta Huruf', value: 'illiterate' }
+      ],
+      kabupatenOptions: [
+        { value: 'all-selected', label: 'All Selected', override: true },
+        { label: 'Fakfak', value: 'fakfak' },
+        { label: 'Kaimana', value: 'kaimana' },
+        { label: 'Wondama', value: 'wondama' },
+        { label: 'Teluk Bintuni', value: 'teluk_bintuni' },
+        { label: 'Manokwari', value: 'manokwari' },
+        { label: 'Sorong Selatan', value: 'sorong_selatan' },
+        { label: 'Sorong', value: 'sorong' },
+        { label: 'Raja Ampat', value: 'raja_ampat' },
+        { label: 'Tambrauw', value: 'tambrauw' },
+        { label: 'Maybrat', value: 'maybrat' },
+        { label: 'Manokwari Selatan', value: 'manokwari_selatan' },
+        { label: 'Pegunungan Arfak', value: 'pegunungan_arfak' },
+        { label: 'Kota Sorong', value: 'kota_sorong' }
+      ],
       selectedIndicator: {
         value: 'all-selected', 
         label: 'All Selected'
@@ -76,9 +77,9 @@ class RegionPopulation extends PureComponent {
           yLeft: { name: 'People', unit: '', format: 'number' }
         },
         tooltip: {
-          y1: { label: 'Pertanian' },
-          y2: { label: 'Pertambangan' },
-          y3: { label: 'Industri pengolahan' },
+          y1: { label: 'Indeks Pembangunan Manusia' },
+          y2: { label: 'Angka Melek Huruf' },
+          y3: { label: 'Angka Buta Huruf' },
           x: { label: 'Year' }
         },
         animation: false,
@@ -86,10 +87,10 @@ class RegionPopulation extends PureComponent {
           x: [ 
             { label: 'year', value: 'x' } 
           ],
-          y: [ 
-            { label: 'Pertanian, kehutanan dan perikanan', value: 'y1' },
-            { label: 'Pertambangan dan penggalian', value: 'y2' },
-            { label: 'Industri pengolahan', value: 'y3' }
+          y: [
+            { label: 'Indeks Pembangunan Manusia', value: 'y1' },
+            { label: 'Angka Melek Huruf', value: 'y2' },
+            { label: 'Angka Buta Huruf', value: 'y3' }
           ]
         },
         theme: { 
@@ -99,14 +100,14 @@ class RegionPopulation extends PureComponent {
         }
       },
       chartDataOptions: [
-        { label: 'Pertanian, kehutanan dan perikanan', value: 'farm' },
-        { label: 'Pertambangan dan penggalian', value: 'mine' },
-        { label: 'Industri pengolahan', value: 'industry' },
+        { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
+        { label: 'Angka Melek Huruf', value: 'literate' },
+        { label: 'Angka Buta Huruf', value: 'illiterate' }
       ],
-      chartDataSelected: [ 
-        { label: 'Pertanian, kehutanan dan perikanan', value: 'farm' },
-        { label: 'Pertambangan dan penggalian', value: 'mine' },
-        { label: 'Industri pengolahan', value: 'industry' },
+      chartDataSelected: [
+        { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
+        { label: 'Angka Melek Huruf', value: 'literate' },
+        { label: 'Angka Buta Huruf', value: 'illiterate' }
       ]
     };
   }
@@ -116,152 +117,38 @@ class RegionPopulation extends PureComponent {
   }
 
   getChartData() {
-    const { selectedOption, selectedSector, selectedKabupaten, selectedIndicator, chartDataSelected, chartConfig } = this.state
+    const { selectedOption, selectedKabupaten, selectedIndicator } = this.state
     let arrayData = []
     let selectedData = []
     if(selectedOption.value === 'health') {
       selectedData = healthData
-    } else if(selectedOption.value === 'employment') {
-      selectedData = employmentData
     } else {
       selectedData = educationData
     }
     selectedData.filter(annualData => {
       let objectData = {}
       objectData.x = annualData.year
-      objectData.y1 = 0
-      objectData.y2 = 0
-      objectData.y3 = 0
-      annualData.sector.map((sectorData, sectorIndex) => {
-        if(selectedSector.value === 'all-selected'){
-          if(sectorData.name === 'farm') {
-            sectorData.kabupaten.map((kabupatenData, index) => {
-              if(selectedKabupaten.value === 'all-selected'){
-                kabupatenData.indicator.map((indicatorData, index) => {
-                  if(selectedIndicator.value === 'all-selected') {
-                    objectData.y1 = objectData.y1 + indicatorData.quantity
-                  } else {
-                    if(selectedIndicator.value === indicatorData.name) {
-                      objectData.y1 = objectData.y1 + indicatorData.quantity
-                    }
-                  }
-                })
-              } else {
-                if(selectedKabupaten.value === kabupatenData.name) {
-                  kabupatenData.indicator.map((indicatorData, index) => {
-                    if(selectedIndicator.value === 'all-selected') {
-                      objectData.y1 = objectData.y1 + indicatorData.quantity
-                    } else {
-                      if(selectedIndicator.value === indicatorData.name) {
-                        objectData.y1 = objectData.y1 + indicatorData.quantity
-                      }
-                    }
-                  })
-                }
-              }
-            }) 
-          } else if(sectorData.name === 'mine') {
-            sectorData.kabupaten.map((kabupatenData, index) => {
-              if(selectedKabupaten.value === 'all-selected'){
-                kabupatenData.indicator.map((indicatorData, index) => {
-                  if(selectedIndicator.value === 'all-selected') {
-                    objectData.y2 = objectData.y2 + indicatorData.quantity
-                  } else {
-                    if(selectedIndicator.value === indicatorData.name) {
-                      objectData.y2 = objectData.y2 + indicatorData.quantity
-                    }
-                  }
-                })
-              } else {
-                if(selectedKabupaten.value === kabupatenData.name) {
-                  kabupatenData.indicator.map((indicatorData, index) => {
-                    if(selectedIndicator.value === 'all-selected') {
-                      objectData.y2 = objectData.y2 + indicatorData.quantity
-                    } else {
-                      if(selectedIndicator.value === indicatorData.name) {
-                        objectData.y2 = objectData.y2 + indicatorData.quantity
-                      }
-                    }
-                  })
-                }
-              }
-            }) 
-          } else {
-            sectorData.kabupaten.map((kabupatenData, index) => {
-              if(selectedKabupaten.value === 'all-selected'){
-                kabupatenData.indicator.map((indicatorData, index) => {
-                  if(selectedIndicator.value === 'all-selected') {
-                    objectData.y3 = objectData.y3 + indicatorData.quantity
-                  } else {
-                    if(selectedIndicator.value === indicatorData.name) {
-                      objectData.y3 = objectData.y3 + indicatorData.quantity
-                    }
-                  }
-                })
-              } else {
-                kabupatenData.indicator.map((indicatorData, index) => {
-                  if(selectedIndicator.value === 'all-selected') {
-                    objectData.y3 = objectData.y3 + indicatorData.quantity
-                  } else {
-                    if(selectedIndicator.value === indicatorData.name) {
-                      objectData.y3 = objectData.y3 + indicatorData.quantity
-                    }
-                  }
-                })
-              }
-            }) 
-          }
-        } else {
-          sectorData.name === selectedSector.value &&
-          sectorData.kabupaten.map((kabupatenData, index) => {
-            if(selectedKabupaten.value === 'all-selected'){
-              kabupatenData.indicator.map((indicatorData, index) => {
-                if(selectedIndicator.value === 'all-selected') {
-                  if(selectedSector.value === 'farm') {
-                    objectData.y1 = objectData.y1 + indicatorData.quantity
-                  } else if(selectedSector.value === 'mine') {
-                    objectData.y2 = objectData.y2 + indicatorData.quantity
-                  } else {
-                    objectData.y3 = objectData.y3 + indicatorData.quantity
-                  }
-                } else {
-                  if(selectedIndicator.value === indicatorData.name) {
-                    if(selectedSector.value === 'farm') {
-                      objectData.y1 = objectData.y1 + indicatorData.quantity
-                    } else if(selectedSector.value === 'mine') {
-                      objectData.y2 = objectData.y2 + indicatorData.quantity
-                    } else {
-                      objectData.y3 = objectData.y3 + indicatorData.quantity
-                    }
-                  }
-                }
-              })
-            } else {
-              if(selectedKabupaten.value === kabupatenData.name) {
-                kabupatenData.indicator.map((indicatorData, index) => {
-                  if(selectedIndicator.value === 'all-selected') {
-                    if(selectedSector.value === 'farm') {
-                      objectData.y1 = objectData.y1 + indicatorData.quantity
-                    } else if(selectedSector.value === 'mine') {
-                      objectData.y2 = objectData.y2 + indicatorData.quantity
-                    } else {
-                      objectData.y3 = objectData.y3 + indicatorData.quantity
-                    }
-                  } else {
-                    if(selectedIndicator.value === indicatorData.name) {
-                      if(selectedSector.value === 'farm') {
-                        objectData.y1 = objectData.y1 + indicatorData.quantity
-                      } else if(selectedSector.value === 'mine') {
-                        objectData.y2 = objectData.y2 + indicatorData.quantity
-                      } else {
-                        objectData.y3 = objectData.y3 + indicatorData.quantity
-                      }
-                    }
-                  }
-                })
-              }
+      annualData.indicator.map((indicatorData, indicatorIndex) => {
+        if(selectedIndicator.value === indicatorData.name) {
+          let axis = 'y' + (indicatorIndex + 1)
+          objectData[axis] = 0
+          indicatorData.kabupaten.map((kabupatenData, index) => {
+            if(selectedKabupaten.value === kabupatenData.name){
+              objectData[axis] = objectData[axis] + kabupatenData.quantity
+            } else if(selectedKabupaten.value === 'all-selected'){
+              objectData[axis] = objectData[axis] + kabupatenData.quantity
             }
-          }) 
+          })
+        } else if(selectedIndicator.value === 'all-selected') {
+          let axis = 'y' + (indicatorIndex + 1)
+          objectData[axis] = 0
+          indicatorData.kabupaten.map((kabupatenData, index) => {
+            if(selectedKabupaten.value === kabupatenData.name){
+              objectData[axis] = objectData[axis] + kabupatenData.quantity
+            } else if(selectedKabupaten.value === 'all-selected'){
+              objectData[axis] = objectData[axis] + kabupatenData.quantity
+            }
+          })
         }
       })
       arrayData.push(objectData)
@@ -274,7 +161,7 @@ class RegionPopulation extends PureComponent {
   getOptions = () => [
       { name: 'Pendidikan', value: 'education' },
       { name: 'Kesehatan', value: 'health' },
-      { name: 'Ketenagakerjaan', value: 'employment' }
+      // { name: 'Ketenagakerjaan', value: 'employment' }
     ];
 
   handleFilterChange = (field, selected) => {
@@ -283,7 +170,7 @@ class RegionPopulation extends PureComponent {
         [field]: selected,
         selectedSector: {value: 'all-selected', 'label': 'All Selected'},
         selectedKabupaten: {value: 'all-selected', 'label': 'All Selected'},
-        selectedIndicator: {value: 'all-selected', 'label': 'All Selected'}
+        selectedIndicator: {value: 'all-selected', 'label': 'All Selected'},
       }, () => {
         this.getChartData()
       });
@@ -317,7 +204,7 @@ class RegionPopulation extends PureComponent {
 
   render() {
     const { t, provinceISO } = this.props;
-    const { selectedOption, selectedIndicator, selectedKabupaten, selectedSector, chartData, chartConfig, chartDataOptions, chartDataSelected, chartDomain } = this.state;
+    const { selectedOption, selectedIndicator, selectedKabupaten, selectedSector, chartData, chartConfig, chartDataOptions, chartDataSelected, chartDomain, indicatorOptions, kabupatenOptions } = this.state;
     const sources = [ 'RADGRK', 'SIGNSa' ];
     const downloadURI = `emissions/download?source=${sources.join(
       ','
@@ -374,7 +261,7 @@ class RegionPopulation extends PureComponent {
                   />
                 </div>
                 <div className={styles.dropdown}>
-                  <Dropdown
+                  {/*<Dropdown
                     key="sector"
                     label="Sektor"
                     placeholder="Filter by"
@@ -383,7 +270,7 @@ class RegionPopulation extends PureComponent {
                     value={selectedSector}
                     theme={{ select: dropdownStyles.select }}
                     hideResetButton
-                  />
+                  />*/}
                   {/*<Multiselect
                     key="sector"
                     label="Sektor"
