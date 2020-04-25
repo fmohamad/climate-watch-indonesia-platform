@@ -74,7 +74,7 @@ class RegionPopulation extends PureComponent {
       chartConfig: {
         axes: {
           xBottom: { name: 'Year', unit: '', format: 'string' },
-          yLeft: { name: 'People', unit: '%', format: 'number' }
+          yLeft: { name: 'People', unit: ' ', format: 'number' }
         },
         tooltip: {
           y1: { label: 'Indeks Pembangunan Manusia' },
@@ -177,7 +177,7 @@ class RegionPopulation extends PureComponent {
           chartConfig: {
             axes: {
               xBottom: { name: 'Year', unit: '', format: 'string' },
-              yLeft: { name: 'People', unit: '', format: 'number' }
+              yLeft: { name: 'People', unit: ' ', format: 'number' }
             },
             tooltip: {
               y1: { label: 'Indeks Pembangunan Manusia' },
@@ -223,7 +223,7 @@ class RegionPopulation extends PureComponent {
           chartConfig: {
             axes: {
               xBottom: { name: 'Year', unit: '', format: 'string' },
-              yLeft: { name: 'Percent', unit: '%', format: 'number' }
+              yLeft: { name: 'Percent', unit: ' ', format: 'number' }
             },
             tooltip: {
               y1: { label: 'Infrastruktur Pelayanan Kesehatan' },
@@ -264,9 +264,16 @@ class RegionPopulation extends PureComponent {
       }, () => {
         this.getChartData()
       });
-
-      console.log('selected', selected);
     } else {
+      let unit = this.state.chartConfig
+      if(selected.value === 'cleanWater') {
+        unit.axes.yLeft.unit = '%'
+        this.setState({ unit })
+      } else {
+        unit.axes.yLeft.unit = ' '
+        this.setState({ unit })
+      }
+
       this.setState({ [field]: selected }, () => {
         this.getChartData()
       });
@@ -292,6 +299,15 @@ class RegionPopulation extends PureComponent {
         </div>
       </div>
     );
+  }
+
+  numberFormat(value) {
+    if(value>=1000000) {
+      value=(value/1000000)+" Juta"
+    } else if(value>=1000) {
+      value=(value/1000)+" Ribu";
+    }
+    return value;
   }
 
   render() {
@@ -401,7 +417,7 @@ class RegionPopulation extends PureComponent {
               barSize={30}
               customMessage={t('common.chart-no-data')}
               showUnit
-              /* onLegendChange={onLegendChange} */
+              getCustomYLabelFormat={value => this.numberFormat(value)}
             />
           </div>
         </div>
