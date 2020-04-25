@@ -1,7 +1,7 @@
 const populationData = [
 	{
 		'year': '2018',
-		'male': [
+		'ID.PB.FA': [
 			{
 				ageRange: '0-4',
 				quantity: 169729
@@ -71,7 +71,7 @@ const populationData = [
 		  	quantity: 86328 
 		  },
 		],
-		'female': [
+		'ID.PB.KA': [
 		  {
 				ageRange: '0-4',
 				quantity: 190729
