@@ -11,6 +11,7 @@ export default [
     slug: 'sectoral-circumstances',
     path: '/:locale/regions/:region/sectoral-circumstances',
     member: 'all',
+    exclude: 'ID.PB',
     province: true,
   },
   {

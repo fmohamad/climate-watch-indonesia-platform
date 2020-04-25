@@ -76,50 +76,7 @@ const getYColumnOptions = createSelector(
   }
 )
 
-const getDFilterValue = (d, modelSelected) =>
-  modelSelected === 'region' ? d.iso_code3 : d[modelSelected]
-
-const isOptionSelected = (selectedOptions, valueOrCode) =>
-  castArray(selectedOptions)
-    .filter((o) => o)
-    .some((o) => o.value === valueOrCode || o.code === valueOrCode)
-
-const filterBySelectedOptions = (
-  emissionsData,
-  metricSelected,
-  selectedOptions,
-  filterOptions
-) => {
-  const fieldPassesFilter = (selectedFilterOption, options, fieldValue) =>
-    (isOptionSelected(selectedFilterOption, ALL_SELECTED) &&
-      isOptionSelected(options, fieldValue)) ||
-    isOptionSelected(selectedFilterOption, fieldValue)
-  const absoluteMetric = METRIC.absolute
-
-  const byMetric = (d) => {
-    const notTotalWithAbsoluteMetric =
-      d.metric === absoluteMetric && d.sector !== SECTOR_TOTAL
-
-    return (
-      d.metric === METRIC[metricSelected] &&
-      (notTotalWithAbsoluteMetric || d.metric !== absoluteMetric)
-    )
-  }
-
-  return emissionsData
-    .filter(byMetric)
-    .filter((d) =>
-      FRONTEND_FILTERED_FIELDS.every((field) =>
-        fieldPassesFilter(
-          selectedOptions[field],
-          filterOptions[field],
-          getDFilterValue(d, field)
-        )
-      )
-    )
-}
-
-const parseValues = createSelector(
+const parseChartData = createSelector(
   [getIndicatorValues, getSelectedOptions, getYColumnOptions],
   (indicatorsData, selectedOptions, yColumnOptions) => {
     if (isEmpty(indicatorsData)) return null
@@ -201,7 +158,7 @@ const getChartLoading = createSelector(
 )
 
 const getDataLoading = createSelector(
-  [getChartLoading, parseValues],
+  [getChartLoading, parseChartData],
   (loading, data) => loading || !data || false
 )
 
@@ -212,7 +169,7 @@ export const getDownloadURI = createSelector([getMetadata], (metadata) => {
 })
 
 export const getChartData = createStructuredSelector({
-  data: parseValues,
+  data: parseChartData,
   config: getChartConfig,
   loading: getDataLoading,
   dataOptions: getLegendDataOptions,

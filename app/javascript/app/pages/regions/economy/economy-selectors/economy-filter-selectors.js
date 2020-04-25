@@ -16,9 +16,9 @@ const CHART_TYPE_OPTIONS = [
 ]
 
 const DEFAULTS = {
-  indicators: 'grdp_capita',
-  locations: 'ID.PB.FA',
-  sectors: 'EDUCATION_SERVICES',
+  indicators: 'prdb-sektor',
+  locations: 'ID.PB',
+  sectors: 'KONSTRUKSI',
   chartType: 'line',
 }
 

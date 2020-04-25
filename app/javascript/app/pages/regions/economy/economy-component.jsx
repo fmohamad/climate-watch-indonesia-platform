@@ -20,6 +20,7 @@ import styles from './economy-styles.scss'
 
 class Economy extends PureComponent {
   handleFilterChange = (field, selected) => {
+
     const { onFilterChange, selectedOptions } = this.props
 
     const prevSelectedOptionValues = castArray(selectedOptions[field])
@@ -88,8 +89,11 @@ class Economy extends PureComponent {
 
   render() {
     const { metaParams, selectedOptions, chartData, t } = this.props
+    console.log(this.props)
 
     const icons = { line: lineIcon, area: areaIcon }
+
+    const isDataPresent = (chartData && chartData.data) ? true : false
 
     return (
       <div className={styles.page}>
@@ -118,7 +122,7 @@ class Economy extends PureComponent {
           </div>
         </div>
         <div className={styles.chartContainer}>
-          {chartData && chartData.data && (
+          {isDataPresent ? (chartData && chartData.data && (
             <Chart
               theme={{
                 legend: styles.legend,
@@ -131,15 +135,16 @@ class Economy extends PureComponent {
               }
               config={chartData.config}
               data={chartData.data}
-              projectedData={chartData.projectedData || []}
               domain={chartData.domain}
               dataOptions={chartData.dataOptions}
               dataSelected={chartData.dataSelected}
+              onLegendChange={v =>
+                this.handleFilterChange('locations', v)}
               height={500}
               loading={chartData.loading}
               showUnit
             />
-          )}
+          )) : (<div className={styles.noData}>No data available</div>)}
         </div>
         <ProvinceMetaProvider metaParams={metaParams} />
         <IndicatorProvider />
@@ -150,28 +155,22 @@ class Economy extends PureComponent {
 
 Economy.propTypes = {
   t: PropTypes.func.isRequired,
-  apiSelected: PropTypes.string,
-  metadataSources: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   downloadURI: PropTypes.string,
   chartData: PropTypes.object,
   metaParams: PropTypes.object,
   fieldToBreakBy: PropTypes.string,
   filterOptions: PropTypes.object,
-  metricSelected: PropTypes.string,
   onFilterChange: PropTypes.func.isRequired,
   selectedOptions: PropTypes.object,
   provinceISO: PropTypes.string,
 }
 
 Economy.defaultProps = {
-  apiSelected: undefined,
   chartData: undefined,
-  metadataSources: undefined,
   downloadURI: undefined,
   metaParams: {},
   fieldToBreakBy: undefined,
   filterOptions: undefined,
-  metricSelected: undefined,
   selectedOptions: undefined,
   provinceISO: '',
 }
