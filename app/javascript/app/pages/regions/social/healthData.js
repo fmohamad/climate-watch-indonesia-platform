@@ -3,39 +3,39 @@ const healthData = [
 		'year': '2007',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 69.58
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 68.80
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 63.40
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 64.40
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 64.17
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 65.38
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 67.21
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 62.47
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
@@ -55,44 +55,44 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 67.28
+						'quantity': 0.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 97.17
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 93.00
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 81.02
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 80.84
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 83.54
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 88.90
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 91.39
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 89.93
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
@@ -112,64 +112,7 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 99.10
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 2.83
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 7.00
-					},
-					{
-						'name': 'wondama',
-						'quantity': 18.98
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 19.16
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 16.46
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 11.10
-					},
-					{
-						'name': 'sorong',
-						'quantity': 8.61
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 10.07
-					},
-					{
-						'name': 'tambrauw',
 						'quantity': 0.00
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 0.00
-					},
-					{
-						'name': 'manokwari_selatan',
-						'quantity': 0.00
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 0.00
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 0.90
 					}
 				]
 			}
@@ -179,39 +122,39 @@ const healthData = [
 		'year': '2008',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 70.24
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 69.27
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 64.79
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 65.29
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 65.46
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 65.77
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 67.82
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 63.57
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
@@ -231,44 +174,44 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 76.52
+						'quantity': 0.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 97.27
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 93.84
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 82.98
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 87.67
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 82.54
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 95.35
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 91.56
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 92.54
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
@@ -288,64 +231,7 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 98.82
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 2.73
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 6.16
-					},
-					{
-						'name': 'wondama',
-						'quantity': 17.02
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 12.33
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 17.46
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 4.65
-					},
-					{
-						'name': 'sorong',
-						'quantity': 8.44
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 7.46
-					},
-					{
-						'name': 'tambrauw',
 						'quantity': 0.00
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 0.00
-					},
-					{
-						'name': 'manokwari_selatan',
-						'quantity': 0.00
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 0.00
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 1.18
 					}
 				]
 			}
@@ -355,48 +241,47 @@ const healthData = [
 		'year': '2009',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 70.80
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 69.80
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 65.27
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 65.65
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 66.20
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 66.09
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 68.16
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 64.08
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 49.12
+						'quantity': 0.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 64.89
-
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
@@ -408,44 +293,44 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 76.84
+						'quantity': 0.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 97.63
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 94.92
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 91.48
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 88.15
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 88.77
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 94.41
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 88.27
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 96.54
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
@@ -465,64 +350,7 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 97.76
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 2.37
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 5.08
-					},
-					{
-						'name': 'wondama',
-						'quantity': 8.52
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 11.85
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 11.23
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 5.59
-					},
-					{
-						'name': 'sorong',
-						'quantity': 11.73
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 3.46
-					},
-					{
-						'name': 'tambrauw',
 						'quantity': 0.00
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 0.00
-					},
-					{
-						'name': 'manokwari_selatan',
-						'quantity': 0.00
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 0.00
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 2.24
 					}
 				]
 			}
@@ -532,47 +360,47 @@ const healthData = [
 		'year': '2010',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 71.46
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 70.13
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 65.76
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 66.58
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 67.19
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 66.31
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 68.50
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 64.58
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 50.51
+						'quantity': 0.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 66.00
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
@@ -584,52 +412,52 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 77.18
+						'quantity': 0.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 97.46
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 95.50
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 84.05
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 85.90
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 87.79
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 88.32
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 91.69
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 93.62
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 77.15
+						'quantity': 0.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 90.73
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
@@ -641,64 +469,7 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 99.13
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 2.54
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 4.50
-					},
-					{
-						'name': 'wondama',
-						'quantity': 15.95
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 14.10
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 12.21
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 11.68
-					},
-					{
-						'name': 'sorong',
-						'quantity': 8.31
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 6.38
-					},
-					{
-						'name': 'tambrauw',
-						'quantity': 22.85
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 9.27
-					},
-					{
-						'name': 'manokwari_selatan',
 						'quantity': 0.00
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 0.00
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 0.87
 					}
 				]
 			}
@@ -708,47 +479,56 @@ const healthData = [
 		'year': '2011',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 72.13
+						'quantity': 103.00
+
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 70.71
+						'quantity': 71.00
+
 					},
 					{
 						'name': 'wondama',
-						'quantity': 66.06
+						'quantity': 62.00
+
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 67.17
+						'quantity': 55.00
+
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 67.67
+						'quantity': 91.00
+
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 66.59
+						'quantity': 32.00
+
 					},
 					{
 						'name': 'sorong',
-						'quantity': 68.93
+						'quantity': 60.00
+
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 65.06
+						'quantity': 54.00
+
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 50.81
+						'quantity': 6.00
+
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 66.43
+						'quantity': 18.00
 					},
 					{
 						'name': 'manokwari_selatan',
@@ -760,52 +540,52 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 77.72
+						'quantity': 58.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 98.13
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 96.91
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 84.18
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 87.05
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 88.77
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 88.43
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 91.76
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 94.13
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 77.33
+						'quantity': 0.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 90.87
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
@@ -817,64 +597,7 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 99.14
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 2.57
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 4.36
-					},
-					{
-						'name': 'wondama',
-						'quantity': 18.39
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 16.51
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 15.80
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 14.73
-					},
-					{
-						'name': 'sorong',
-						'quantity': 13.58
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 7.67
-					},
-					{
-						'name': 'tambrauw',
-						'quantity': 27.26
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 10.27
-					},
-					{
-						'name': 'manokwari_selatan',
 						'quantity': 0.00
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 0.00
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 1.37
 					}
 				]
 			}
@@ -884,47 +607,56 @@ const healthData = [
 		'year': '2012',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 72.64
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 71.22
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'wondama',
-						'quantity': 66.80
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 67.58
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 68.07
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 66.83
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'sorong',
-						'quantity': 69.23
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 65.49
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 51.18
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 67.26
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
@@ -936,52 +668,52 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 78.36
+						'quantity': 0.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 98.47
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 96.99
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 85.12
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 87.38
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 89.03
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 88.45
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 91.84
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 94.34
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 77.38
+						'quantity': 0.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 91.22
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
@@ -993,64 +725,7 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 99.69
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 1.53
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 3.01
-					},
-					{
-						'name': 'wondama',
-						'quantity': 14.88
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 12.62
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 10.97
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 11.55
-					},
-					{
-						'name': 'sorong',
-						'quantity': 8.16
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 5.66
-					},
-					{
-						'name': 'tambrauw',
-						'quantity': 22.62
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 8.78
-					},
-					{
-						'name': 'manokwari_selatan',
 						'quantity': 0.00
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 0.00
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 0.31
 					}
 				]
 			}
@@ -1060,104 +735,104 @@ const healthData = [
 		'year': '2013',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 64.29
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 60.36
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 55.65
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 59.73
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 68.81
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 57.73
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 60.86
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 60.36
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 48.69
+						'quantity': 0.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 54.93
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
-						'quantity': 54.95
+						'quantity': 0.00
 					},
 					{
 						'name': 'pegunungan_arfak',
-						'quantity': 53.36
+						'quantity': 0.00
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 74.96
+						'quantity': 0.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 99.12
+						'quantity': 0.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 98.13
+						'quantity': 0.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 94.19
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 92.45
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 93.91
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 95.84
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 95.58
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 99.10
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 70.63
+						'quantity': 0.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 94.70
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
@@ -1169,64 +844,7 @@ const healthData = [
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 99.29
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 0.88
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 1.87
-					},
-					{
-						'name': 'wondama',
-						'quantity': 5.81
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 7.55
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 6.09
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 4.16
-					},
-					{
-						'name': 'sorong',
-						'quantity': 4.42
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 0.90
-					},
-					{
-						'name': 'tambrauw',
-						'quantity': 29.37
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 5.30
-					},
-					{
-						'name': 'manokwari_selatan',
 						'quantity': 0.00
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 0.00
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 0.71
 					}
 				]
 			}
@@ -1236,125 +854,68 @@ const healthData = [
 		'year': '2014',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 64.73
+						'quantity': 97.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 61.07
+						'quantity': 110.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 56.27
+						'quantity': 47.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 60.40
+						'quantity': 65.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 69.35
+						'quantity': 69.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 58.24
+						'quantity': 56.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 61.23
+						'quantity': 82.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 60.86
+						'quantity': 83.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 49.40
+						'quantity': 30.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 55.36
+						'quantity': 34.00
 					},
 					{
 						'name': 'manokwari_selatan',
-						'quantity': 55.32
+						'quantity': 16.00
 					},
 					{
 						'name': 'pegunungan_arfak',
-						'quantity': 53.69
+						'quantity': 22.00
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 75.78
+						'quantity': 63.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 99.14
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 100.00
-					},
-					{
-						'name': 'wondama',
-						'quantity': 97.60
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 96.06
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 99.52
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 98.33
-					},
-					{
-						'name': 'sorong',
-						'quantity': 98.69
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 99.23
-					},
-					{
-						'name': 'tambrauw',
-						'quantity': 84.42
-					},
-					{
-						'name': 'maybrat',
 						'quantity': 0.00
-					},
-					{
-						'name': 'manokwari_selatan',
-						'quantity': 0.00
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 0.00
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 96.44
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 0.86
 					},
 					{
 						'name': 'kaimana',
@@ -1362,35 +923,35 @@ const healthData = [
 					},
 					{
 						'name': 'wondama',
-						'quantity': 2.40
+						'quantity': 0.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 3.94
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 0.48
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 1.67
+						'quantity': 0.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 1.31
+						'quantity': 0.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 0.77
+						'quantity': 0.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 15.58
+						'quantity': 0.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 3.56
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
@@ -1412,100 +973,52 @@ const healthData = [
 		'year': '2015',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 64.92
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 61.33
-					},
-					{
-						'name': 'wondama',
-						'quantity': 56.64
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 61.09
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 69.91
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 58.60
-					},
-					{
-						'name': 'sorong',
-						'quantity': 61.86
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 61.23
-					},
-					{
-						'name': 'tambrauw',
-						'quantity': 49.77
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 55.78
-					},
-					{
-						'name': 'manokwari_selatan',
-						'quantity': 56.59
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 53.73
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 75.91
-					}
-				]
-			},
-			{
-				'name': 'literate',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
 						'quantity': 0.00
+
 					},
 					{
 						'name': 'kaimana',
 						'quantity': 0.00
+
 					},
 					{
 						'name': 'wondama',
 						'quantity': 0.00
+
 					},
 					{
 						'name': 'teluk_bintuni',
 						'quantity': 0.00
+
 					},
 					{
 						'name': 'manokwari',
 						'quantity': 0.00
+
 					},
 					{
 						'name': 'sorong_selatan',
 						'quantity': 0.00
+
 					},
 					{
 						'name': 'sorong',
 						'quantity': 0.00
+
 					},
 					{
 						'name': 'raja_ampat',
 						'quantity': 0.00
+
 					},
 					{
 						'name': 'tambrauw',
 						'quantity': 0.00
+
 					},
 					{
 						'name': 'maybrat',
@@ -1526,59 +1039,59 @@ const healthData = [
 				]
 			},
 			{
-				'name': 'illiterate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 0.00
+						'quantity': 74.53
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 0.00
+						'quantity': 75.76
 					},
 					{
 						'name': 'wondama',
-						'quantity': 0.00
+						'quantity': 17.26
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 0.00
+						'quantity': 84.69
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 0.00
+						'quantity': 64.50
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 0.00
+						'quantity': 56.87
 					},
 					{
 						'name': 'sorong',
-						'quantity': 0.00
+						'quantity': 80.30
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 0.00
+						'quantity': 58.11
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 0.00
+						'quantity': 29.33
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 0.00
+						'quantity': 31.63
 					},
 					{
 						'name': 'manokwari_selatan',
-						'quantity': 0.00
+						'quantity': 59.65
 					},
 					{
 						'name': 'pegunungan_arfak',
-						'quantity': 0.00
+						'quantity': 31.64
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 0.00
+						'quantity': 86.63
 					}
 				]
 			}
@@ -1588,173 +1101,125 @@ const healthData = [
 		'year': '2016',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 65.55
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 62.15
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'wondama',
-						'quantity': 57.16
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 61.81
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 70.34
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 59.20
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'sorong',
-						'quantity': 62.42
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 61.95
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 50.35
+						'quantity': 0.00
+
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 56.35
+						'quantity': 0.00
 					},
 					{
 						'name': 'manokwari_selatan',
-						'quantity': 57.12
+						'quantity': 0.00
 					},
 					{
 						'name': 'pegunungan_arfak',
-						'quantity': 53.89
+						'quantity': 0.00
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 76.33
+						'quantity': 0.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 98.26
+						'quantity': 83.13
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 98.78
+						'quantity': 67.17
 					},
 					{
 						'name': 'wondama',
-						'quantity': 97.84
+						'quantity': 10.56
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 97.62
+						'quantity': 89.63
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 96.83
+						'quantity': 70.14
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 97.48
+						'quantity': 49.22
 					},
 					{
 						'name': 'sorong',
-						'quantity': 96.26
+						'quantity': 72.24
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 98.69
+						'quantity': 55.20
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 95.01
+						'quantity': 55.70
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 94.89
+						'quantity': 35.20
 					},
 					{
 						'name': 'manokwari_selatan',
-						'quantity': 91.04
+						'quantity': 53.58
 					},
 					{
 						'name': 'pegunungan_arfak',
-						'quantity': 76.73
+						'quantity': 15.01
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 99.53
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 1.74
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 1.22
-					},
-					{
-						'name': 'wondama',
-						'quantity': 2.16
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 2.38
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 3.17
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 2.52
-					},
-					{
-						'name': 'sorong',
-						'quantity': 3.74
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 1.31
-					},
-					{
-						'name': 'tambrauw',
-						'quantity': 4.99
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 5.11
-					},
-					{
-						'name': 'manokwari_selatan',
-						'quantity': 8.96
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 23.27
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 0.47 
+						'quantity': 86.74
 					}
 				]
 			}
@@ -1764,173 +1229,116 @@ const healthData = [
 		'year': '2017',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 66.09
+						'quantity': 206.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 62.74
+						'quantity': 132.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 58.10
+						'quantity': 50.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 62.39
+						'quantity': 177.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 70.67
+						'quantity': 312.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 60.19
+						'quantity': 141.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 63.42
+						'quantity': 200.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 62.35
+						'quantity': 161.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 51.01
+						'quantity': 22.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 57.23
+						'quantity': 100.00
 					},
 					{
 						'name': 'manokwari_selatan',
-						'quantity': 58.08
+						'quantity': 136.00
 					},
 					{
 						'name': 'pegunungan_arfak',
-						'quantity': 54.39
+						'quantity': 68.00
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 76.73
+						'quantity': 134.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 98.99
+						'quantity': 94.92
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 99.33
+						'quantity': 81.20
 					},
 					{
 						'name': 'wondama',
-						'quantity': 98.69
+						'quantity': 5.36
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 97.51
+						'quantity': 82.70
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 94.86
+						'quantity': 68.99
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 98.13
+						'quantity': 46.76
 					},
 					{
 						'name': 'sorong',
-						'quantity': 97.14
+						'quantity': 81.55
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 96.98
+						'quantity': 59.42
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 94.96
+						'quantity': 44.69
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 96.55
+						'quantity': 17.10
 					},
 					{
 						'name': 'manokwari_selatan',
-						'quantity': 92.95
+						'quantity': 55.80
 					},
 					{
 						'name': 'pegunungan_arfak',
-						'quantity': 81.70
+						'quantity': 62.58
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 99.74
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 1.01
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 0.67
-					},
-					{
-						'name': 'wondama',
-						'quantity': 1.31
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 2.49
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 5.14
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 1.87
-					},
-					{
-						'name': 'sorong',
-						'quantity': 2.86
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 3.02
-					},
-					{
-						'name': 'tambrauw',
-						'quantity': 5.04
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 3.45
-					},
-					{
-						'name': 'manokwari_selatan',
-						'quantity': 7.05
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 18.30
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 0.26
+						'quantity': 91.41
 					}
 				]
 			}
@@ -1940,173 +1348,116 @@ const healthData = [
 		'year': '2018',
 		'indicator': [
 			{
-				'name': 'humanDevelopment',
+				'name': 'healthInfrastructure',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 66.99
+						'quantity': 114.00
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 63.67
+						'quantity': 136.00
 					},
 					{
 						'name': 'wondama',
-						'quantity': 58.86
+						'quantity': 86.00
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 63.13
+						'quantity': 88.00
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 71.17
+						'quantity': 76.00
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 61.01
+						'quantity': 64.00
 					},
 					{
 						'name': 'sorong',
-						'quantity': 64.32
+						'quantity': 89.00
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 62.84
+						'quantity': 81.00
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 51.95
+						'quantity': 33.00
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 58.16
+						'quantity': 70.00
 					},
 					{
 						'name': 'manokwari_selatan',
-						'quantity': 58.84
+						'quantity': 17.00
 					},
 					{
 						'name': 'pegunungan_arfak',
-						'quantity': 55.31
+						'quantity': 24.00
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 77.35
+						'quantity': 73.00
 					}
 				]
 			},
 			{
-				'name': 'literate',
+				'name': 'cleanWater',
 				'kabupaten': [
 					{
 						'name': 'fakfak',
-						'quantity': 99.21
+						'quantity': 97.69
 					},
 					{
 						'name': 'kaimana',
-						'quantity': 99.31
+						'quantity': 86.98
 					},
 					{
 						'name': 'wondama',
-						'quantity': 97.25
+						'quantity': 15.54
 					},
 					{
 						'name': 'teluk_bintuni',
-						'quantity': 97.47
+						'quantity': 86.57
 					},
 					{
 						'name': 'manokwari',
-						'quantity': 98.50
+						'quantity': 73.21
 					},
 					{
 						'name': 'sorong_selatan',
-						'quantity': 97.12
+						'quantity': 43.02
 					},
 					{
 						'name': 'sorong',
-						'quantity': 96.89
+						'quantity': 88.71
 					},
 					{
 						'name': 'raja_ampat',
-						'quantity': 98.75
+						'quantity': 76.05
 					},
 					{
 						'name': 'tambrauw',
-						'quantity': 95.44
+						'quantity': 24.62
 					},
 					{
 						'name': 'maybrat',
-						'quantity': 93.95
+						'quantity': 42.35
 					},
 					{
 						'name': 'manokwari_selatan',
-						'quantity': 92.10
+						'quantity': 43.25
 					},
 					{
 						'name': 'pegunungan_arfak',
-						'quantity': 79.27
+						'quantity': 34.76
 					},
 					{
 						'name': 'kota_sorong',
-						'quantity': 98.83
-					}
-				]
-			},
-			{
-				'name': 'illiterate',
-				'kabupaten': [
-					{
-						'name': 'fakfak',
-						'quantity': 0.79
-					},
-					{
-						'name': 'kaimana',
-						'quantity': 0.69
-					},
-					{
-						'name': 'wondama',
-						'quantity': 2.75
-					},
-					{
-						'name': 'teluk_bintuni',
-						'quantity': 2.53
-					},
-					{
-						'name': 'manokwari',
-						'quantity': 1.50
-					},
-					{
-						'name': 'sorong_selatan',
-						'quantity': 2.88
-					},
-					{
-						'name': 'sorong',
-						'quantity': 3.11
-					},
-					{
-						'name': 'raja_ampat',
-						'quantity': 1.25
-					},
-					{
-						'name': 'tambrauw',
-						'quantity': 4.56
-					},
-					{
-						'name': 'maybrat',
-						'quantity': 6.05
-					},
-					{
-						'name': 'manokwari_selatan',
-						'quantity': 7.90
-					},
-					{
-						'name': 'pegunungan_arfak',
-						'quantity': 20.73
-					},
-					{
-						'name': 'kota_sorong',
-						'quantity': 1.17
+						'quantity': 94.84
 					}
 				]
 			}

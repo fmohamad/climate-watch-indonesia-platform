@@ -74,7 +74,7 @@ class RegionPopulation extends PureComponent {
       chartConfig: {
         axes: {
           xBottom: { name: 'Year', unit: '', format: 'string' },
-          yLeft: { name: 'People', unit: '', format: 'number' }
+          yLeft: { name: 'People', unit: '%', format: 'number' }
         },
         tooltip: {
           y1: { label: 'Indeks Pembangunan Manusia' },
@@ -166,6 +166,96 @@ class RegionPopulation extends PureComponent {
 
   handleFilterChange = (field, selected) => {
     if(field === 'selectedOption') {
+      if(selected.value === 'education') {
+        this.setState({
+          indicatorOptions: [
+            { value: 'all-selected', label: 'All Selected', override: true },
+            { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
+            { label: 'Angka Melek Huruf', value: 'literate' },
+            { label: 'Angka Buta Huruf', value: 'illiterate' }
+          ],
+          chartConfig: {
+            axes: {
+              xBottom: { name: 'Year', unit: '', format: 'string' },
+              yLeft: { name: 'People', unit: '', format: 'number' }
+            },
+            tooltip: {
+              y1: { label: 'Indeks Pembangunan Manusia' },
+              y2: { label: 'Angka Melek Huruf' },
+              y3: { label: 'Angka Buta Huruf' },
+              x: { label: 'Year' }
+            },
+            animation: false,
+            columns: {
+              x: [ 
+                { label: 'year', value: 'x' } 
+              ],
+              y: [
+                { label: 'Indeks Pembangunan Manusia', value: 'y1' },
+                { label: 'Angka Melek Huruf', value: 'y2' },
+                { label: 'Angka Buta Huruf', value: 'y3' }
+              ]
+            },
+            theme: { 
+              y1: { stroke: '#00B4D2', fill: '#00B4D2' },
+              y2: { stroke: '#0677B3', fill: '#0677B3' },
+              y3: { stroke: '#D2187C', fill: '#D2187C' }  
+            }
+          },
+          chartDataOptions: [
+            { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
+            { label: 'Angka Melek Huruf', value: 'literate' },
+            { label: 'Angka Buta Huruf', value: 'illiterate' }
+          ],
+          chartDataSelected: [
+            { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
+            { label: 'Angka Melek Huruf', value: 'literate' },
+            { label: 'Angka Buta Huruf', value: 'illiterate' }
+          ]
+        })
+      } else {
+        this.setState({
+          indicatorOptions: [
+            { value: 'all-selected', label: 'All Selected', override: true },
+            { label: 'Infrastruktur Pelayanan Kesehatan', value: 'healthInfrastructure' },
+            { label: 'Persentase Akses Air Minum Layak', value: 'cleanWater' }
+          ],
+          chartConfig: {
+            axes: {
+              xBottom: { name: 'Year', unit: '', format: 'string' },
+              yLeft: { name: 'Percent', unit: '%', format: 'number' }
+            },
+            tooltip: {
+              y1: { label: 'Infrastruktur Pelayanan Kesehatan' },
+              y2: { label: 'Persentase Akses Air Minum Layak' },
+              x: { label: 'Year' }
+            },
+            animation: false,
+            columns: {
+              x: [ 
+                { label: 'year', value: 'x' } 
+              ],
+              y: [
+                { label: 'Infrastruktur Pelayanan Kesehatan', value: 'y1' },
+                { label: 'Persentase Akses Air Minum Layak', value: 'y2' },
+              ]
+            },
+            theme: { 
+              y1: { stroke: '#00B4D2', fill: '#00B4D2' },
+              y2: { stroke: '#0677B3', fill: '#0677B3' }
+            }
+          },
+          chartDataOptions: [
+            { label: 'Infrastruktur Pelayanan Kesehatan', value: 'healthInfrastructure' },
+            { label: 'Persentase Akses Air Minum Layak', value: 'cleanWater' }
+          ],
+          chartDataSelected: [
+            { label: 'Infrastruktur Pelayanan Kesehatan', value: 'healthInfrastructure' },
+            { label: 'Persentase Akses Air Minum Layak', value: 'cleanWater' }
+          ]
+        })
+      }
+
       this.setState({ 
         [field]: selected,
         selectedSector: {value: 'all-selected', 'label': 'All Selected'},
@@ -174,6 +264,8 @@ class RegionPopulation extends PureComponent {
       }, () => {
         this.getChartData()
       });
+
+      console.log('selected', selected);
     } else {
       this.setState({ [field]: selected }, () => {
         this.getChartData()
@@ -308,6 +400,7 @@ class RegionPopulation extends PureComponent {
               height={300}
               barSize={30}
               customMessage={t('common.chart-no-data')}
+              showUnit
               /* onLegendChange={onLegendChange} */
             />
           </div>
