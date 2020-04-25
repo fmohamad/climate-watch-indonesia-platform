@@ -29,28 +29,45 @@ class Policy extends PureComponent {
         "data": [
           {
             "x": 2016,
-            "y3": -14069940,
-            "y4": 94960
+            "y1": 84.51,
+            "y2": 80,
+            "y3": 75
           },
           {
             "x": 2017,
-            "y3": -14702640,
-            "y4": 114610
+            "y1": 84.51,
+            "y2": 82,
+            "y3": 76
           },
           {
             "x": 2018,
-            "y3": -18262560,
-            "y4": 125920
+            "y1": 82,
+            "y2": 82,
+            "y3": 78
           },
           {
             "x": 2019,
-            "y3": -11824590,
-            "y4": 135910
+            "y1": 80,
+            "y2": 85,
+            "y3": 80
           },
           {
             "x": 2020,
-            "y3": -11824590,
-            "y4": 102220
+            "y1": 81,
+            "y2": 85,
+            "y3": 80
+          },
+          {
+            "x": 2021,
+            "y1": 82,
+            "y2": 86,
+            "y3": 82
+          },
+          {
+            "x": 2022,
+            "y1": 82,
+            "y2": 88,
+            "y3": 83
           }
         ],
         "projectedData": null,
@@ -62,39 +79,34 @@ class Policy extends PureComponent {
               "format": "YYYY"
             },
             "yLeft": {
-              "name": "Emissions",
-              "unit": "tCO2e",
+              "name": "Percent",
+              "unit": "",
               "format": "number"
             }
           },
           "theme": {
-            "y4": {
+            "y1": {
               "stroke": "#00B4D2",
               "fill": "#00B4D2"
-            },
-            "y3": {
-              "stroke": "#D2187C",
-              "fill": "#D2187C"
-            },
-            "y5": {
-              "stroke": "#FF7800",
-              "fill": "#FF7800"
-            },
-            "y6": {
-              "stroke": "#FFB400",
-              "fill": "#FFB400"
             },
             "y2": {
               "stroke": "#0677B3",
               "fill": "#0677B3"
+            },
+            "y3": {
+              "stroke": "#D2187C",
+              "fill": "#D2187C"
             }
           },
           "tooltip": {
-            "y4": {
+            "y1": {
               "label": "Indeks Lingkungan Hidup"
             },
+            "y2": {
+              "label": "Persentase Timbulan Sampah"
+            },
             "y3": {
-              "label": "Indeks Kualitas Air"
+              "label": "Target Penurunan Timbulan Sampah"
             }
           },
           "animation": false,
@@ -108,10 +120,14 @@ class Policy extends PureComponent {
             "y": [
               {
                 "label": "Indeks Lingkungan Hidup",
-                "value": "y4",
+                "value": "y1",
               },
               {
-                "label": "Indeks Kualitas Air",
+                "label": "Persentase Timbulan Sampah",
+                "value": "y2",
+              },
+              {
+                "label": "Target Penurunan Timbulan Sampah",
                 "value": "y3",
               }
             ]
@@ -124,8 +140,12 @@ class Policy extends PureComponent {
             "value": "2",
           },
           {
-            "label": "Indeks Kualitas Air",
+            "label": "Persentase Timbulan Sampah",
             "value": "3",
+          },
+          {
+            "label": "Target Penurunan Timbulan Sampah",
+            "value": "4",
           }
         ],
         "dataSelected": [
@@ -134,8 +154,12 @@ class Policy extends PureComponent {
             "value": "2",
           },
           {
-            "label": "Indeks Kualitas Air",
+            "label": "Persentase Timbulan Sampah",
             "value": "3",
+          },
+          {
+            "label": "Target Penurunan Timbulan Sampah",
+            "value": "4",
           }
         ]
       },
@@ -149,8 +173,12 @@ class Policy extends PureComponent {
           "value": "2",
         },
         {
-          "label": "Indeks Kualitas Air",
+          "label": "Persentase Timbulan Sampah",
           "value": "3",
+        },
+        {
+          "label": "Target Penurunan Timbulan Sampah",
+          "value": "4",
         }
       ],
       selectedIndicator: {
@@ -160,10 +188,11 @@ class Policy extends PureComponent {
     };
   }
 
-  setChartData() {
+  handleFilterChange = (field, selected) => {
     const { selectedIndicator, chartData } = this.state;
     let config = chartData.config
-    if(selectedIndicator.value === '2') {
+
+    if(selected.value === '2') {
       config.columns = {
         "x": [
           {
@@ -174,12 +203,12 @@ class Policy extends PureComponent {
         "y": [
           {
             "label": "Indeks Lingkungan Hidup",
-            "value": "y4",
+            "value": "y1",
           }
         ]
       }
       this.setState({ config })
-    } else if(selectedIndicator.value === '3') {
+    } else if(selected.value === '3') {
       config.columns = {
         "x": [
           {
@@ -189,11 +218,27 @@ class Policy extends PureComponent {
         ],
         "y": [
           {
-            "label": "Indeks Kualitas Air",
-            "value": "y3",
+            "label": "Persentase Timbulan Sampah",
+            "value": "y2",
           }
         ]
       }
+      this.setState({ config })
+    } else if(selected.value === '4'){
+      config.columns = {
+        "x": [
+          {
+            "label": "year",
+            "value": "x"
+          }
+        ],
+        "y": [
+          {
+            "label": "Target Penurunan Timbulan Sampah",
+            "value": "y3",
+          }
+        ]
+      } 
       this.setState({ config })
     } else {
       config.columns = {
@@ -206,22 +251,22 @@ class Policy extends PureComponent {
         "y": [
           {
             "label": "Indeks Lingkungan Hidup",
-            "value": "y4",
+            "value": "y1",
           },
           {
-            "label": "Indeks Kualitas Air",
+            "label": "Persentase Timbulan Sampah",
+            "value": "y2",
+          },
+          {
+            "label": "Target Penurunan Timbulan Sampah",
             "value": "y3",
           }
         ]
       }
       this.setState({ config })
     }
-  }
 
-  handleFilterChange = (field, selected) => {
-    this.setState({ [field]: selected }, () => {
-      this.setChartData()
-    });
+    this.setState({ [field]: selected });
   };
 
   render() {
@@ -400,33 +445,129 @@ class Policy extends PureComponent {
               <br/>
               <tr>
                 <td>2016</td>
-                <td>14%</td>
-                <td>8%</td>
-                <td>Tahun Dasar</td>
+                <td>84.51%</td>
+                <td>0%</td>
+                <td>Indeks lingkungan hidup</td>
               </tr>
               <tr>
                 <td>2017</td>
-                <td>20%</td>
-                <td>12%</td>
-                <td>Tahun Dasar</td>
+                <td>84.51%</td>
+                <td>0%</td>
+                <td>Indeks lingkungan hidup</td>
               </tr>
               <tr>
                 <td>2018</td>
-                <td>25%</td>
-                <td>18%</td>
-                <td>Tahun Dasar</td>
+                <td>82%</td>
+                <td>0%</td>
+                <td>Indeks lingkungan hidup</td>
               </tr>
               <tr>
                 <td>2019</td>
-                <td>30%</td>
-                <td>25%</td>
-                <td>Tahun Dasar</td>
+                <td>80%</td>
+                <td>0%</td>
+                <td>Indeks lingkungan hidup</td>
               </tr>
               <tr>
                 <td>2020</td>
-                <td>30%</td>
-                <td>25%</td>
-                <td>Tahun Dasar</td>
+                <td>81%</td>
+                <td>0%</td>
+                <td>Indeks lingkungan hidup</td>
+              </tr>
+              <tr>
+                <td>2021</td>
+                <td>82%</td>
+                <td>0%</td>
+                <td>Indeks lingkungan hidup</td>
+              </tr>
+              <tr>
+                <td>2022</td>
+                <td>82%</td>
+                <td>0%</td>
+                <td>Indeks lingkungan hidup</td>
+              </tr>
+              <tr>
+                <td>2016</td>
+                <td>80%</td>
+                <td>0%</td>
+                <td>Persentase timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2017</td>
+                <td>82%</td>
+                <td>0%</td>
+                <td>Persentase timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2018</td>
+                <td>82%</td>
+                <td>0%</td>
+                <td>Persentase timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2019</td>
+                <td>85%</td>
+                <td>0%</td>
+                <td>Persentase timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2020</td>
+                <td>85%</td>
+                <td>0%</td>
+                <td>Persentase timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2021</td>
+                <td>86%</td>
+                <td>0%</td>
+                <td>Persentase timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2022</td>
+                <td>88%</td>
+                <td>0%</td>
+                <td>Persentase timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2016</td>
+                <td>75%</td>
+                <td>0%</td>
+                <td>Target penurunan timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2017</td>
+                <td>76%</td>
+                <td>0%</td>
+                <td>Target penurunan timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2018</td>
+                <td>78%</td>
+                <td>0%</td>
+                <td>Target penurunan timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2019</td>
+                <td>80%</td>
+                <td>0%</td>
+                <td>Target penurunan timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2020</td>
+                <td>80%</td>
+                <td>0%</td>
+                <td>Target penurunan timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2021</td>
+                <td>82%</td>
+                <td>0%</td>
+                <td>Target penurunan timbulan sampah</td>
+              </tr>
+              <tr>
+                <td>2022</td>
+                <td>83%</td>
+                <td>0%</td>
+                <td>Target penurunan timbulan sampah</td>
               </tr>
             </table>
           </div>
