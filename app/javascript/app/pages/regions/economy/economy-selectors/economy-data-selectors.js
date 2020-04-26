@@ -6,13 +6,17 @@ import concat from 'lodash/concat'
 import flatten from 'lodash/flatten'
 import { ALL_SELECTED, METRIC, SECTOR_TOTAL } from 'constants'
 
-import { getThemeConfig, getYColumnValue, getTooltipConfig } from 'utils/graphs'
+import {
+  getThemeConfig,
+  getYColumnValue,
+  getTooltipConfig,
+} from 'utils/graphs'
 
 import { getMetadata, getIndicatorValues } from './economy-get-selectors'
 import {
-  getFieldSelected,
   getSelectedOptions,
   getFilterOptions,
+  getFieldSelected
 } from './economy-filter-selectors'
 
 const getAxes = (xName, unit, yName) => ({
@@ -37,35 +41,29 @@ const getUnit = createSelector(
   }
 )
 
-const getModelSelected = createSelector(
-  getFieldSelected('indicators'),
-  (selectedIndicator) => {
-    if (!selectedIndicator) return null
-    return selectedIndicator.value.split('-')[1]
-  }
-)
+const getModelSelected = createSelector((getFieldSelected('indicators')), (indicator) => {
+  if (!indicator) return null
+  return indicator.value.split('-')[1]
+})
 
 const outAllSelectedOption = (o) => o.value !== ALL_SELECTED
 
-const getLegendDataOptions = createSelector(
-  [getFilterOptions, getModelSelected],
-  (options, selectedModel) => {
-    if (!options || !options.locations || !selectedModel) return null
+const getLegendDataOptions = createSelector([getFilterOptions, getModelSelected], (options, model) => {
+  if (!options || !options.locations) return null
 
-    if (selectedModel === 'kabupaten') {
-      return options.locations.filter(outAllSelectedOption)
-    }
-
-    return options.sectors
+  if (model === 'kabupaten') {
+    return options.locations.filter(outAllSelectedOption)
   }
-)
+
+  return options.sectors
+})
 
 const getLegendDataSelected = createSelector(
   [getSelectedOptions, getFilterOptions, getModelSelected],
-  (selectedOptions, options, selectedModel) => {
-    if (!selectedOptions || isEmpty(selectedOptions) || !options || !selectedModel) return null
+  (selectedOptions, options, model) => {
+    if (!selectedOptions || isEmpty(selectedOptions) || !options) return null
 
-    if (selectedModel === 'kabupaten') {
+    if (model === 'kabupaten') {
       return castArray(selectedOptions.locations)
     }
 
@@ -74,15 +72,15 @@ const getLegendDataSelected = createSelector(
 )
 
 const getYColumnOptions = createSelector(
-  [getLegendDataSelected, getModelSelected],
-  (legendDataSelected, modelSelected) => {
+  [getLegendDataSelected],
+  (legendDataSelected) => {
     if (!legendDataSelected) return null
     const columns = legendDataSelected.map((data) => {
       if (!data) return null
 
       return {
         label: data && data.label,
-        value: data && getYColumnValue(`${modelSelected}${data.value}`),
+        value: getYColumnValue(data && data.value),
         code: data && data.code,
       }
     })
@@ -91,56 +89,111 @@ const getYColumnOptions = createSelector(
   }
 )
 
-const parseChartData = createSelector(
+const getDFilterValue = (d, modelSelected) =>
+  modelSelected === 'region' ? d.iso_code3 : d[modelSelected]
+
+const isOptionSelected = (selectedOptions, valueOrCode) =>
+  castArray(selectedOptions)
+    .filter((o) => o)
+    .some((o) => o.value === valueOrCode || o.code === valueOrCode)
+
+const filterBySelectedOptions = (
+  emissionsData,
+  metricSelected,
+  selectedOptions,
+  filterOptions
+) => {
+  const fieldPassesFilter = (selectedFilterOption, options, fieldValue) =>
+    (isOptionSelected(selectedFilterOption, ALL_SELECTED) &&
+      isOptionSelected(options, fieldValue)) ||
+    isOptionSelected(selectedFilterOption, fieldValue)
+  const absoluteMetric = METRIC.absolute
+
+  const byMetric = (d) => {
+    const notTotalWithAbsoluteMetric =
+      d.metric === absoluteMetric && d.sector !== SECTOR_TOTAL
+
+    return (
+      d.metric === METRIC[metricSelected] &&
+      (notTotalWithAbsoluteMetric || d.metric !== absoluteMetric)
+    )
+  }
+
+  return emissionsData
+    .filter(byMetric)
+    .filter((d) =>
+      FRONTEND_FILTERED_FIELDS.every((field) =>
+        fieldPassesFilter(
+          selectedOptions[field],
+          filterOptions[field],
+          getDFilterValue(d, field)
+        )
+      )
+    )
+}
+
+const parseValues = createSelector(
   [getIndicatorValues, getSelectedOptions, getYColumnOptions, getModelSelected],
-  (indicatorsData, selectedOptions, yColumnOptions, modelSelected) => {
+  (indicatorsData, selectedOptions, yColumnOptions, model) => {
     if (isEmpty(indicatorsData)) return null
-    if (!selectedOptions || !yColumnOptions || !modelSelected) return null
+    if (!selectedOptions || !yColumnOptions) return null
 
     const { locations, indicators, sectors } = selectedOptions
 
     const location = castArray(locations)
     const sector = castArray(sectors)
-
     const { values } = indicatorsData
-
     let filterByLocations = []
-    let dataFiltered = []
 
-    if (modelSelected === 'kabupaten') {
+    if (model === 'kabupaten') {
       filterByLocations = flatten(
         concat(
           location.map((loc) => filter(values, { location_iso_code3: loc.value }))
         )
       )
     } else {
-      filterByLocations = filter(values, {location_iso_code3: 'ID.PB'})
+      filterByLocations = flatten(
+        concat(
+          sector.map((sec) => filter(values, { category: sec.label }))
+        )
+      )
     }
 
-    const filterByIndicator = filterByLocations.filter(data => data.indicator_code === indicators.value)
+    const dataFiltered = filterByLocations.filter((data) => {
+      return (
+        data.indicator_code === indicators.value
+      )
+    })
 
     if (isEmpty(dataFiltered) || !dataFiltered) return null
 
-    const yearValues = dataFiltered[0].values.map((d) => d.year)
+    const yearValues = dataFiltered[0].values.map(d => d.year)
 
     if (!yearValues) return null
 
     const dataParsed = []
 
-    yearValues.forEach((x) => {
+    yearValues.forEach(x => {
       const item = {}
-      dataFiltered.forEach((data) => {
-        const yValue = yColumnOptions.find(
-          (column) => column.code === data.location_iso_code3
-        ).value
+      dataFiltered.forEach(data => {
+
+        let yValue = ''
+        
+        if (model === 'kabupaten') {
+          yValue = yColumnOptions.find(column => column.code === data.location_iso_code3).value
+        } else {
+          yValue = yColumnOptions.find(column => column.label === data.category ).value
+        }
 
         item.x = x
-        item[yValue] = data.values.find((d) => d.year === x).value
+        item[yValue] = data.values.find(d => d.year === x).value
+
       })
       dataParsed.push(item)
-    })
+    });
 
     return dataParsed
+
   }
 )
 
@@ -176,7 +229,7 @@ const getChartLoading = createSelector(
 )
 
 const getDataLoading = createSelector(
-  [getChartLoading, parseChartData],
+  [getChartLoading, parseValues],
   (loading, data) => loading || !data || false
 )
 
@@ -187,7 +240,7 @@ export const getDownloadURI = createSelector([getMetadata], (metadata) => {
 })
 
 export const getChartData = createStructuredSelector({
-  data: parseChartData,
+  data: parseValues,
   config: getChartConfig,
   loading: getDataLoading,
   dataOptions: getLegendDataOptions,
