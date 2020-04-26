@@ -1,7 +1,7 @@
 const populationData = [
 	{
-		'year': '2018',
-		'ID.PB.FA': [
+		'year': '2017',
+		values: [
 			{
 				ageRange: '0-4',
 				quantity: 169729
@@ -143,8 +143,8 @@ const populationData = [
 		]
 	},
 	{
-		'year': '2019',
-		'male': [
+		'year': '2018',
+		values: [
 			{
 				ageRange: '0-4',
 				quantity: 192729
@@ -286,8 +286,8 @@ const populationData = [
 		]
 	},
 	{
-		'year': '2020',
-		'male': [
+		'year': '2019',
+		values: [
 			{
 				ageRange: '0-4',
 				quantity: 202735

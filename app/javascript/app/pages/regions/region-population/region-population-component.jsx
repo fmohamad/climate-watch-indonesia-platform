@@ -31,8 +31,8 @@ class RegionPopulation extends PureComponent {
         value: 'population',
       },
       selectedYear: {
-        value: '2018',
-        label: '2018',
+        value: '2017',
+        label: '2017',
       },
       selectedLocation: {
         value: 'ID.PB.FA',
@@ -76,11 +76,11 @@ class RegionPopulation extends PureComponent {
   }
 
   getChartData() {
-    const { selectedLocation, selectedYear } = this.state
+    const { selectedYear } = this.state
     let data = []
     populationData.filter((annualData) => {
       if (selectedYear.value === annualData.year) {
-        annualData[selectedLocation.value].map((item, index) => {
+        annualData.values.map((item, index) => {
           let dataObject = {}
           dataObject.x = item.ageRange
           dataObject.yIdn = item.quantity
@@ -209,7 +209,6 @@ class RegionPopulation extends PureComponent {
       chartData,
       selectedPopulationData,
     } = this.state
-    console.log(chartData)
 
     if (selectedOption.value === 'population') {
       return (
