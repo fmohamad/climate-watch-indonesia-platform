@@ -89,7 +89,6 @@ class Economy extends PureComponent {
 
   render() {
     const { metaParams, selectedOptions, chartData, t } = this.props
-    console.log(this.props)
 
     const icons = { line: lineIcon, area: areaIcon }
 
@@ -105,7 +104,7 @@ class Economy extends PureComponent {
           <div className={styles.filters}>
             {this.renderDropdown('indicators')}
             {this.renderDropdown('locations', true)}
-            {this.renderDropdown('sectors')}
+            {this.renderDropdown('sectors', true)}
             {this.renderDropdown('chartType', false, icons)}
             <Button theme={{ button: cx(button.darkBlue, styles.button) }}>
               <NavLink
@@ -158,7 +157,6 @@ Economy.propTypes = {
   downloadURI: PropTypes.string,
   chartData: PropTypes.object,
   metaParams: PropTypes.object,
-  fieldToBreakBy: PropTypes.string,
   filterOptions: PropTypes.object,
   onFilterChange: PropTypes.func.isRequired,
   selectedOptions: PropTypes.object,
@@ -169,7 +167,6 @@ Economy.defaultProps = {
   chartData: undefined,
   downloadURI: undefined,
   metaParams: {},
-  fieldToBreakBy: undefined,
   filterOptions: undefined,
   selectedOptions: undefined,
   provinceISO: '',
