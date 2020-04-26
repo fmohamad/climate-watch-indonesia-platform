@@ -91,3 +91,10 @@ platforms:
           - wp_population
           - wp_economic
           - wp_social
+      - name: west_papua_policies
+        menu: West Papua Platform
+        importer: WestPapua::ImportPolicies
+        datasets:
+          - wp_policies
+          - wp_policies_id
+          - wp_policies_data
