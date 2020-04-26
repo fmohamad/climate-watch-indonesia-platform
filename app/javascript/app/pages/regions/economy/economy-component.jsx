@@ -21,6 +21,10 @@ import styles from './economy-styles.scss'
 class Economy extends PureComponent {
   handleFilterChange = (field, selected) => {
 
+    if (field === 'indicators') {
+      window.location.href = `/en/regions/ID.PB/economy?indicators=${selected.value}`
+    }
+
     const { onFilterChange, selectedOptions } = this.props
 
     const prevSelectedOptionValues = castArray(selectedOptions[field])

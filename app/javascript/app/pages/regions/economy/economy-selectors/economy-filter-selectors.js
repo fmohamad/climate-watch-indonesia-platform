@@ -4,12 +4,10 @@ import { ALL_SELECTED } from 'constants'
 import {
   getAllSelectedOption,
   getFieldQuery,
-  findOption,
-  withAllSelected
+  findOption
 } from 'selectors/filters-selectors'
 
 import { getMetadata } from './economy-get-selectors'
-
 
 // OPTIONS
 const CHART_TYPE_OPTIONS = [
@@ -25,18 +23,14 @@ const DEFAULTS = {
 }
 
 const getFieldOptions = (field) =>
-  createSelector([getMetadata, getFieldQuery('indicators')], (metadata, queryIndicator) => {
+  createSelector(getMetadata, (metadata) => {
     if (!metadata || !metadata[field]) return null
-
-    const indSelected = queryIndicator || DEFAULTS.indicators
-    const isSectorModel = indSelected.includes('sektor')
-
-    console.log(isSectorModel)
 
     const transformToOption = (o) => ({
       label: o.name,
       value: o.iso_code3 || o.code || o.id,
-      code: o.iso_code3 || o.code || o.label
+      code: o.iso_code3 || o.code || o.label,
+      override: o.override
     })
 
     const options = metadata[field]
@@ -65,14 +59,12 @@ export const getFilterOptions = createStructuredSelector({
   chartType: () => CHART_TYPE_OPTIONS,
 })
 
-const getDefaultSector = { label: 'Total', value: 'total', code: 'total' }
-
 // DEFAULTS
 const getDefaults = createSelector([getFilterOptions], (options) => ({
   chartType: findOption(CHART_TYPE_OPTIONS, DEFAULTS.chartType),
   indicators: findOption(options.indicators, DEFAULTS.indicators),
   locations: findOption(options.locations, DEFAULTS.locations),
-  sectors: getDefaultSector
+  sectors: findOption(options.sectors, DEFAULTS.sectors),
 }))
 
 export const getSelectedOptions = createStructuredSelector({
