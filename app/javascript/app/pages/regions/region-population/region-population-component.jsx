@@ -10,7 +10,7 @@ import PopulationMap from './population-map'
 import populationData from './populationData'
 import { locationOptions, yearOptions, populationCardData } from './data'
 
-const format = require('d3-format').format;
+const format = require('d3-format').format
 
 import styles from './region-population-styles'
 
@@ -46,7 +46,12 @@ class RegionPopulation extends PureComponent {
         config: {
           axes: {
             xBottom: { name: 'Age', unit: 'tahun', format: 'string' },
-            yLeft: { name: 'Jumlah Jiwa', unit: 'jiwa', format: 'number', label: 'jiwa' },
+            yLeft: {
+              name: 'Jumlah Jiwa',
+              unit: 'jiwa',
+              format: 'number',
+              label: 'jiwa',
+            },
           },
           tooltip: {
             yIdn: { label: 'People', unit: 'jiwa' },
@@ -65,7 +70,6 @@ class RegionPopulation extends PureComponent {
     }
   }
 
-
   componentDidMount() {
     this.getChartData()
     this.getPopulationData()
@@ -76,13 +80,13 @@ class RegionPopulation extends PureComponent {
     let data = []
     populationData.filter((annualData) => {
       if (selectedYear.value === annualData.year) {
-          annualData[selectedLocation.value].map((item, index) => {
-            let dataObject = {}
-            dataObject.x = item.ageRange
-            dataObject.yIdn = item.quantity
-            data.push(dataObject)
-          })
-        }
+        annualData[selectedLocation.value].map((item, index) => {
+          let dataObject = {}
+          dataObject.x = item.ageRange
+          dataObject.yIdn = item.quantity
+          data.push(dataObject)
+        })
+      }
     })
     this.setState({ chartData: data })
   }
@@ -91,7 +95,10 @@ class RegionPopulation extends PureComponent {
     const { selectedYear } = this.state
     const { selectedLocation } = this.state
     populationCardData.filter((annualData) => {
-      if (selectedYear.value === annualData.year && selectedLocation.value === annualData.location) {
+      if (
+        selectedYear.value === annualData.year &&
+        selectedLocation.value === annualData.location
+      ) {
         this.setState({
           selectedPopulationData: annualData.data,
         })
@@ -140,7 +147,26 @@ class RegionPopulation extends PureComponent {
   }
 
   renderDropdown() {
-    const { selectedYear, selectedLocation } = this.state
+    const { selectedYear, selectedLocation, selectedOption } = this.state
+
+    if (selectedOption.value === 'distribution') {
+      return (
+        <div className={styles.dropdown}>
+          <Dropdown
+            key='year'
+            label='Tahun'
+            placeholder='Filter by'
+            options={yearOptions}
+            onValueChange={(value) =>
+              this.handleFilterChange('selectedYear', value)
+            }
+            value={selectedYear}
+            theme={{ select: dropdownStyles.select }}
+            hideResetButton
+          />
+        </div>
+      )
+    }
     return (
       <div className={styles.dropdownContainer}>
         <div className={styles.dropdown}>
@@ -197,20 +223,19 @@ class RegionPopulation extends PureComponent {
           <div className={styles.cardContainer}>
             <Card theme={cardTheme} title='Total Populasi Penduduk (Kabupaten)'>
               <div className={styles.cardContent}>
-                  <p>{selectedPopulationData.total_population}</p>
+                <p>{selectedPopulationData.total_population}</p>
               </div>
             </Card>
             <Card theme={cardTheme} title='Laju pertumbuhan penduduk per tahun'>
               <div className={styles.cardContent}>
-                  <p>{selectedPopulationData.growth}</p>
+                <p>{selectedPopulationData.growth}</p>
               </div>
             </Card>
             <Card theme={cardTheme} title='Kepadatan penduduk'>
               <div className={styles.cardContent}>
-                  <p>
-                    {selectedPopulationData.density}{' '}
-                    Jiwa/Km<sup>2</sup>
-                  </p>
+                <p>
+                  {selectedPopulationData.density} Jiwa/Km<sup>2</sup>
+                </p>
               </div>
             </Card>
             <Card
@@ -226,7 +251,8 @@ class RegionPopulation extends PureComponent {
       )
     }
 
-    const getCustomYLabelFormat = value => `${format('.2s')(`${value / 1000}`)}`;
+    const getCustomYLabelFormat = (value) =>
+      `${format('.2s')(`${value / 1000}`)}`
 
     return (
       <div className={styles.container}>
