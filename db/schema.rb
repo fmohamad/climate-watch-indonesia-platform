@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_31_154340) do
+ActiveRecord::Schema.define(version: 2020_04_26_055328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -243,6 +243,40 @@ ActiveRecord::Schema.define(version: 2019_01_31_154340) do
     t.index ["name"], name: "platforms_name_key", unique: true
   end
 
+  create_table "policies", force: :cascade do |t|
+    t.string "section", null: false
+    t.string "code", null: false
+    t.string "name", null: false
+    t.string "unit"
+    t.text "description"
+    t.jsonb "translations", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_policies_on_code", unique: true
+    t.index ["section"], name: "index_policies_on_section"
+  end
+
+  create_table "policy_categories", force: :cascade do |t|
+    t.text "name", null: false
+    t.jsonb "translations", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_policy_categories_on_name", unique: true
+  end
+
+  create_table "policy_values", force: :cascade do |t|
+    t.bigint "location_id"
+    t.bigint "policy_id"
+    t.string "source"
+    t.jsonb "values"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_policy_values_on_category_id"
+    t.index ["location_id"], name: "index_policy_values_on_location_id"
+    t.index ["policy_id"], name: "index_policy_values_on_policy_id"
+  end
+
   create_table "province_climate_plans", force: :cascade do |t|
     t.bigint "location_id"
     t.text "mitigation_activities"
@@ -316,6 +350,9 @@ ActiveRecord::Schema.define(version: 2019_01_31_154340) do
   add_foreign_key "indicator_values", "locations", on_delete: :cascade
   add_foreign_key "location_members", "locations", column: "member_id", on_delete: :cascade
   add_foreign_key "location_members", "locations", on_delete: :cascade
+  add_foreign_key "policy_values", "locations", on_delete: :cascade
+  add_foreign_key "policy_values", "policies", on_delete: :cascade
+  add_foreign_key "policy_values", "policy_categories", column: "category_id", on_delete: :cascade
   add_foreign_key "province_climate_plans", "locations", on_delete: :cascade
   add_foreign_key "province_development_plans", "locations", on_delete: :cascade
   add_foreign_key "sections", "platforms"
