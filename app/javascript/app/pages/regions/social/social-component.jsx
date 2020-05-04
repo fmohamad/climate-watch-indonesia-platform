@@ -32,7 +32,6 @@ class RegionPopulation extends PureComponent {
         value: 'education' 
       },
       indicatorOptions: [
-        { value: 'all-selected', label: 'All Selected', override: true },
         { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
         { label: 'Angka Melek Huruf', value: 'literate' },
         { label: 'Angka Buta Huruf', value: 'illiterate' }
@@ -54,15 +53,11 @@ class RegionPopulation extends PureComponent {
         { label: 'Kota Sorong', value: 'kota_sorong' }
       ],
       selectedIndicator: {
-        value: 'all-selected', 
-        label: 'All Selected'
+        label: 'Indeks Pembangunan Manusia', 
+        value: 'humanDevelopment'
       },
       selectedKabupaten: {
         value: 'all-selected',
-        label: 'All Selected'
-      },
-      selectedSector: {
-        value: 'all-selected', 
         label: 'All Selected'
       },
       chartData: [
@@ -78,8 +73,8 @@ class RegionPopulation extends PureComponent {
         },
         tooltip: {
           y1: { label: 'Indeks Pembangunan Manusia' },
-          y2: { label: 'Angka Melek Huruf' },
-          y3: { label: 'Angka Buta Huruf' },
+          y2: { label: '' },
+          y3: { label: '' },
           x: { label: 'Year' }
         },
         animation: false,
@@ -106,8 +101,6 @@ class RegionPopulation extends PureComponent {
       ],
       chartDataSelected: [
         { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
-        { label: 'Angka Melek Huruf', value: 'literate' },
-        { label: 'Angka Buta Huruf', value: 'illiterate' }
       ]
     };
   }
@@ -169,7 +162,6 @@ class RegionPopulation extends PureComponent {
       if(selected.value === 'education') {
         this.setState({
           indicatorOptions: [
-            { value: 'all-selected', label: 'All Selected', override: true },
             { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
             { label: 'Angka Melek Huruf', value: 'literate' },
             { label: 'Angka Buta Huruf', value: 'illiterate' }
@@ -181,8 +173,8 @@ class RegionPopulation extends PureComponent {
             },
             tooltip: {
               y1: { label: 'Indeks Pembangunan Manusia' },
-              y2: { label: 'Angka Melek Huruf' },
-              y3: { label: 'Angka Buta Huruf' },
+              y2: { label: '' },
+              y3: { label: '' },
               x: { label: 'Year' }
             },
             animation: false,
@@ -209,25 +201,26 @@ class RegionPopulation extends PureComponent {
           ],
           chartDataSelected: [
             { label: 'Indeks Pembangunan Manusia', value: 'humanDevelopment' },
-            { label: 'Angka Melek Huruf', value: 'literate' },
-            { label: 'Angka Buta Huruf', value: 'illiterate' }
-          ]
+          ],
+          selectedIndicator: {
+            label: 'Indeks Pembangunan Manusia', 
+            value: 'humanDevelopment'
+          }
         })
       } else {
         this.setState({
           indicatorOptions: [
-            { value: 'all-selected', label: 'All Selected', override: true },
             { label: 'Infrastruktur Pelayanan Kesehatan', value: 'healthInfrastructure' },
             { label: 'Persentase Akses Air Minum Layak', value: 'cleanWater' }
           ],
           chartConfig: {
             axes: {
               xBottom: { name: 'Year', unit: '', format: 'string' },
-              yLeft: { name: 'Percent', unit: ' ', format: 'number' }
+              yLeft: { name: 'Unit', unit: 'unit', format: 'number' }
             },
             tooltip: {
               y1: { label: 'Infrastruktur Pelayanan Kesehatan' },
-              y2: { label: 'Persentase Akses Air Minum Layak' },
+              y2: {label: ''},
               x: { label: 'Year' }
             },
             animation: false,
@@ -250,31 +243,42 @@ class RegionPopulation extends PureComponent {
             { label: 'Persentase Akses Air Minum Layak', value: 'cleanWater' }
           ],
           chartDataSelected: [
-            { label: 'Infrastruktur Pelayanan Kesehatan', value: 'healthInfrastructure' },
-            { label: 'Persentase Akses Air Minum Layak', value: 'cleanWater' }
-          ]
+            { label: 'Infrastruktur Pelayanan Kesehatan', value: 'healthInfrastructure' }
+          ],
+          selectedIndicator: {
+            label: 'Infrastruktur Pelayanan Kesehatan', 
+            value: 'healthInfrastructure' 
+          }
         })
       }
 
       this.setState({ 
         [field]: selected,
-        selectedSector: {value: 'all-selected', 'label': 'All Selected'},
         selectedKabupaten: {value: 'all-selected', 'label': 'All Selected'},
-        selectedIndicator: {value: 'all-selected', 'label': 'All Selected'},
       }, () => {
         this.getChartData()
       });
     } else {
       let unit = this.state.chartConfig
+      let tooltip = this.state.chartConfig
+      let index = this.state.indicatorOptions.indexOf(selected)
+      let axis = 'y' + (index + 1)
+      tooltip.tooltip = {
+        y1: {label: ''},
+        y2: {label: ''},
+        y3: {label: ''},
+        x: {label: 'year'}
+      }
+      tooltip.tooltip[axis].label = selected.label
       if(selected.value === 'cleanWater') {
         unit.axes.yLeft.unit = '%'
         this.setState({ unit })
       } else {
-        unit.axes.yLeft.unit = ' '
+        unit.axes.yLeft.unit = 'unit'
         this.setState({ unit })
       }
 
-      this.setState({ [field]: selected }, () => {
+      this.setState({ [field]: selected, chartDataSelected: [selected], tooltip }, () => {
         this.getChartData()
       });
     }
@@ -312,7 +316,7 @@ class RegionPopulation extends PureComponent {
 
   render() {
     const { t, provinceISO } = this.props;
-    const { selectedOption, selectedIndicator, selectedKabupaten, selectedSector, chartData, chartConfig, chartDataOptions, chartDataSelected, chartDomain, indicatorOptions, kabupatenOptions } = this.state;
+    const { selectedOption, selectedIndicator, selectedKabupaten, chartData, chartConfig, chartDataOptions, chartDataSelected, chartDomain, indicatorOptions, kabupatenOptions } = this.state;
     const sources = [ 'RADGRK', 'SIGNSa' ];
     const downloadURI = `emissions/download?source=${sources.join(
       ','
@@ -368,28 +372,6 @@ class RegionPopulation extends PureComponent {
                     hideResetButton
                   />
                 </div>
-                <div className={styles.dropdown}>
-                  {/*<Dropdown
-                    key="sector"
-                    label="Sektor"
-                    placeholder="Filter by"
-                    options={sectorOptions}
-                    onValueChange={value => this.handleFilterChange('selectedSector', value)}
-                    value={selectedSector}
-                    theme={{ select: dropdownStyles.select }}
-                    hideResetButton
-                  />*/}
-                  {/*<Multiselect
-                    key="sector"
-                    label="Sektor"
-                    options={chartDataOptions}
-                    // onValueChange={selected => this.handleFilterChange(field, selected)}
-                    values={chartDataSelected}
-                    theme={{ wrapper: dropdownStyles.select }}
-                    hideResetButton
-                  />*/}
-                </div>
-                {}
               </div>
               <Button theme={{ button: cx(button.darkBlue, styles.button) }}>
                 <NavLink

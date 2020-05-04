@@ -447,127 +447,127 @@ class Policy extends PureComponent {
                 <td>2016</td>
                 <td>84.51%</td>
                 <td>0%</td>
-                <td>Indeks lingkungan hidup</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2017</td>
                 <td>84.51%</td>
                 <td>0%</td>
-                <td>Indeks lingkungan hidup</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2018</td>
                 <td>82%</td>
                 <td>0%</td>
-                <td>Indeks lingkungan hidup</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2019</td>
                 <td>80%</td>
                 <td>0%</td>
-                <td>Indeks lingkungan hidup</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2020</td>
                 <td>81%</td>
                 <td>0%</td>
-                <td>Indeks lingkungan hidup</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2021</td>
                 <td>82%</td>
                 <td>0%</td>
-                <td>Indeks lingkungan hidup</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2022</td>
                 <td>82%</td>
                 <td>0%</td>
-                <td>Indeks lingkungan hidup</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2016</td>
                 <td>80%</td>
                 <td>0%</td>
-                <td>Persentase timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2017</td>
                 <td>82%</td>
                 <td>0%</td>
-                <td>Persentase timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2018</td>
                 <td>82%</td>
                 <td>0%</td>
-                <td>Persentase timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2019</td>
                 <td>85%</td>
                 <td>0%</td>
-                <td>Persentase timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2020</td>
                 <td>85%</td>
                 <td>0%</td>
-                <td>Persentase timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2021</td>
                 <td>86%</td>
                 <td>0%</td>
-                <td>Persentase timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2022</td>
                 <td>88%</td>
                 <td>0%</td>
-                <td>Persentase timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2016</td>
                 <td>75%</td>
                 <td>0%</td>
-                <td>Target penurunan timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2017</td>
                 <td>76%</td>
                 <td>0%</td>
-                <td>Target penurunan timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2018</td>
                 <td>78%</td>
                 <td>0%</td>
-                <td>Target penurunan timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2019</td>
                 <td>80%</td>
                 <td>0%</td>
-                <td>Target penurunan timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2020</td>
                 <td>80%</td>
                 <td>0%</td>
-                <td>Target penurunan timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2021</td>
                 <td>82%</td>
                 <td>0%</td>
-                <td>Target penurunan timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2022</td>
                 <td>83%</td>
                 <td>0%</td>
-                <td>Target penurunan timbulan sampah</td>
+                <td>Data belum tersedia</td>
               </tr>
             </table>
           </div>
