@@ -165,10 +165,6 @@ class Policy extends PureComponent {
       },
       indicatorOptions: [
         {
-         "label": "All Selected",
-          "value": "1",
-        },
-        {
           "label": "Indeks Lingkungan Hidup",
           "value": "2",
         },
@@ -182,10 +178,45 @@ class Policy extends PureComponent {
         }
       ],
       selectedIndicator: {
-       "label": "All Selected",
-        "value": "1",
-      }
+        label: "Indeks Lingkungan Hidup",
+        value: "2",
+      },
+      cardOptions: [
+        {
+          label: 'Tujuan',
+          value: 'tujuan'
+        },
+        {
+          label: 'Sasaran',
+          value: 'sasaran'
+        }
+      ],
+      selectedCard: {
+        label: "Tujuan",
+        value: "tujuan",
+      },
     };
+  }
+
+  componentDidMount() {
+    const { selectedIndicator, chartData } = this.state;
+    let config = chartData.config
+
+    config.columns = {
+      "x": [
+        {
+          "label": "year",
+          "value": "x"
+        }
+      ],
+      "y": [
+        {
+          "label": "Indeks Lingkungan Hidup",
+          "value": "y1",
+        }
+      ]
+    }
+    this.setState({ config })
   }
 
   handleFilterChange = (field, selected) => {
@@ -240,30 +271,6 @@ class Policy extends PureComponent {
         ]
       } 
       this.setState({ config })
-    } else {
-      config.columns = {
-        "x": [
-          {
-            "label": "year",
-            "value": "x"
-          }
-        ],
-        "y": [
-          {
-            "label": "Indeks Lingkungan Hidup",
-            "value": "y1",
-          },
-          {
-            "label": "Persentase Timbulan Sampah",
-            "value": "y2",
-          },
-          {
-            "label": "Target Penurunan Timbulan Sampah",
-            "value": "y3",
-          }
-        ]
-      }
-      this.setState({ config })
     }
 
     this.setState({ [field]: selected });
@@ -271,7 +278,7 @@ class Policy extends PureComponent {
 
   render() {
     const { t, provinceISO } = this.props;
-    const { chartData, indicatorOptions, selectedIndicator } = this.state;
+    const { chartData, indicatorOptions, selectedIndicator, cardOptions, selectedCard } = this.state;
 
     return (
       <div className={styles.page}>
@@ -294,97 +301,121 @@ class Policy extends PureComponent {
             </div>
           </div>
         </div>
+        <div className={styles.container}>
+          <div className={styles.toolbox}>
+            <div className={styles.dropdownContainer}>
+              <div className={styles.dropdown}>
+                <Dropdown
+                  key="indicator"
+                  label="Indikator"
+                  placeholder="Filter by"
+                  options={cardOptions}
+                  onValueChange={value => this.handleFilterChange('selectedCard', value)}
+                  value={selectedCard}
+                  theme={{ select: dropdownStyles.select }}
+                  hideResetButton
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <div className={styles.cardContainer}>
-          <div>
-            <SectionTitle
-              title={'Tujuan'}
-            />
-            <p>
-              Tujuan implemantasi Strategi dan Rencana Aksi di Provinsi Papua Barat
-            </p>
-            <br/>
-            <div className={styles.card}>
-              <ul>
-                <li>
-                  <span className={styles.number}>
-                    1
-                  </span>
-                  <span className={styles.cardContent}>
-                    Mengurangi degradasi dan deforestasi akibat konversi lahan hutan dan alih fungsi kawasan hutan.
-                  </span>
-                </li>
-                <li>
-                  <span className={styles.number}>
-                    2
-                  </span>
-                  <span className={styles.cardContent}>
-                    Meningkatkan upaya-upaya rehabilitasi lahan kritis dan pengembangan hutan tanaman rakyat.
-                  </span>
-                </li>
-                <li>
-                  <span className={styles.number}>
-                    3
-                  </span>
-                  <span className={styles.cardContent}>
-                    Mengembangkan ekonomi kerakyatan sektor kehutanan melalui usaha pemanfaatan hasil hutan non kayu dan jasa hutan
-                  </span>
-                </li>
-                <li>
-                  <span className={styles.number}>
-                    4
-                  </span>
-                  <span className={styles.cardContent}>
-                    Meningkatkan kapasitas masyarakat dalam rangka adaptasi gejala perubahan iklim, resiko bencana dan kerawanan pangan.
-                  </span>
-                </li>
-              </ul>
+          {
+            selectedCard.value === 'tujuan' &&
+            <div>
+              <SectionTitle
+                title={'Tujuan'}
+              />
+              <p>
+                Tujuan implemantasi Strategi dan Rencana Aksi di Provinsi Papua Barat
+              </p>
+              <br/>
+              <div className={styles.card}>
+                <ul>
+                  <li>
+                    <span className={styles.number}>
+                      1
+                    </span>
+                    <span className={styles.cardContent}>
+                      . Mengurangi degradasi dan deforestasi akibat konversi lahan hutan dan alih fungsi kawasan hutan.
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.number}>
+                      2
+                    </span>
+                    <span className={styles.cardContent}>
+                      . Meningkatkan upaya-upaya rehabilitasi lahan kritis dan pengembangan hutan tanaman rakyat.
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.number}>
+                      3
+                    </span>
+                    <span className={styles.cardContent}>
+                      . Mengembangkan ekonomi kerakyatan sektor kehutanan melalui usaha pemanfaatan hasil hutan non kayu dan jasa hutan
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.number}>
+                      4
+                    </span>
+                    <span className={styles.cardContent}>
+                      . Meningkatkan kapasitas masyarakat dalam rangka adaptasi gejala perubahan iklim, resiko bencana dan kerawanan pangan.
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <div>
-            <SectionTitle
-              title={'Sasaran'}
-            />
-            <p>
-              Sasaran implementasi Strategi dan Rencana Aksi di Provinsi Papua Barat
-            </p>
-            <br/>
-            <div className={styles.card}>
-              <ul>
-                <li>
-                  <span className={styles.number}>
-                    1
-                  </span>
-                  <span className={styles.cardContent}>
-                    Mengurangi degradasi dan deforestasi akibat konversi lahan hutan dan alih fungsi kawasan hutan.
-                  </span>
-                </li>
-                <li>
-                  <span className={styles.number}>
-                    2
-                  </span>
-                  <span className={styles.cardContent}>
-                    Meningkatkan upaya-upaya rehabilitasi lahan kritis dan pengembangan hutan tanaman rakyat.
-                  </span>
-                </li>
-                <li>
-                  <span className={styles.number}>
-                    3
-                  </span>
-                  <span className={styles.cardContent}>
-                    Mengembangkan ekonomi kerakyatan sektor kehutanan melalui usaha pemanfaatan hasil hutan non kayu dan jasa hutan
-                  </span>
-                </li>
-                <li>
-                  <span className={styles.number}>
-                    4
-                  </span>
-                  <span className={styles.cardContent}>
-                    Meningkatkan kapasitas masyarakat dalam rangka adaptasi gejala perubahan iklim, resiko bencana dan kerawanan pangan.
-                  </span>
-                </li>
-              </ul>
+          }
+          {
+            selectedCard.value === 'sasaran' &&
+            <div>
+              <SectionTitle
+                title={'Sasaran'}
+              />
+              <p>
+                Sasaran implementasi Strategi dan Rencana Aksi di Provinsi Papua Barat
+              </p>
+              <br/>
+              <div className={styles.card}>
+                <ul>
+                  <li>
+                    <span className={styles.number}>
+                      1
+                    </span>
+                    <span className={styles.cardContent}>
+                      . Mengurangi degradasi dan deforestasi akibat konversi lahan hutan dan alih fungsi kawasan hutan.
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.number}>
+                      2
+                    </span>
+                    <span className={styles.cardContent}>
+                      . Meningkatkan upaya-upaya rehabilitasi lahan kritis dan pengembangan hutan tanaman rakyat.
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.number}>
+                      3
+                    </span>
+                    <span className={styles.cardContent}>
+                      . Mengembangkan ekonomi kerakyatan sektor kehutanan melalui usaha pemanfaatan hasil hutan non kayu dan jasa hutan
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.number}>
+                      4
+                    </span>
+                    <span className={styles.cardContent}>
+                      . Meningkatkan kapasitas masyarakat dalam rangka adaptasi gejala perubahan iklim, resiko bencana dan kerawanan pangan.
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          }
         </div>
         <div className={styles.chartContainer}>
           <div className={styles.chartMapContainer}>
@@ -438,134 +469,133 @@ class Policy extends PureComponent {
             <table>
               <tr>
                 <th>Tahun</th>
-                <th>Rencana</th>
+                <th style={{borderRight: 'solid 1px black'}}>Rencana</th>
                 <th>Aktualisasi</th>
                 <th>Deskripsi</th>
               </tr>
-              <br/>
               <tr>
                 <td>2016</td>
-                <td>84.51%</td>
+                <td style={{borderRight: 'solid 1px black'}}>84.51%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2017</td>
-                <td>84.51%</td>
+                <td style={{borderRight: 'solid 1px black'}}>84.51%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2018</td>
-                <td>82%</td>
+                <td style={{borderRight: 'solid 1px black'}}>82%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2019</td>
-                <td>80%</td>
+                <td style={{borderRight: 'solid 1px black'}}>80%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2020</td>
-                <td>81%</td>
+                <td style={{borderRight: 'solid 1px black'}}>81%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2021</td>
-                <td>82%</td>
+                <td style={{borderRight: 'solid 1px black'}}>82%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2022</td>
-                <td>82%</td>
+                <td style={{borderRight: 'solid 1px black'}}>82%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2016</td>
-                <td>80%</td>
+                <td style={{borderRight: 'solid 1px black'}}>80%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2017</td>
-                <td>82%</td>
+                <td style={{borderRight: 'solid 1px black'}}>82%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2018</td>
-                <td>82%</td>
+                <td style={{borderRight: 'solid 1px black'}}>82%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2019</td>
-                <td>85%</td>
+                <td style={{borderRight: 'solid 1px black'}}>85%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2020</td>
-                <td>85%</td>
+                <td style={{borderRight: 'solid 1px black'}}>85%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2021</td>
-                <td>86%</td>
+                <td style={{borderRight: 'solid 1px black'}}>86%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2022</td>
-                <td>88%</td>
+                <td style={{borderRight: 'solid 1px black'}}>88%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2016</td>
-                <td>75%</td>
+                <td style={{borderRight: 'solid 1px black'}}>75%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2017</td>
-                <td>76%</td>
+                <td style={{borderRight: 'solid 1px black'}}>76%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2018</td>
-                <td>78%</td>
+                <td style={{borderRight: 'solid 1px black'}}>78%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2019</td>
-                <td>80%</td>
+                <td style={{borderRight: 'solid 1px black'}}>80%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2020</td>
-                <td>80%</td>
+                <td style={{borderRight: 'solid 1px black'}}>80%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2021</td>
-                <td>82%</td>
+                <td style={{borderRight: 'solid 1px black'}}>82%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
               <tr>
                 <td>2022</td>
-                <td>83%</td>
+                <td style={{borderRight: 'solid 1px black'}}>83%</td>
                 <td>0%</td>
                 <td>Data belum tersedia</td>
               </tr>
