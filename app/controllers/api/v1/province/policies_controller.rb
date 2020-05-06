@@ -41,7 +41,7 @@ module  Api
           policies.map do |indicator|
             {
               id: policy.id,
-              section: policy.section
+              section: policy.section,
               code: policy.code,
               name: policy.name,
               unit: policy.unit,
@@ -62,7 +62,7 @@ module  Api
 
         def fetch_locations
           province = ::Location.find_by(iso_code3: location)
-          locations = ::Locations.includes(:location_members)
+          locations = ::Location.includes(:location_members)
           locations = locations.where(location_member: { member_id: province.id })
           locations.map do |loc|
             {
