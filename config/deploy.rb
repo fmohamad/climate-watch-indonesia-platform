@@ -2,7 +2,7 @@
 lock "~> 3.11.2"
 
 set :application, "indonesia-platform"
-set :repo_url, "git@github.com:anggiaramadhan/indonesia-platform.git"
+set :repo_url, "https://github.com/anggiaramadhan/indonesia-platform.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -23,4 +23,4 @@ append :linked_dirs, '.bundle'
 # Default value for keep_releases is 5
 set :keep_releases, 2
 
-set :rvm_ruby_version, 'ruby-2.5.1' 
+set :rvm_ruby_version, 'ruby-2.5.1'
