@@ -35,10 +35,14 @@ module  Api
           params[:sections]&.split(',')
         end
 
-        def fetch_sectors
+        def selected_model
+          params[:code].split('-')[1]
+        end
+
+        def fetch_policies
           policies = ::Policy.all
           policies = policies.where(section: sections) if sections
-          policies.map do |indicator|
+          policies.map do |policy|
             {
               id: policy.id,
               section: policy.section,
@@ -51,26 +55,49 @@ module  Api
         end
 
         def fetch_sectors
-          ::PolicyCategory.where(id: category_ids).map do |category|
-            {
-              id: category.id,
-              name: category.name,
-              code: category.code
-            }
+          if selected_model == 'sektor'
+            ::PolicyCategory.where(id: category_ids).map do |category|
+              {
+                id: category.id,
+                name: category.name,
+                code: category.code
+              }
+            end
+          else
+            ::PolicyCategory.where(name: 'total').map do |category|
+              {
+                id: category.id,
+                name: category.name,
+                code: category.code
+              }
+            end
           end
+
         end
 
         def fetch_locations
-          province = ::Location.find_by(iso_code3: location)
-          locations = ::Location.includes(:location_members)
-          locations = locations.where(location_member: { member_id: province.id })
-          locations.map do |loc|
-            {
-              id: loc.id,
-              iso_code3: loc.iso_code3,
-              name: loc.wri_standard_name
-            }
+          if selected_model == 'kabupaten'
+            province = ::Location.find_by(iso_code3: location)
+            locations = ::Location.includes(:location_members)
+            locations = locations.where(location_member: { member_id: province.id })
+            locations.map do |loc|
+              {
+                id: loc.id,
+                iso_code3: loc.iso_code3,
+                name: loc.wri_standard_name
+              }
+            end
+          else
+            locations = ::Location.where(location_members: {iso_code3: 'ID.PB'})
+            locations.map do |loc|
+              {
+                id: loc.id,
+                iso_code3: loc.iso_code3,
+                name: loc.wri_standard_name
+              }
+            end
           end
+
         end
 
         def fetch_values
