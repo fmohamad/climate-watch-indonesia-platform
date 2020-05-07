@@ -1,5 +1,5 @@
 class PolicyCategory < ApplicationRecord
-  include translates
+  include Translate
 
   translate :name, i18n: :value_category
 
