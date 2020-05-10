@@ -36,7 +36,7 @@ module Api
         end
 
         def selected_model
-          params[:code].split('-')[1]
+          params[:code]&.split('-')&.last
         end
 
         def fetch_meta_indicators

@@ -6,14 +6,14 @@ import { getProvince, getLocations } from 'selectors/provinces-selectors';
 import { METRIC } from 'constants';
 
 import indonesiaPaths from 'utils/maps/indonesia-paths';
+import papuaPaths from 'utils/maps/papua-barat-paths';
 import { getTranslate } from 'selectors/translation-selectors';
 
 import {
-  filterBySelectedOptions,
-  getEmissionsData,
-  getUnit,
+  getIndicatorPopulation,
   getSelectedOptions
-} from '../../regions-ghg-emissions/regions-ghg-emissions-selectors';
+} from '../region-population-selectors';
+import isEmpty from 'lodash/isEmpty';
 
 const DEFAULT_MAP_CENTER = [ 113, -1.86 ];
 const MAP_BUCKET_COLORS = [
@@ -23,6 +23,27 @@ const MAP_BUCKET_COLORS = [
   '#297CB8',
   '#064584'
 ];
+
+const style = {
+default: {
+    fill: '#ffc735',
+      stroke: '#ecf1fa',
+      strokeWidth: 0.05,
+      outline: 'none'
+  },
+  hover: {
+    fill: '#ffc735',
+      stroke: '#ffc735',
+      strokeWidth: 0.05,
+      outline: 'none'
+  },
+  pressed: {
+    fill: '#ffc735',
+      stroke: '#ffc735',
+      strokeWidth: 0.1,
+      outline: 'none'
+  }
+}
 
 const getSelectedYear = (state, { selectedYear }) => selectedYear;
 
@@ -79,86 +100,30 @@ const createBucketColorScale = emissions => {
 
 export const getMap = createSelector(
   [
-    getEmissionsData,
-    getUnit,
+    getIndicatorPopulation,
     getSelectedOptions,
-    getProvince,
-    getSelectedYear,
-    getTranslate,
-    getLocations
+    getTranslate
   ],
   (
-    emissions,
-    unit,
-    selectedOptions,
-    provinceISO,
-    selectedYear,
-    t,
-    provincesDetails
+    indicators,
+    options,
+    t
   ) =>
     {
-      if (!emissions || !selectedOptions || !unit) return {};
-      const years = emissions.length && emissions[0].emissions.map(d => d.year);
-      const paths = [];
-      const isAbsoluteMetric = selectedOptions.metric.code === METRIC.absolute;
-      const divisor = isAbsoluteMetric && unit.startsWith('kt') ? 1000 : 1;
-      const correctedUnit = isAbsoluteMetric ? unit.replace('kt', 'Mt') : unit;
-      const byProvinceISO = path =>
-        (path.properties && path.properties.code_hasc) === provinceISO;
-      const provincePath = indonesiaPaths.find(byProvinceISO);
-      const mapCenter = provincePath
-        ? [
-          provincePath.properties.longitude,
-          provincePath.properties.latitude
-        ]
-        : DEFAULT_MAP_CENTER;
-      const filteredEmissions = filterBySelectedOptions(
-        emissions,
-        selectedOptions
-      );
-      if (!filteredEmissions.length) return { paths: indonesiaPaths };
-      const normalizedEmissions = flatten(
-        filteredEmissions.map(
-          e =>
-            e.emissions.map(ev => ({
-              provinceISO: e.iso_code3,
-              year: ev.year,
-              value: ev.value / divisor
-            }))
-        )
-      );
-      const year = selectedYear || years[years.length - 1];
-      const filteredByYear = normalizedEmissions.filter(e => e.year === year);
-
-      const bucketColorScale = createBucketColorScale(normalizedEmissions);
-      const buckets = composeBuckets(bucketColorScale.quantiles());
-
-      indonesiaPaths.forEach(path => {
-        const iso = path.properties && path.properties.code_hasc;
-
-        const totalEmission = filteredByYear
-          .filter(e => e.provinceISO === iso)
-          .reduce((sum, e) => sum + e.value, 0);
-        const bucketColor = bucketColorScale(totalEmission);
+      if (isEmpty(indicators)) return {}
+      const paths = []
+      papuaPaths.forEach(path => {
+        const district = path.properties && path.properties.district;
         const { geometry, properties, type } = path;
-        const provinceProperties = provincesDetails.find(
-          p => p.iso_code3 === iso
-        );
-        const provinceName = provinceProperties
-          ? provinceProperties.wri_standard_name
-          : properties.name;
+        const districtName = properties.district
 
         paths.push({
           type,
           geometry,
-          properties: { ...properties, name: provinceName },
-          style: getMapStyles(bucketColor)
+          properties: { ...properties, name: districtName },
+          style
         });
       });
-
-      const mapLegendTitle = year &&
-        `${t(`pages.regions.regions-ghg-emissions.legendTitle`)} ${year}`;
-
-      return { paths, buckets, unit: correctedUnit, mapCenter, mapLegendTitle };
+      return { paths }
     }
 );
