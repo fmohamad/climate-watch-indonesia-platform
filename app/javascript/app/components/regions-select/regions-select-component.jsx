@@ -2,10 +2,26 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import ResultsList from 'components/results-list';
+import Search from 'components/search';
+import RegionsMap from './regions-map';
+import { TabletLandscape } from 'components/responsive';
 
-import styles from 'components/nav-nested-menu/nav-nested-menu-styles';
+import layout from 'styles/layout.scss';
+import resultsListLightTheme from 'styles/themes/results-list/results-list-light.scss';
+import searchCountriesTheme from 'styles/themes/search/search-countries.scss';
+import styles from './regions-select-styles.scss';
 
 class RegionsSelect extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = { search: '' };
+  }
+
+  filterProvince(value) {
+    this.setState({ search: value });
+  }
+
   render() {
     const {
       provinces,
@@ -13,23 +29,46 @@ class RegionsSelect extends PureComponent {
       className,
       handleClickOutside,
       activeProvince,
-      parentRef
+      parentRef,
+      paths
     } = this.props;
+    const { search } = this.state;
 
     return opened && (
-    <React.Fragment>
-      <ResultsList
-        list={provinces}
-        handleClickOutside={handleClickOutside}
-        opened={opened}
-        parentRef={parentRef}
-        activeProvince={activeProvince}
-        className={cx(className, styles.regionsList)}
-        emptyDataMsg="No results"
-        handleMouseItemEnter={undefined}
-        handleMouseItemLeave={undefined}
-      />
-    </React.Fragment>
+        <React.Fragment>
+          <div className={cx(styles.wrapper, className)}>
+            <div className={cx(layout.content, styles.content)}>
+              <div className="grid-layout-element">
+                <div>
+                  <Search
+                    placeholder="Search a region"
+                    value={search}
+                    onChange={value => this.filterProvince(value)}
+                    theme={searchCountriesTheme}
+                    autofocus={opened || autofocus}
+                  />
+                </div>
+              </div>
+              <div className="grid-colum-item">
+                <div className={styles.columns}>
+                  <ResultsList
+                    list={provinces}
+                    opened={opened}
+                    parentRef={parentRef}
+                    activeProvince={activeProvince}
+                    emptyDataMsg="No results"
+                    handleMouseItemEnter={undefined}
+                    handleMouseItemLeave={undefined}
+                    handleClickOutside={handleClickOutside}
+                  />
+                  <TabletLandscape>
+                    <RegionsMap />
+                  </TabletLandscape>
+                </div>
+              </div>
+            </div>
+          </div>
+        </React.Fragment>
       );
   }
 }
