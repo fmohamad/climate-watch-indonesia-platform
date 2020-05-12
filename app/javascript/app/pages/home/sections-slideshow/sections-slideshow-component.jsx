@@ -72,7 +72,6 @@ class SectionsSlideshowComponent extends Component {
 
   render() {
     const { t, locale } = this.props;
-    console.log(this.props)
 
     const slideOne = t('pages.homepage.slide-one') || {};
     const slideTwo = t('pages.homepage.slide-two') || {};

@@ -59,7 +59,6 @@ class RegionsSelect extends PureComponent {
                     emptyDataMsg="No results"
                     handleMouseItemEnter={undefined}
                     handleMouseItemLeave={undefined}
-                    handleClickOutside={handleClickOutside}
                   />
                   <TabletLandscape>
                     <RegionsMap />

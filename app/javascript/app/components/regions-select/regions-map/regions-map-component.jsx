@@ -25,20 +25,18 @@ class RegionsMap extends PureComponent {
   }
 
   handleProvinceClick = e => {
-    console.log('e', e);
-    /*const { linkToProvince, query } = this.props;
+    const { linkToProvince, query } = this.props;
+
     const provinceISO = e.properties && e.properties.code_hasc;
+    // window.location.pathname = `id/${provinceISO}/regions-ghg-emissions`
 
     if (!provinceISO) return;
 
     const metricQuery = query && query.metric && { metric: query.metric };
-    console.log("provinceISO", provinceISO);
-    console.log("metricQuery", metricQuery);
     linkToProvince({
       section: 'regions-ghg-emissions',
-      region: provinceISO,
-      query: metricQuery
-    });*/
+      region: 'ID.PB'
+    });
   };
 
   handleZoomIn = () => {
@@ -71,12 +69,6 @@ class RegionsMap extends PureComponent {
           dragEnable={false}
           forceUpdate
         />
-        <MapChoroplethLegend
-          buckets={buckets}
-          unit={unit}
-          title={mapLegendTitle}
-          theme={{ container: styles.mapLegendContainer }}
-        />
       </div>
     );
   }
@@ -84,8 +76,6 @@ class RegionsMap extends PureComponent {
 
 RegionsMap.propTypes = {
   paths: PropTypes.array,
-  buckets: PropTypes.array,
-  unit: PropTypes.string,
   mapCenter: PropTypes.array,
   linkToProvince: PropTypes.func.isRequired
 };
@@ -93,8 +83,6 @@ RegionsMap.propTypes = {
 RegionsMap.defaultProps = {
   mapCenter: [ 113, -1.86 ],
   paths: [],
-  buckets: [],
-  unit: ''
 };
 
 export default RegionsMap;
