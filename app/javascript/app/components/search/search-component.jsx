@@ -21,8 +21,6 @@ class Search extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(this.props);
-    console.log(nextProps);
     if (nextProps.value !== this.props.value) {
       this.setState({ search: nextProps.value });
     }
@@ -42,7 +40,6 @@ class Search extends Component {
   debouncedChange = debounce(
     () => {
       const { onChange } = this.props;
-      console.log('onChange', onChange);
       if (onChange) {
         this.props.onChange(this.state.search);
       }

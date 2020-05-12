@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import castArray from 'lodash/castArray';
 
 import Map from 'components/map';
 import MapChoroplethLegend from 'components/map-choropleth-legend';
@@ -21,7 +22,9 @@ MapTooltip.propTypes = { properties: PropTypes.object.isRequired };
 class RegionsMap extends PureComponent {
   constructor() {
     super();
-    this.state = { mapZoom: MAP_ZOOM_DEFAULT };
+    this.state = { 
+      mapZoom: MAP_ZOOM_DEFAULT,
+     };
   }
 
   handleProvinceClick = e => {
@@ -51,10 +54,9 @@ class RegionsMap extends PureComponent {
   };
 
   render() {
-    const { paths, buckets, mapCenter, unit, mapLegendTitle } = this.props;
+    const { paths, buckets, mapCenter, unit, mapLegendTitle, hoverRegion } = this.props;
     const { mapZoom } = this.state;
     const mapStyle = { width: '100%', height: '100%' };
-
     return (
       <div className={styles.mapContainer}>
         <Map
@@ -77,12 +79,14 @@ class RegionsMap extends PureComponent {
 RegionsMap.propTypes = {
   paths: PropTypes.array,
   mapCenter: PropTypes.array,
-  linkToProvince: PropTypes.func.isRequired
+  linkToProvince: PropTypes.func.isRequired,
+  hoverRegion: PropTypes.string
 };
 
 RegionsMap.defaultProps = {
   mapCenter: [ 113, -1.86 ],
   paths: [],
+  hoverRegion: ''
 };
 
 export default RegionsMap;

@@ -4,7 +4,7 @@
 .wrapper {
   padding-left: 7vw;
   padding-right: 7vw;
-  min-height: 65vh;
+  height: 650px;
   width: 100vw !important;
   position: fixed !important;
   left: 0;
@@ -15,7 +15,7 @@
   border-top: solid 1px $gray2;
 
   @media #{$tablet-landscape} {
-    min-height: 65vh; // 196px = font size plus footer padding
+    height: 650px; // 196px = font size plus footer padding
   }
 }
 
@@ -28,7 +28,7 @@
 }
 
 .columns {
-  min-height: 65vh;
+  height: 650px;
 
   @include columns();
 
@@ -46,7 +46,7 @@
 .list {
   display: inline-block;
   font-size: $font-size-m;
-  max-height: 65vhpx;
+  max-height: 650px;
   vertical-align: top;
 
   @media #{$tablet-landscape} {

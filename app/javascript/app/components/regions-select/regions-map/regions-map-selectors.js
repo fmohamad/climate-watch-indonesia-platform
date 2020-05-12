@@ -26,7 +26,7 @@ const countryStyles = {
     outline: 'none'
   },
   hover: {
-    fill: '#ffc735',
+    fill: '#ffd771',
     stroke: '#ffffff',
     strokeWidth: 0.1,
     outline: 'none'
@@ -38,6 +38,26 @@ const countryStyles = {
     outline: 'none'
   }
 };
+
+const PBStyles = {
+  ...countryStyles,
+  default: {
+    ...countryStyles.default,
+    fill: '#ffc735',
+    fillOpacity: 1
+  }
+};
+
+const hoverRegionStyles = {
+  ...countryStyles,
+  default: {
+    ...countryStyles.default,
+    fill: '#ffd771',
+    fillOpacity: 1
+  }
+};
+
+const getHoverRegion = (state, props) => props.hoverRegion
 
 const getMapStyles = color => ({
   default: {
@@ -91,16 +111,33 @@ const createBucketColorScale = emissions => {
 };
 
 export const getMap = createSelector(
-  [ getProvince, getTranslate, getLocations ],
-  (provinceISO, t, provincesDetails) => {
+  [ getProvince, getTranslate, getLocations, getHoverRegion ],
+  (provinceISO, t, provincesDetails, hoverRegion) => {
+    const region = hoverRegion
     const paths = [];
     const byProvinceISO = path =>
       (path.properties && path.properties.code_hasc) === provinceISO;
     const provincePath = indonesiaPaths.find(byProvinceISO);
     const mapCenter = DEFAULT_MAP_CENTER;
 
+
     indonesiaPaths.forEach(path => {
       const iso = path.properties && path.properties.code_hasc;
+      const isEqual = iso === 'ID.PB'
+      if (isEqual) {
+        return paths.push({
+          ...path,
+          style: PBStyles
+        });
+      }
+
+      const isHover = iso === region
+      if (isHover) {
+        return paths.push({
+          ...path,
+          style: hoverRegionStyles
+        });
+      }
 
       const { geometry, properties, type } = path;
       const provinceProperties = provincesDetails.length > 0 &&
@@ -117,6 +154,6 @@ export const getMap = createSelector(
       });
     });
 
-    return { paths, mapCenter };
+    return { paths, mapCenter, region };
   }
 );

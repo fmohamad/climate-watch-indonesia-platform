@@ -15,24 +15,29 @@ class RegionsSelect extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { search: '' };
+    this.state = { 
+      search: '',
+      region: '',
+      provinces: []
+    };
   }
 
   filterProvince(value) {
-    this.setState({ search: value });
+    let filterProvince = this.props.provinces.filter((province) => {return province.label.toLowerCase().indexOf(value) !== -1})
+    
+    this.setState({ 
+      search: value,
+      provinces: filterProvince
+    });
+  }
+
+  onRegionMouseEnter(region) {
+    this.setState({region: region})
   }
 
   render() {
-    const {
-      provinces,
-      opened,
-      className,
-      handleClickOutside,
-      activeProvince,
-      parentRef,
-      paths
-    } = this.props;
-    const { search } = this.state;
+    const { provinces, opened, className, handleClickOutside, activeProvince, parentRef, paths } = this.props;
+    const { search, region } = this.state;
 
     return opened && (
         <React.Fragment>
@@ -52,16 +57,17 @@ class RegionsSelect extends PureComponent {
               <div className="grid-colum-item">
                 <div className={styles.columns}>
                   <ResultsList
-                    list={provinces}
+                    searchText={search}
+                    list={search.length > 0 ? this.state.provinces :  this.props.provinces}
                     opened={opened}
                     parentRef={parentRef}
                     activeProvince={activeProvince}
                     emptyDataMsg="No results"
-                    handleMouseItemEnter={undefined}
+                    handleMouseItemEnter={(region) => this.onRegionMouseEnter(region)}
                     handleMouseItemLeave={undefined}
                   />
                   <TabletLandscape>
-                    <RegionsMap />
+                    <RegionsMap hoverRegion={region} />
                   </TabletLandscape>
                 </div>
               </div>
