@@ -1,7 +1,8 @@
 import { createStructuredSelector, createSelector } from 'reselect'
 import { getTranslate } from 'selectors/translation-selectors'
-import get from 'lodash/get'
 import filter from 'lodash/filter'
+import get from 'lodash/get'
+import find from 'lodash/find'
 import isEmpty from 'lodash/isEmpty'
 
 import {
@@ -10,11 +11,26 @@ import {
   withAllSelected,
 } from 'selectors/filters-selectors'
 
+import { getProvince } from 'selectors/provinces-selectors';
+
 import { ALL_SELECTED } from 'constants/constants'
 
 const section = 'wp_population'
 const code = 'code-kabupaten'
 const LOCATION = 'ID.PB'
+
+const modelOptions = () => ([
+  {
+    name: 'Population',
+    label: 'Population',
+    value: 'population'
+  },
+  {
+    name: 'Age Group Distribution',
+    label: 'Age Group Distribution',
+    value: 'age_group'
+  }
+]);
 
 const getQuery = ({ location }) => location && (location.query || null)
 
@@ -40,8 +56,30 @@ const getDistrictOptions = createSelector(getMetadataData, (metas) => {
 
 export const getIndicatorPopulation = createSelector(_getIndicator, (indicators) => {
   if (isEmpty(indicators)) return null
-  return indicators.values
+  const filterByInd = filter(indicators.values, function(data) {
+    return (
+      data.indicator_code === 'wp_pop_total' ||
+      data.indicator_code === 'wp_pop_growth' ||
+      data.indicator_code === 'wp_pop_density' ||
+      data.indicator_code === 'wp_pop_sex_ratio'
+    )
+  })
+
+  return filterByInd
 })
+
+const getIndicatorDistribution = createSelector(
+  _getIndicator,
+  indicators => {
+    if (isEmpty(indicators)) return null
+
+    const filterByInd = filter(indicators.values, function(data) {
+      return data.indicator_code === 'wp_pop_age_group'
+    })
+
+    return filterByInd
+  }
+);
 
 const getYearOptions = createSelector(getIndicatorPopulation, (indicators) => {
   if (isEmpty(indicators)) return null
@@ -57,6 +95,7 @@ const getYearOptions = createSelector(getIndicatorPopulation, (indicators) => {
 const getFilterOptions = createStructuredSelector({
   district: withAllSelected(getDistrictOptions),
   year: getYearOptions,
+  model: modelOptions
 })
 
 // DEFAULTS
@@ -65,6 +104,7 @@ const getDefaults = createSelector(
   (options, allSelectedOption) => ({
     district: allSelectedOption,
     year: get(options, 'year[0]'),
+    model: get(options, 'model[0]'),
   })
 )
 
@@ -89,7 +129,17 @@ const getFieldSelected = (field) => (state) => {
 export const getSelectedOptions = createStructuredSelector({
   district: getFieldSelected('district'),
   year: getFieldSelected('year'),
+  model: getFieldSelected('model'),
 })
+
+const getSelectedModel = createSelector(
+  getSelectedOptions,
+  options => {
+    if (!options && !options.model && !options.model.value) return null
+
+    return options.model
+  }
+);
 
 const getCardData = createSelector(
   [getIndicatorPopulation, getSelectedOptions],
@@ -127,7 +177,7 @@ const getPopTotal = createSelector(
   getCardData,
   data => {
     if (!data) return null
-    return filter(data, ['ind_code', 'pop_total'])[0].value
+    return filter(data, ['ind_code', 'wp_pop_total'])[0].value
   }
 )
 
@@ -135,7 +185,7 @@ const getPopGrowth = createSelector(
   getCardData,
   data => {
     if (!data) return null
-    return filter(data, ['ind_code', 'pop_growth'])[0].value
+    return filter(data, ['ind_code', 'wp_pop_growth'])[0].value
   }
 )
 
@@ -143,7 +193,7 @@ const getPopDensity = createSelector(
   getCardData,
   data => {
     if (!data) return null
-    return filter(data, ['ind_code', 'pop_density'])[0].value
+    return filter(data, ['ind_code', 'wp_pop_density'])[0].value
   }
 )
 
@@ -151,20 +201,77 @@ const getPopSexRatio = createSelector(
   getCardData,
   data => {
     if (!data) return null
-    return filter(data, ['ind_code', 'pop_sex_ratio'])[0].value
+    return filter(data, ['ind_code', 'wp_pop_sex_ratio'])[0].value
   }
 )
 
+const getChartData = createSelector(
+  [getIndicatorDistribution, getSelectedOptions],
+  (indicators, options) => {
+    if (isEmpty(indicators)) return null
+    const selectedYear = options.year.value
+    const xAxis = indicators.map(data => data.category)
+    let yAxis = []
+    let data = []
+    xAxis.forEach(x => {
+      const { values } = filter(indicators, ['category', x])[0]
+      let object = {
+        x: x,
+        y: find(values, ['year', selectedYear]).value
+      }
+      data.push(object)
+    })
+
+    return data
+  }
+);
+
+const domain = () => (
+  { x: ['auto', 'auto'], y: [0, 'auto'] }
+);
+
+const config = () => ({
+  axes: {
+    xBottom: {
+      name: 'Age distribution',
+      unit: 'age',
+      format: 'string',
+      label: { dx: 0, dy: 0, className: '' }
+    },
+    yLeft: {
+      name: 'Number of people',
+      unit: 'people',
+      format: 'string',
+      label: { dx: 0, dy: 10, className: '' }
+    }
+  },
+  tooltip: { y: { label: 'people' } },
+  animation: false,
+  columns: {
+    x: [ { label: 'age', value: 'x' } ],
+    y: [ { label: 'people', value: 'y' } ]
+  },
+  theme: { y: { stroke: '', fill: '#f5b335' } }
+});
+
+const getChart = createStructuredSelector({
+  domain: domain,
+  config: config
+});
+
 export const getRegionPopulation = createStructuredSelector({
   t: getTranslate,
-  indicators: getIndicatorPopulation,
   popTotal: getPopTotal,
   popGrowth: getPopGrowth,
   popDensity: getPopDensity,
   popSexRatio: getPopSexRatio,
   filterOptions: getFilterOptions,
   selectedOptions: getSelectedOptions,
+  selectedModel: getSelectedModel,
   params: getIndicatorParams,
   metaParams: getMetaParams,
   query: getQuery,
+  provinceISO: getProvince,
+  chartData: getChartData,
+  chart: getChart,
 })

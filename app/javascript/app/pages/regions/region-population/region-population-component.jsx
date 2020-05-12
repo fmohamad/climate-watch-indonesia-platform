@@ -14,8 +14,6 @@ import uniq from 'lodash/uniq'
 import flatMap from 'lodash/flatMap'
 import CustomTooltip from './bar-chart-tooltip'
 import PopulationMap from './population-map'
-import populationData from './populationData'
-import { locationOptions, yearOptions, populationCardData } from './data'
 
 import styles from './region-population-styles'
 
@@ -29,38 +27,6 @@ const cardTheme = {
 }
 
 class RegionPopulation extends PureComponent {
-
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      modelOptions: [
-        {
-          name: 'Population',
-          value: 'population'
-        },
-        {
-          name: 'Age group distribution',
-          value: 'age_group'
-        }
-      ],
-      selectedModel: {
-        name: 'Population',
-        value: 'population'
-      }
-    }
-  }
-
-  getOptions = () => [
-    {
-      name: 'Populasi',
-      value: 'population',
-    },
-    {
-      name: 'Distribusi Kelompok Umur',
-      value: 'distribution',
-    },
-  ]
 
   handleFilterChange = (field, selected) => {
 
@@ -90,16 +56,25 @@ class RegionPopulation extends PureComponent {
     onFilterChange({ [field]: values })
   }
 
+  handleSwitchChange = (option) => {
+    const { onFilterChange, selectedOptions, provinceISO, updateFiltersSelected } = this.props
+
+    console.log('switch change', option)
+    updateFiltersSelected({
+      section: 'region-population',
+      region: provinceISO,
+      query: ({ model: option.value })
+    })
+  }
+
   renderSwitch() {
-    const { selectedModel, modelOptions } = this.state
+    const { selectedModel, filterOptions } = this.props
     return (
       <div className={styles.switch}>
         <div className='switch-container'>
           <Switch
-            options={modelOptions}
-            onClick={(value) =>
-              this.setState({selectedModel: value})
-            }
+            options={filterOptions.model}
+            onClick={value => this.handleSwitchChange(value)}
             selectedOption={selectedModel.value}
             theme={{
               wrapper: styles.switchWrapper,
@@ -135,16 +110,19 @@ class RegionPopulation extends PureComponent {
   }
 
   renderContent() {
-    const { selectedModel } = this.state
+    const { selectedModel } = this.props
     const {
       t,
       chart,
       chartData,
       popTotal,
-      pop_density,
+      popDensity,
       popGrowth,
-      popSexRatio
+      popSexRatio,
+      selectedOptions
     } = this.props
+
+    console.log(this.props)
 
     if (selectedModel.value === 'population') {
       return (
@@ -176,7 +154,7 @@ class RegionPopulation extends PureComponent {
             <Card theme={cardTheme} title='Kepadatan penduduk'>
               <div className={styles.cardContent}>
                 <p>
-                  {popGrowth} Jiwa/Km<sup>2</sup>
+                  {popDensity} Jiwa/Km<sup>2</sup>
                 </p>
               </div>
             </Card>
@@ -199,7 +177,9 @@ class RegionPopulation extends PureComponent {
     return (
       <div className={styles.container}>
         <div className={styles.toolbox}>
-          {this.renderDropdown()}
+          <div className={styles.dropdown}>
+            {this.renderDropdown('year')}
+          </div>
           <InfoDownloadToolbox
             className={{ buttonWrapper: styles.buttonWrapper }}
             /* slugs={sources} */
@@ -213,7 +193,6 @@ class RegionPopulation extends PureComponent {
           config={chart.config}
           data={chartData}
           theme={{ legend: styles.legend }}
-          customTooltip={<CustomTooltip />}
           getCustomYLabelFormat={getCustomYLabelFormat}
           domain={chart.domain}
           dataOptions={chart.dataOptions}
@@ -221,15 +200,14 @@ class RegionPopulation extends PureComponent {
           height={300}
           barSize={30}
           customMessage={t('common.chart-no-data')}
-          /* onLegendChange={onLegendChange} */
+          showUnit
         />
       </div>
     )
   }
 
   render() {
-    const { t, selectedIndicator, provinceISO, params, metaParams, filterOptions } = this.props
-    const { selectedModel } = this.state
+    const { t, params, metaParams, provinceISO, selectedModel } = this.props
     const sources = ['RADGRK', 'SIGNSa']
     const downloadURI = `emissions/download?source=${sources.join(
       ','
@@ -240,7 +218,7 @@ class RegionPopulation extends PureComponent {
         <div className={styles.chartMapContainer}>
           <div>
             <SectionTitle
-              title={selectedModel.name}
+              title={selectedModel.label}
               description={t('pages.regions.region-population.description')}
             />
           </div>
@@ -269,19 +247,28 @@ class RegionPopulation extends PureComponent {
 
 RegionPopulation.propTypes = {
   t: PropTypes.func.isRequired,
-  selectedIndicator: PropTypes.object,
-  provinceISO: PropTypes.string,
   selectedOptions: PropTypes.object,
   filterOptions: PropTypes.object,
   onFilterChange: PropTypes.func.isRequired,
-  cardData: PropTypes.object
+  popTotal: PropTypes.string,
+  popGrowth: PropTypes.string,
+  popDensity: PropTypes.string,
+  popSexRatio: PropTypes.string,
+  params: PropTypes.object,
+  metaParams: PropTypes.object,
+  provinceISO: PropTypes.string
 }
 
 RegionPopulation.defaultProps = {
-  selectedIndicator: {},
   selectedOptions: undefined,
   filterOptions: undefined,
-  cardData: undefined
+  popTotal: "",
+  popGrowth: "",
+  popDensity: "",
+  popSexRatio: "",
+  params: {},
+  metaParams: {},
+  provinceISO: ""
 }
 
 export default RegionPopulation

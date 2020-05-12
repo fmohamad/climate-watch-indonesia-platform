@@ -7,7 +7,8 @@ import Map from 'components/map';
 import styles from './population-map-styles.scss';
 
 const MAP_ZOOM_STEP = 2;
-const MAP_ZOOM_DEFAULT = 23;
+const MAP_ZOOM_DEFAULT = 40;
+const MAP_ZOOM_FOCUS = 60;
 const MAP_ZOOM_MIN = 6;
 
 const MapTooltip = ({ properties }) => (
@@ -16,7 +17,7 @@ const MapTooltip = ({ properties }) => (
   </div>
 );
 
-MapTooltip.propTypes = { properties: PropTypes.object };
+MapTooltip.propTypes = { properties: PropTypes.object.isRequired };
 
 class PopulationMap extends PureComponent {
   constructor() {
@@ -25,9 +26,10 @@ class PopulationMap extends PureComponent {
   }
 
   handleDistrictClick = e => {
-    const { query, linkToDistrict } = this.props;
+    const { query, linkToDistrict, selectedOptions } = this.props;
+    const year = selectedOptions.year.value
     const districtISO = e.properties && e.properties.iso_code3;
-    const filter = ({district: districtISO })
+    const filter = ({district: districtISO, year })
     const provinceISO = 'ID.PB'
 
     if (!districtISO) return;
@@ -37,6 +39,7 @@ class PopulationMap extends PureComponent {
       region: provinceISO,
       query: updateQueryParams(query, filter)
     });
+    
   };
 
   handleZoomIn = () => {
@@ -51,7 +54,7 @@ class PopulationMap extends PureComponent {
   };
 
   render() {
-    const { buckets, paths } = this.props;
+    const { paths, mapCenter } = this.props;
     const { mapZoom } = this.state;
     const mapStyle = { width: '100%', height: '100%', fill: '#FFFFFF' };
 
@@ -60,15 +63,17 @@ class PopulationMap extends PureComponent {
         <Map
           zoom={mapZoom}
           paths={paths}
-          center={[ 132.825, -1.32525 ]}
+          center={mapCenter}
           className={styles.map}
           style={mapStyle}
           handleZoomIn={this.handleZoomIn}
           handleZoomOut={this.handleZoomOut}
           onGeographyClick={this.handleDistrictClick}
+          onGeographyEnter={this.handleEnter}
           tooltip={MapTooltip}
           forceUpdate
           zoomEnable
+          showTooltip
         />
       </div>
     );
@@ -77,15 +82,14 @@ class PopulationMap extends PureComponent {
 
 PopulationMap.propTypes = {
   paths: PropTypes.array,
-  buckets: PropTypes.array,
-  unit: PropTypes.string,
   mapCenter: PropTypes.array,
   linkToDistrict: PropTypes.func.isRequired,
-  query: PropTypes.func.isRequired
+  query: PropTypes.func.isRequired,
+  selectedOptions: PropTypes.object.isRequired,
 };
 
 PopulationMap.defaultProps = {
-  mapCenter: [ 113, -1.86 ],
+  mapCenter: [ 132.825, -1.32525],
   paths: [],
   buckets: [],
   unit: ''
