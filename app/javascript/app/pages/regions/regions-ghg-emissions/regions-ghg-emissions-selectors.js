@@ -351,5 +351,3 @@ export const getGHGEmissions = createStructuredSelector({
   provinceISO: getProvince,
   t: getTranslate
 });
-
-console.log('query', getQuery({}))

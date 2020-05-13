@@ -5,14 +5,19 @@ import InfoDownloadToolbox from 'components/info-download-toolbox'
 import Chart from 'components/chart'
 import { Switch, Card, Dropdown } from 'cw-components'
 import dropdownStyles from 'styles/dropdown'
+import ProvinceMetaProvider from 'providers/province-meta-provider'
+import IndicatorsProvider from 'providers/indicators-provider';
+import startCase from 'lodash/startCase'
+import kebabCase from 'lodash/kebabCase'
+import castArray from 'lodash/castArray'
+import uniq from 'lodash/uniq'
+import flatMap from 'lodash/flatMap'
 import CustomTooltip from './bar-chart-tooltip'
 import PopulationMap from './population-map'
-import populationData from './populationData'
-import { locationOptions, yearOptions, populationCardData } from './data'
-
-const format = require('d3-format').format
 
 import styles from './region-population-styles'
+
+const { format } = require('d3-format')
 
 const cardTheme = {
   card: styles.card,
@@ -22,119 +27,55 @@ const cardTheme = {
 }
 
 class RegionPopulation extends PureComponent {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      selectedOption: {
-        name: 'Populasi',
-        value: 'population',
-      },
-      selectedYear: {
-        value: '2017',
-        label: '2017',
-      },
-      selectedLocation: {
-        value: 'ID.PB.FA',
-        label: 'Fakfak',
-        override: true,
-      },
-      selectedPopulationData: {},
-      chartData: [],
-      chart: {
-        domain: { x: ['auto', 'auto'], y: [0, 'auto'] },
-        config: {
-          axes: {
-            xBottom: { name: 'Age', unit: 'tahun', format: 'string' },
-            yLeft: {
-              name: 'Jumlah Jiwa',
-              unit: 'jiwa',
-              format: 'number',
-              label: 'jiwa',
-            },
-          },
-          tooltip: {
-            yIdn: { label: 'People', unit: 'jiwa' },
-            x: { label: 'Age' },
-            indicator: 'Age',
-            theme: { yIdn: { stroke: '#ffc735', fill: '#ffc735' } },
-          },
-          animation: false,
-          columns: {
-            x: [{ label: 'age', value: 'x' }],
-            y: [{ label: 'people', value: 'yIdn' }],
-          },
-          theme: { yIdn: { stroke: '#ffc735', fill: '#ffc735' } },
-        },
-      },
-    }
-  }
-
-  componentDidMount() {
-    this.getChartData()
-    this.getPopulationData()
-  }
-
-  getChartData() {
-    const { selectedYear } = this.state
-    let data = []
-    populationData.filter((annualData) => {
-      if (selectedYear.value === annualData.year) {
-        annualData.values.map((item, index) => {
-          let dataObject = {}
-          dataObject.x = item.ageRange
-          dataObject.yIdn = item.quantity
-          data.push(dataObject)
-        })
-      }
-    })
-    this.setState({ chartData: data })
-  }
-
-  getPopulationData() {
-    const { selectedYear } = this.state
-    const { selectedLocation } = this.state
-    populationCardData.filter((annualData) => {
-      if (
-        selectedYear.value === annualData.year &&
-        selectedLocation.value === annualData.location
-      ) {
-        this.setState({
-          selectedPopulationData: annualData.data,
-        })
-      }
-    })
-  }
-
-  getOptions = () => [
-    {
-      name: 'Populasi',
-      value: 'population',
-    },
-    {
-      name: 'Distribusi Kelompok Umur',
-      value: 'distribution',
-    },
-  ]
 
   handleFilterChange = (field, selected) => {
-    this.setState({ [field]: selected }, () => {
-      this.getChartData()
-      this.getPopulationData()
+
+    const { onFilterChange, selectedOptions } = this.props
+
+    const prevSelectedOptionValues = castArray(selectedOptions[field])
+      .filter((o) => o)
+      .map((o) => o.value)
+    const selectedArray = castArray(selected)
+    const newSelectedOption = selectedArray.find(
+      (o) => !prevSelectedOptionValues.includes(o.value)
+    )
+
+    const removedAnyPreviousOverride = selectedArray
+      .filter((v) => v)
+      .filter((v) => !v.override)
+
+    const values =
+      newSelectedOption && newSelectedOption.override
+        ? newSelectedOption.value
+        : uniq(
+            flatMap(removedAnyPreviousOverride, (v) =>
+              String(v.value).split(',')
+            )
+          ).join(',')
+
+    onFilterChange({ [field]: values })
+  }
+
+  handleSwitchChange = (option) => {
+    const { onFilterChange, selectedOptions, provinceISO, updateFiltersSelected } = this.props
+
+    console.log('switch change', option)
+    updateFiltersSelected({
+      section: 'region-population',
+      region: provinceISO,
+      query: ({ model: option.value })
     })
   }
 
   renderSwitch() {
-    const { selectedOption } = this.state
+    const { selectedModel, filterOptions } = this.props
     return (
       <div className={styles.switch}>
         <div className='switch-container'>
           <Switch
-            options={this.getOptions()}
-            onClick={(value) =>
-              this.handleFilterChange('selectedOption', value)
-            }
-            selectedOption={String(selectedOption.value)}
+            options={filterOptions.model}
+            onClick={value => this.handleSwitchChange(value)}
+            selectedOption={selectedModel.value}
             theme={{
               wrapper: styles.switchWrapper,
               option: styles.option,
@@ -146,75 +87,55 @@ class RegionPopulation extends PureComponent {
     )
   }
 
-  renderDropdown() {
-    const { selectedYear, selectedLocation, selectedOption } = this.state
+  renderDropdown(field) {
+    const { selectedOptions, filterOptions, t } = this.props
 
-    if (selectedOption.value === 'distribution') {
-      return (
-        <div className={styles.dropdown}>
-          <Dropdown
-            key='year'
-            label='Tahun'
-            placeholder='Filter by'
-            options={yearOptions}
-            onValueChange={(value) =>
-              this.handleFilterChange('selectedYear', value)
-            }
-            value={selectedYear}
-            theme={{ select: dropdownStyles.select }}
-            hideResetButton
-          />
-        </div>
-      )
-    }
+    const value = selectedOptions && selectedOptions[field]
+    const options = filterOptions[field] || []
+
+    const label = t(`pages.regions.economy.labels.${kebabCase(field)}`)
+
     return (
-      <div className={styles.dropdownContainer}>
-        <div className={styles.dropdown}>
-          <Dropdown
-            key='year'
-            label='Tahun'
-            placeholder='Filter by'
-            options={yearOptions}
-            onValueChange={(value) =>
-              this.handleFilterChange('selectedYear', value)
-            }
-            value={selectedYear}
-            theme={{ select: dropdownStyles.select }}
-            hideResetButton
-          />
-        </div>
-        <div className={styles.dropdown}>
-          <Dropdown
-            key='year'
-            label='Kabupaten'
-            placeholder='Filter by'
-            options={locationOptions}
-            onValueChange={(value) =>
-              this.handleFilterChange('selectedLocation', value)
-            }
-            value={selectedLocation}
-            theme={{ select: dropdownStyles.select }}
-            hideResetButton
-          />
-        </div>
-      </div>
+      <Dropdown
+        key={field}
+        label={label}
+        placeholder={`Filter by ${startCase(field)}`}
+        options={options}
+        onValueChange={(selected) => this.handleFilterChange(field, selected)}
+        value={value || null}
+        theme={{ select: dropdownStyles.select }}
+        hideResetButton
+      />
     )
   }
 
   renderContent() {
-    const { t } = this.props
+    const { selectedModel } = this.props
     const {
-      selectedOption,
+      t,
       chart,
       chartData,
-      selectedPopulationData,
-    } = this.state
+      popTotal,
+      popDensity,
+      popGrowth,
+      popSexRatio,
+      selectedOptions
+    } = this.props
 
-    if (selectedOption.value === 'population') {
+    console.log(this.props)
+
+    if (selectedModel.value === 'population') {
       return (
         <div className={styles.chartMapContainer}>
           <div className={styles.filtersChartContainer}>
-            {this.renderDropdown()}
+            <div className={styles.dropdownContainer}>
+              <div className={styles.dropdown}>
+                {this.renderDropdown('year')}
+              </div>
+              <div className={styles.dropdown}>
+                {this.renderDropdown('district')}
+              </div>
+            </div>
             <div className={styles.chartContainer}>
               <PopulationMap />
             </div>
@@ -222,18 +143,18 @@ class RegionPopulation extends PureComponent {
           <div className={styles.cardContainer}>
             <Card theme={cardTheme} title='Total Populasi Penduduk (Kabupaten)'>
               <div className={styles.cardContent}>
-                <p>{selectedPopulationData.total_population}</p>
+                <p>{popTotal}</p>
               </div>
             </Card>
             <Card theme={cardTheme} title='Laju pertumbuhan penduduk per tahun'>
               <div className={styles.cardContent}>
-                <p>{selectedPopulationData.growth}</p>
+                <p>{popGrowth}</p>
               </div>
             </Card>
             <Card theme={cardTheme} title='Kepadatan penduduk'>
               <div className={styles.cardContent}>
                 <p>
-                  {selectedPopulationData.density} Jiwa/Km<sup>2</sup>
+                  {popDensity} Jiwa/Km<sup>2</sup>
                 </p>
               </div>
             </Card>
@@ -242,7 +163,7 @@ class RegionPopulation extends PureComponent {
               title='Rasio Jenis Kelamin (Perempuan/ Laki-laki)'
             >
               <div className={styles.cardContent}>
-                <p>{selectedPopulationData.ratio}</p>
+                <p>{popSexRatio}</p>
               </div>
             </Card>
           </div>
@@ -256,7 +177,9 @@ class RegionPopulation extends PureComponent {
     return (
       <div className={styles.container}>
         <div className={styles.toolbox}>
-          {this.renderDropdown()}
+          <div className={styles.dropdown}>
+            {this.renderDropdown('year')}
+          </div>
           <InfoDownloadToolbox
             className={{ buttonWrapper: styles.buttonWrapper }}
             /* slugs={sources} */
@@ -270,7 +193,6 @@ class RegionPopulation extends PureComponent {
           config={chart.config}
           data={chartData}
           theme={{ legend: styles.legend }}
-          customTooltip={<CustomTooltip />}
           getCustomYLabelFormat={getCustomYLabelFormat}
           domain={chart.domain}
           dataOptions={chart.dataOptions}
@@ -278,15 +200,14 @@ class RegionPopulation extends PureComponent {
           height={300}
           barSize={30}
           customMessage={t('common.chart-no-data')}
-          /* onLegendChange={onLegendChange} */
+          showUnit
         />
       </div>
     )
   }
 
   render() {
-    const { t, selectedIndicator, provinceISO } = this.props
-    const { selectedOption } = this.state
+    const { t, params, metaParams, provinceISO, selectedModel } = this.props
     const sources = ['RADGRK', 'SIGNSa']
     const downloadURI = `emissions/download?source=${sources.join(
       ','
@@ -297,12 +218,12 @@ class RegionPopulation extends PureComponent {
         <div className={styles.chartMapContainer}>
           <div>
             <SectionTitle
-              title={selectedOption.name}
+              title={selectedModel.label}
               description={t('pages.regions.region-population.description')}
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            {selectedOption.value === 'population' && (
+            {selectedModel.value === 'population' && (
               <InfoDownloadToolbox
                 className={{ buttonWrapper: styles.buttonWrapper }}
                 slugs={sources}
@@ -317,6 +238,8 @@ class RegionPopulation extends PureComponent {
           <div className={styles.dropdowns}>{this.renderSwitch()}</div>
           {this.renderContent()}
         </div>
+        <IndicatorsProvider params={params} />
+        <ProvinceMetaProvider metaParams={metaParams} />
       </div>
     )
   }
@@ -324,12 +247,28 @@ class RegionPopulation extends PureComponent {
 
 RegionPopulation.propTypes = {
   t: PropTypes.func.isRequired,
-  selectedIndicator: PropTypes.object,
-  provinceISO: PropTypes.string,
+  selectedOptions: PropTypes.object,
+  filterOptions: PropTypes.object,
+  onFilterChange: PropTypes.func.isRequired,
+  popTotal: PropTypes.string,
+  popGrowth: PropTypes.string,
+  popDensity: PropTypes.string,
+  popSexRatio: PropTypes.string,
+  params: PropTypes.object,
+  metaParams: PropTypes.object,
+  provinceISO: PropTypes.string
 }
 
 RegionPopulation.defaultProps = {
-  selectedIndicator: {},
+  selectedOptions: undefined,
+  filterOptions: undefined,
+  popTotal: "",
+  popGrowth: "",
+  popDensity: "",
+  popSexRatio: "",
+  params: {},
+  metaParams: {},
+  provinceISO: ""
 }
 
 export default RegionPopulation

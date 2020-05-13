@@ -64,10 +64,8 @@ en:
           title: Populasi
           description: Penduduk Papua Barat berjumlah 963.000 jiwa pada 2019. Jumlah tersebut terdiri atas 457.200 jiwa penduduk perempuan dan 506.400 jiwa laki-laki.
           labels:
-            indicator: Indicator 
-            regency: Regency
-            sector: Sector
-            chart-type: Chart Type
+            year: Year
+            district: District
         social:
           title: Sosial
           description: Papua Barat dalam angka partisipasi kasar, mulai dari tingkat SD, SMP hingga SMA. Hal itu terlihat misalnya dari nilai ujian nasional dan kapasitas guru.
