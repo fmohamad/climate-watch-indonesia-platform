@@ -14,12 +14,27 @@ import styles from './regions-select-styles.scss';
 class RegionsSelect extends PureComponent {
   constructor(props) {
     super(props);
-
+    // this.wrapperRef = React.createRef();
     this.state = { 
       search: '',
       region: '',
       provinces: []
     };
+  }
+
+  componentWillMount() {
+    document.addEventListener('mousedown', this.handleClickOutside, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside, false);
+  }
+
+  handleClickOutside = e => {
+    if(this.node.contains(e.target)) {
+      return
+    } 
+    this.props.handleClickOutside()
   }
 
   filterProvince(value) {
@@ -35,16 +50,21 @@ class RegionsSelect extends PureComponent {
     this.setState({region: region})
   }
 
+  handleClick(section) {
+    if(section === 'region') {
+      this.props.handleClickOutside()
+    }
+  }
+
   render() {
     const { provinces, opened, className, handleClickOutside, activeProvince, parentRef, paths } = this.props;
     const { search, region } = this.state;
-
     return opened && (
         <React.Fragment>
-          <div className={cx(styles.wrapper, className)}>
+          <div className={cx(styles.wrapper, className)} ref={node => this.node = node}>
             <div className={cx(layout.content, styles.content)}>
               <div className="grid-layout-element">
-                <div>
+                <div onClick={() => this.handleClick('search')}>
                   <Search
                     placeholder="Search a region"
                     value={search}
@@ -55,7 +75,7 @@ class RegionsSelect extends PureComponent {
                 </div>
               </div>
               <div className="grid-colum-item">
-                <div className={styles.columns}>
+                <div className={styles.columns} onClick={() => this.handleClick('region')}>
                   <ResultsList
                     searchText={search}
                     list={search.length > 0 ? this.state.provinces :  this.props.provinces}

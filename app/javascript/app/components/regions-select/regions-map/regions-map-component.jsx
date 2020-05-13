@@ -38,6 +38,7 @@ class RegionsMap extends PureComponent {
       section: 'regions-ghg-emissions',
       region: provinceISO
     });
+    this.props.handleClickOutside
   };
 
   handleZoomIn = () => {
