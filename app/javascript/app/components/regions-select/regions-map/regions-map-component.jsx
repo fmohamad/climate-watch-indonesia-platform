@@ -31,14 +31,12 @@ class RegionsMap extends PureComponent {
     const { linkToProvince, query } = this.props;
 
     const provinceISO = e.properties && e.properties.code_hasc;
-    // window.location.pathname = `id/${provinceISO}/regions-ghg-emissions`
 
     if (!provinceISO) return;
 
-    const metricQuery = query && query.metric && { metric: query.metric };
     linkToProvince({
       section: 'regions-ghg-emissions',
-      region: 'ID.PB'
+      region: provinceISO
     });
   };
 
@@ -79,7 +77,6 @@ class RegionsMap extends PureComponent {
 RegionsMap.propTypes = {
   paths: PropTypes.array,
   mapCenter: PropTypes.array,
-  linkToProvince: PropTypes.func.isRequired,
   hoverRegion: PropTypes.string
 };
 

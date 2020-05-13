@@ -1,4 +1,3 @@
 import { createAction } from 'redux-tools';
-import { REGIONS } from 'router';
 
-export const linkToProvince = createAction(REGIONS);
+export const linkToProvince = createAction('location/REGIONS');
