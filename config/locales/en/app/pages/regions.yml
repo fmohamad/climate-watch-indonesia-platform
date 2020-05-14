@@ -71,9 +71,7 @@ en:
           description: Papua Barat dalam angka partisipasi kasar, mulai dari tingkat SD, SMP hingga SMA. Hal itu terlihat misalnya dari nilai ujian nasional dan kapasitas guru.
           labels:
             indicator: Indicator 
-            regency: Regency
-            sector: Sector
-            chart-type: Chart Type
+            district: Regency
         policy:
           title: Melacak Kebijakan 
           description: Upaya-upaya Papua Barat dalam rangka penurunan emisi diwujudkan dengan dikeluarkannya berbagai instrumen kebijakan.

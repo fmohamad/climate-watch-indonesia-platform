@@ -57,9 +57,8 @@ class RegionPopulation extends PureComponent {
   }
 
   handleSwitchChange = (option) => {
-    const { onFilterChange, selectedOptions, provinceISO, updateFiltersSelected } = this.props
+    const { selectedOptions, provinceISO, updateFiltersSelected } = this.props
 
-    console.log('switch change', option)
     updateFiltersSelected({
       section: 'region-population',
       region: provinceISO,

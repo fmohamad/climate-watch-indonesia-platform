@@ -2,19 +2,26 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isArray from 'lodash/isArray';
-import { getRegionPopulation } from './social-selectors';
+import { getRegionSocial } from './social-selectors';
+import { updateQueryParams } from 'utils'
 import * as actions from './social-actions';
 
 import Component from './social-component';
 
-const mapStateToProps = getRegionPopulation;
+const mapStateToProps = getRegionSocial;
 
 class SocialContainer extends PureComponent {
-  /* onFilterChange = filter => {
+  onFilterChange = filter => {
     const { updateFiltersSelected, query } = this.props;
+    const provinceISO = 'ID.PB'
+    console.log('query', query)
 
-    updateFiltersSelected({ query: { ...query, ...filter } });
-  }; */
+    updateFiltersSelected({
+      section: 'social',
+      region: provinceISO,
+      query: updateQueryParams(query, filter),
+    })
+  };
   /* updateIndicatorFilter = newFilter => {
     this.onFilterChange({
       popNationalIndicator: newFilter.value,
@@ -34,7 +41,7 @@ class SocialContainer extends PureComponent {
     return (
       <Component
         {...this.props}
-        /* onFilterChange={this.onFilterChange} */
+        onFilterChange={this.onFilterChange}
         /* onIndicatorChange={this.updateIndicatorFilter} */
         /* onLegendChange={this.updateLegendFilter} */
       />
