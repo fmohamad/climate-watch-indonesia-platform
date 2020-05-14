@@ -5,6 +5,7 @@ import filter from 'lodash/filter'
 import concat from 'lodash/concat'
 import flatten from 'lodash/flatten'
 import { ALL_SELECTED, METRIC, SECTOR_TOTAL } from 'constants'
+import { format } from 'd3-format';
 
 import {
   getThemeConfig,
@@ -199,6 +200,25 @@ const parseValues = createSelector(
 
 let colorCache = {}
 
+// Y LABEL FORMATS
+const getCustomYLabelFormat = unit => {
+  const formatY = {
+    'Juta Rupiah': value => format('.3~s')(value / 1000000),
+    'million Rupiahs': value => `${value}`,
+    '%': value => `${value}%`
+  };
+  return formatY[unit];
+};
+
+const getCustomUnit = unit => {
+  const formatY = {
+    'billion Rupiahs': 'Rupiahs',
+    'million Rupiahs': 'Rupiahs',
+    '%': 'Percentage'
+  };
+  return formatY[unit] || unit;
+};
+
 export const getChartConfig = createSelector(
   [getUnit, getYColumnOptions],
   (ind, yColumnOptions) => {
@@ -216,6 +236,7 @@ export const getChartConfig = createSelector(
       tooltip,
       animation: false,
       columns: { x: [{ label: 'year', value: 'x' }], y: yColumnOptions },
+      yLabelFormat: getCustomYLabelFormat(ind.unit)
     }
 
     return { ...config }

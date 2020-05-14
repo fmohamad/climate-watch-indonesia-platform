@@ -13,10 +13,16 @@ class EconomyContainer extends PureComponent {
   onFilterChange = filter => {
     const { updateFiltersSelected, provinceISO, query } = this.props;
 
+    let oldQuery = query
+
+    if (filter && filter.indicators) {
+      oldQuery = null
+    }
+
     updateFiltersSelected({
       section: 'economy',
       region: provinceISO,
-      query: updateQueryParams(query, filter)
+      query: updateQueryParams(oldQuery, filter)
     });
   };
 
