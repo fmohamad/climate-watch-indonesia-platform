@@ -10,6 +10,7 @@ import kebabCase from 'lodash/kebabCase'
 import castArray from 'lodash/castArray'
 import uniq from 'lodash/uniq'
 import flatMap from 'lodash/flatMap'
+import CustomTooltip from './bar-chart-tooltip';
 
 import dropdownStyles from 'styles/dropdown.scss'
 import lineIcon from 'assets/icons/line_chart.svg'
