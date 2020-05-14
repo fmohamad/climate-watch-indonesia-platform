@@ -99,8 +99,10 @@ module Api
         end
 
         def fetch_values
+          indicators = ::Indicator.where(section: sections) if sections
           values = ::IndicatorValue.includes(:location, :indicator, :category)
           values = values.where(locations: {iso_code3: location}) if location
+          values = values.where(indicators: {id: indicators.pluck(:id)})
         end
 
         def category_ids

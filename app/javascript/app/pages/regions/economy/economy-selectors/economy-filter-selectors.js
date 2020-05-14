@@ -1,5 +1,6 @@
 import { createStructuredSelector, createSelector } from 'reselect'
 import { ALL_SELECTED } from 'constants'
+import isEmpty from 'lodash/isEmpty';
 
 import {
   getAllSelectedOption,
@@ -24,7 +25,7 @@ const DEFAULTS = {
 
 const getFieldOptions = (field) =>
   createSelector(getMetadata, (metadata) => {
-    if (!metadata || !metadata[field]) return null
+    if (isEmpty(metadata)) return null
 
     const transformToOption = (o) => ({
       label: o.name,
