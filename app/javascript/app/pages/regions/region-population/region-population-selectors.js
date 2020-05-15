@@ -234,18 +234,21 @@ const config = () => ({
   axes: {
     xBottom: {
       name: 'Age distribution',
-      unit: 'age',
+      unit: 'umur',
       format: 'string',
       label: { dx: 0, dy: 0, className: '' }
     },
     yLeft: {
       name: 'Number of people',
-      unit: 'people',
+      unit: 'jiwa',
       format: 'string',
       label: { dx: 0, dy: 10, className: '' }
     }
   },
-  tooltip: { y: { label: 'people' } },
+  tooltip: { 
+    y: { label: 'People' },
+    indicator: 'Age' 
+  },
   animation: false,
   columns: {
     x: [ { label: 'age', value: 'x' } ],

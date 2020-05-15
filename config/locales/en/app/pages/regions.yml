@@ -11,7 +11,7 @@ en:
           labels:
             sector: Sektor
             gas: Gas
-            metric: Metrik 
+            metric: Indikator 
           emission-target-by: Emission target by
           projected-bau-by: Projected BAU emission by
         sectoral-circumstances:

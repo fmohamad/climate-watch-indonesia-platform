@@ -121,8 +121,6 @@ class RegionPopulation extends PureComponent {
       selectedOptions
     } = this.props
 
-    console.log(this.props)
-
     if (selectedModel.value === 'population') {
       return (
         <div className={styles.chartMapContainer}>
@@ -193,6 +191,7 @@ class RegionPopulation extends PureComponent {
           data={chartData}
           theme={{ legend: styles.legend }}
           getCustomYLabelFormat={getCustomYLabelFormat}
+          customTooltip={<CustomTooltip />}
           domain={chart.domain}
           dataOptions={chart.dataOptions}
           dataSelected={chart.dataSelected}

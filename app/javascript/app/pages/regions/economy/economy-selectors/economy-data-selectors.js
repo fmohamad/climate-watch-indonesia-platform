@@ -29,10 +29,10 @@ const getUnit = createSelector(
   [getMetadata, getSelectedOptions],
   (metadata, options) => {
     if (!metadata || !metadata.indicators) return null
+
     const indicator = metadata.indicators.find(
       (meta) => meta.code === options.indicators.value
     )
-
     if (!indicator) return null
 
     return {

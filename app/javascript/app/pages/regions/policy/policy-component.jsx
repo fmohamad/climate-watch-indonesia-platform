@@ -10,6 +10,8 @@ import { TabletLandscape } from 'components/responsive';
 import dropdownStyles from 'styles/dropdown';
 import buttonThemes from 'styles/themes/button';
 import shareIcon from 'assets/icons/share';
+import ProvinceMetaProvider from 'providers/province-meta-provider'
+import IndicatorsProvider from 'providers/indicators-provider';
 
 import styles from './policy-styles';
 
@@ -277,9 +279,9 @@ class Policy extends PureComponent {
   };
 
   render() {
-    const { t, provinceISO } = this.props;
+    const { t, provinceISO, indicatorParams, metaParams } = this.props;
     const { chartData, indicatorOptions, selectedIndicator, cardOptions, selectedCard } = this.state;
-
+    console.log('props', this.props);
     return (
       <div className={styles.page}>
         <div className={styles.chartMapContainer}>
@@ -602,6 +604,8 @@ class Policy extends PureComponent {
             </table>
           </div>
         </div>
+        <IndicatorsProvider params={indicatorParams} />
+        <ProvinceMetaProvider metaParams={metaParams} />
       </div>
     );
   }

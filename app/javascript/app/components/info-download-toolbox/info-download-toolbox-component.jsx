@@ -26,20 +26,20 @@ class InfoDownloadToolbox extends PureComponent {
   }
 
   handleClickOutside = () => {
-    // this.setState({ opened: false });
+    this.setState({ opened: false });
   };
 
   handleDownloadClick = () => {
-    /*const { downloadUri, locale } = this.props;
+    const { downloadUri, locale } = this.props;
     if (downloadUri) {
       const url = appendParamsToURL(getURL(downloadUri), { locale });
       handleAnalytics('Data Download', 'Download', url);
       window.open(url, '_blank');
-    }*/
+    }
   };
 
   handleMenuDownloadClick = option => {
-    /*const { locale } = this.props;
+    const { locale } = this.props;
     const isPDF = option.value === 'pdf';
     handleAnalytics('Data Download', 'Download', option.url);
 
@@ -48,11 +48,11 @@ class InfoDownloadToolbox extends PureComponent {
     } else {
       const url = appendParamsToURL(getURL(option.url), { locale });
       window.open(url, '_blank');
-    }*/
+    }
   };
 
   handleInfoClick = () => {
-    /*const { slugs, setModalMetadata, t } = this.props;
+    const { slugs, setModalMetadata, t } = this.props;
 
     if (!slugs) return;
 
@@ -63,7 +63,7 @@ class InfoDownloadToolbox extends PureComponent {
       slugs,
       open: true,
       customTitle: t('common.metadata.modal-default-title')
-    });*/
+    });
   };
 
   render() {
