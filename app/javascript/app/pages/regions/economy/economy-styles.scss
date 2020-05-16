@@ -5,17 +5,15 @@
   @include row();
 
   margin-top: $gutter-padding;
+  margin-bottom: $gutter-padding * 3;
 }
 
-.filtersGroup {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 25px;
-}
+.dropdowns {
+  @include columns();
 
-.filters {
-  @include columns($columns: full);
+  @media #{$tablet-landscape} {
+    @include columns($columns: (3,3,3,1,2));
+  }
 }
 
 .buttonWrapper {
@@ -23,37 +21,11 @@
   max-width: 100px;
 }
 
-.button {
-  align-self: flex-end;
-  min-width: 20%;
-  a {
-    color: #ffffff !important;
-  }
-}
+.chartMapContainer {
+  @include columns();
 
-.active {
-  color: #ffffff !important; 
-}
-
-.switch {
-  @include columns($columns: 12);
-
-  .switchWrapper {
-    margin-left: $gutter-padding / 2;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px $box-shadow;
-    border: 2px solid $border-color;
-    color: $black;
-    margin-bottom: $gutter-padding + 10px;
-  }
-
-  .option {
-    border-radius: 4px;
-    box-shadow: $box-shadow;
-  }
-
-  .checkedOption {
-    background-color: $dark-blue;
+  @media #{$tablet-landscape} {
+    @include columns($columns: (12));
   }
 }
 
@@ -69,25 +41,12 @@
   margin-left: 0;
 }
 
-@media #{$tablet-landscape} {
-  .filters {
-    @include columns($columns: (3,2,2,2,1.5,2));
-  }
+.targetChartsContainer {
+  @include columns();
 
-  .switch {
-    @include columns($columns: 4);
-  }
+  margin-top: 50px;
 
-  .filtersGroup {
-    flex-direction: row;
+  @media #{$tablet-landscape} {
+    @include columns(6);
   }
-}
-
-.noData {
-  font-size: $font-size-m;
-  text-align: center;
-  vertical-align: middle;
-  color: $midnight-blue;
-  line-height: 1.38;
-  margin-top: 100px;
 }

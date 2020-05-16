@@ -15,9 +15,6 @@ import Chart from 'components/chart';
 import { Switch, Card, Dropdown, Button, Multiselect } from 'cw-components';
 import { TabletLandscape } from 'components/responsive';
 import cx from 'classnames';
-import educationData from './educationData';
-import healthData from './healthData';
-// import employmentData from './employmentData';
 
 import dropdownStyles from 'styles/dropdown';
 import button from 'styles/themes/button';
