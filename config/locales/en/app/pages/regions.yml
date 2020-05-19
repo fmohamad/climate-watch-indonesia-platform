@@ -60,6 +60,11 @@ en:
             grdp: PRDB
             grdp_capita: PRDB Per Kapita
             grdp_growth: Pertumbuhan Ekonomi
+          unit:
+            year: Year
+            million-rp: Million Rp
+            percent: Percent
+            satuan: satuan
         region-population:
           title: Populasi
           description: Penduduk Papua Barat berjumlah 963.000 jiwa pada 2019. Jumlah tersebut terdiri atas 457.200 jiwa penduduk perempuan dan 506.400 jiwa laki-laki.

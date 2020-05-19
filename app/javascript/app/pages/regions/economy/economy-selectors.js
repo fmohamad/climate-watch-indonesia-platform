@@ -5,21 +5,16 @@ import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
+import kebabCase from 'lodash/kebabCase'
 import { format } from 'd3-format';
 import {
-  ALL_SELECTED,
-  API_TARGET_DATA_SCALE,
-  EMISSION_TARGET,
-  METRIC,
   SECTOR_TOTAL,
-  SOURCE,
   WEST_PAPUA
 } from 'constants/constants';
 
 import {
   getAllSelectedOption,
   findOption,
-  withAllSelected
 } from 'selectors/filters-selectors';
 import { getProvince } from 'selectors/provinces-selectors';
 import { getTranslate } from 'selectors/translation-selectors';
@@ -257,8 +252,8 @@ const parseChartData = createSelector(
 // Y LABEL FORMATS
 const getCustomYLabelFormat = unit => {
   const formatY = {
-    'Juta Rupiah': value => format(',.2f')(value/1000000),
-    'million Rupiahs': value => `${value}`,
+    'million-rp': value => format(',.2f')(value/1000000),
+    'million Rp': value => `${value}`,
     '%': value => `${value}%`
   };
   return formatY[unit];
@@ -279,11 +274,15 @@ export const getChartConfig = createSelector(
     const tooltip = getTooltipConfig(yColumnOptions);
     const theme = getThemeConfig(yColumnOptions);
 
+    const year = t(
+      `pages.regions.economy.unit.year}`
+    );
+
     const axes = {
-      xBottom: { name: 'Year', unit: 'date', format: 'YYYY' },
+      xBottom: { name: year, unit: year, format: 'YYYY' },
       yLeft: {
         name: options.indicator.label,
-        unit,
+        unit: t(`pages.regions.economy.unit.million-rp`),
         format: 'number',
       }
     }
@@ -302,14 +301,89 @@ export const getChartConfig = createSelector(
   }
 );
 
+const getDefaultColumns = createSelector(
+  parseChartData,
+  data => {
+    if (!data || isEmpty(data)) return null
+
+    const years = data.map(dt => dt.x)
+
+    const defaultColumns = ['indicator', 'unit', ...years]
+
+    return defaultColumns
+  }
+)
+
+const firstColumnHeaders = () => (['indicator', 'unit'])
+
+const narrowColumns = createSelector(
+  parseChartData,
+  data => {
+    if (!data || isEmpty(data)) return null
+
+    return [ 'unit' ] + data.map(dt => dt.x) 
+  }
+)
+
+const getTableData = createSelector(
+  [getSelectedModel, getDefaultColumns, getIndicatorData, parseChartData, getSelectedOptions, getUnit, getTranslate],
+  (model, columns, indicatorData, parsedData, options, unit, t) => {
+    if (!parsedData || !options || !unit || !model) return null
+
+    const filteredData = filteredDataBySelectedOptions(indicatorData, options)
+
+    console.log('unit', unit)
+    let tableData = []
+    if (model === KABUPATEN) {
+      filteredData.forEach(data => {
+        const objectData = {}
+
+        objectData.indicator = data.location
+        objectData.unit =  t(`pages.regions.economy.unit.${unit}`)
+
+        data.values.forEach(value => {
+          objectData[value.year] = value.value
+        })
+
+        tableData.push(objectData)
+      })
+    }
+
+
+    if (model === SEKTOR) {
+      filteredData.forEach(data => {
+        const objectData = {}
+
+        objectData.indicator = data.category
+        objectData.unit = unit
+
+        data.values.forEach(value => {
+          objectData[value.year] = value.value
+        })
+
+        tableData.push(objectData)
+      })
+    }
+    
+    return tableData
+
+  }
+)
+
 
 const getChartLoading = ({ provinceMeta = {}, indicators = {} }) =>
-  provinceMeta && provinceMeta.loading || indicators && indicators.loading;
+  (provinceMeta && provinceMeta.loading) || (indicators && indicators.loading);
 
 const getDataLoading = createSelector(
   [ getChartLoading, parseChartData ],
   (loading, data) => loading || !data || false
 );
+
+export const getTableConfig = createStructuredSelector({
+  defaultColumns: getDefaultColumns,
+  firstColumnHeaders,
+  narrowColumns
+});
 
 export const getChartData = createStructuredSelector({
   data: parseChartData,
@@ -322,6 +396,8 @@ export const getChartData = createStructuredSelector({
 export const getEconomies = createStructuredSelector({
   indicatorParams: getIndicatorParams,
   chartData: getChartData,
+  tableData: getTableData,
+  tableConfig: getTableConfig,
   selectedOptions: getSelectedOptions,
   filterOptions: getFilterOptions,
   query: getQuery,

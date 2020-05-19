@@ -6,7 +6,7 @@ import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
 import { format } from 'd3-format';
 
-import { Chart, Dropdown, Multiselect } from 'cw-components';
+import { Chart, Dropdown, Multiselect, Table } from 'cw-components';
 
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import SectionTitle from 'components/section-title';
@@ -126,6 +126,32 @@ class Economies extends PureComponent {
     );
   }
 
+  renderTable() {
+    const { tableData, tableConfig } = this.props
+    if (!tableData) return null
+
+    const setColumnWidth = column => {
+      if (tableConfig.narrowColumns.includes(column)) return 100 
+      return 230
+    }
+
+    return (
+      <Table
+        data={tableData}
+        hasColumnSelect
+        parseMarkdown
+        firstColumnHeaders={tableConfig.firstColumnHeaders}
+        narrowColumns={tableConfig.narrowColumns}
+        emptyValueLabel='Data belum tersedia'
+        defaultColumns={tableConfig.defaultColumns}
+        horizontalScroll
+        dinamicRowsHeight
+        shouldOverflow
+        setColumnWidth={setColumnWidth}
+      />
+    )
+  }
+
   render() {
     const { indicatorParams, metadataParams, provinceISO, t } = this.props;
     const icons = { line: lineIcon, area: areaIcon };
@@ -158,6 +184,9 @@ class Economies extends PureComponent {
               <div className={styles.chartContainer}>
                 {this.renderChart()}
               </div>
+              <div className={styles.tableContainer}>
+                {this.renderTable()}
+              </div>
             </div>
           </div>
         </div>
@@ -171,6 +200,8 @@ class Economies extends PureComponent {
 Economies.propTypes = {
   t: PropTypes.func.isRequired,
   chartData: PropTypes.object,
+  tableData: PropTypes.array,
+  tableConfig: PropTypes.object,
   indicatorParams: PropTypes.object,
   metadataParams: PropTypes.object,
   selectedOptions: PropTypes.object,
@@ -182,6 +213,8 @@ Economies.propTypes = {
 
 Economies.defaultProps = {
   chartData: undefined,
+  tableData: undefined,
+  tableConfig: undefined,
   indicatorParams: undefined,
   metadataParams: undefined,
   selectedOptions: undefined,
