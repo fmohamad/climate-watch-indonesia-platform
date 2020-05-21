@@ -1,33 +1,42 @@
+import { connect } from 'react-redux';
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
-import { updateQueryParams } from 'utils';
 import Component from './economy-component';
+import { getEconomies } from './economy-selectors';
+
 import * as actions from './economy-actions';
-import {
-  getEconomies
-} from './economy-selectors/economy-selectors';
+
+const mapStateToProps = getEconomies;
 
 class EconomyContainer extends PureComponent {
-  onFilterChange = filter => {
-    const { updateFiltersSelected, provinceISO, query } = this.props;
+  constructor() {
+    super();
+    this.state = { year: null };
+  }
+
+  onFilterChange = (filter) => {
+    const { updateFiltersSelected, query, provinceISO } = this.props;
 
     let oldQuery = query
 
-    if (filter && filter.indicators) {
-      oldQuery = null
-    }
+    if (filter && filter.indicator) oldQuery = null
 
     updateFiltersSelected({
       section: 'economy',
       region: provinceISO,
-      query: updateQueryParams(oldQuery, filter)
+      query: { ...oldQuery, ...filter }
     });
   };
 
   render() {
-    return <Component {...this.props} onFilterChange={this.onFilterChange} />;
+
+    return (
+      <Component
+        {...this.props}
+        onFilterChange={this.onFilterChange}
+      />
+    );
   }
 }
 
@@ -39,4 +48,4 @@ EconomyContainer.propTypes = {
 
 EconomyContainer.defaultProps = { query: {}, provinceISO: '' };
 
-export default connect(getEconomies, actions)(EconomyContainer);
+export default connect(mapStateToProps, actions)(EconomyContainer);

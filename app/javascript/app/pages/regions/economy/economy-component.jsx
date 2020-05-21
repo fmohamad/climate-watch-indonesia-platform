@@ -1,99 +1,139 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import castArray from 'lodash/castArray';
+import kebabCase from 'lodash/kebabCase';
+import uniq from 'lodash/uniq';
+import flatMap from 'lodash/flatMap';
+import { format } from 'd3-format';
+
+import { Chart, Dropdown, Multiselect } from 'cw-components';
+
+import InfoDownloadToolbox from 'components/info-download-toolbox';
+import SectionTitle from 'components/section-title';
 import ProvinceMetaProvider from 'providers/province-meta-provider'
 import IndicatorProvider from 'providers/indicators-provider'
-import SectionTitle from 'components/section-title'
-import { Chart, Dropdown, Multiselect, Button } from 'cw-components'
-import { NavLink } from 'redux-first-router-link'
-import startCase from 'lodash/startCase'
-import kebabCase from 'lodash/kebabCase'
-import castArray from 'lodash/castArray'
-import uniq from 'lodash/uniq'
-import flatMap from 'lodash/flatMap'
-import CustomTooltip from './bar-chart-tooltip';
+import dropdownStyles from 'styles/dropdown.scss';
+import lineIcon from 'assets/icons/line_chart.svg';
+import areaIcon from 'assets/icons/area_chart.svg';
+import { WEST_PAPUA } from 'constants/constants';
 
-import dropdownStyles from 'styles/dropdown.scss'
-import lineIcon from 'assets/icons/line_chart.svg'
-import areaIcon from 'assets/icons/area_chart.svg'
-import button from 'styles/themes/button'
-import cx from 'classnames'
-import styles from './economy-styles.scss'
+import styles from './economy-styles.scss';
 
-class Economy extends PureComponent {
-  handleFilterChange = (field, selected) => {
+class Economies extends PureComponent {
 
-    const { onFilterChange, selectedOptions } = this.props
+  handleLegendChange = (selected) => {
+    const { selectedModel } = this.props
+    const KABUPATEN = 'kabupaten'
 
-    const prevSelectedOptionValues = castArray(selectedOptions[field])
-      .filter((o) => o)
-      .map((o) => o.value)
-    const selectedArray = castArray(selected)
-    const newSelectedOption = selectedArray.find(
-      (o) => !prevSelectedOptionValues.includes(o.value)
-    )
-
-    const removedAnyPreviousOverride = selectedArray
-      .filter((v) => v)
-      .filter((v) => !v.override)
-
-    const values =
-      newSelectedOption && newSelectedOption.override
-        ? newSelectedOption.value
-        : uniq(
-            flatMap(removedAnyPreviousOverride, (v) =>
-              String(v.value).split(',')
-            )
-          ).join(',')
-
-    onFilterChange({ [field]: values })
+    if (selectedModel === KABUPATEN) {
+      this.handleFilterChange('district', selected)
+    } else {
+      this.handleFilterChange('sector', selected)
+    }
   }
 
+  handleFilterChange = (field, selected) => {
+    const { onFilterChange, selectedOptions } = this.props;
+
+    const prevSelectedOptionValues = castArray(selectedOptions[field]).map(
+      o => o.value
+    );
+    const selectedArray = castArray(selected);
+    const newSelectedOption = selectedArray.find(
+      o => !prevSelectedOptionValues.includes(o.value)
+    );
+
+    const removedAnyPreviousOverride = selectedArray
+      .filter(v => v)
+      .filter(v => !v.override);
+
+    const values = newSelectedOption && newSelectedOption.override
+      ? newSelectedOption.value
+      : uniq(
+        flatMap(removedAnyPreviousOverride, v => String(v.value).split(','))
+      ).join(',');
+
+    onFilterChange({ [field]: values });
+  };
+
   renderDropdown(field, multi, icons) {
-    const { selectedOptions, filterOptions, t } = this.props
+    const { selectedModel } = this.props
 
-    const value = selectedOptions && selectedOptions[field]
-    const options = filterOptions[field] || []
-    const iconsProp = icons ? { icons } : {}
+    const { selectedOptions, filterOptions, t } = this.props;
+    const value = selectedOptions && selectedOptions[field];
+    const options = filterOptions[field] || [];
+    const iconsProp = icons ? { icons } : {};
 
-    const label = t(`pages.regions.economy.labels.${kebabCase(field)}`)
+    const disabled = (field === 'sector' && selectedModel === 'kabupaten') ||
+                     (field === 'district' && selectedModel === 'sektor')
 
+    const label = t(
+      `pages.regions.economy.labels.${kebabCase(field)}`
+    );
     if (multi) {
-      const values = castArray(value).filter((v) => v)
+      const values = castArray(value).filter(v => v);
       return (
         <Multiselect
           key={field}
           label={label}
-          placeholder={`Filter by ${startCase(field)}`}
           options={options}
-          onValueChange={(selected) => this.handleFilterChange(field, selected)}
+          onValueChange={selected => this.handleFilterChange(field, selected)}
           values={values}
           theme={{ wrapper: dropdownStyles.select }}
+          disabled={disabled}
           hideResetButton
         />
-      )
+      );
     }
-
     return (
       <Dropdown
         key={field}
         label={label}
-        placeholder={`Filter by ${startCase(field)}`}
         options={options}
-        onValueChange={(selected) => this.handleFilterChange(field, selected)}
+        onValueChange={selected => this.handleFilterChange(field, selected)}
         value={value || null}
         theme={{ select: dropdownStyles.select }}
         hideResetButton
         {...iconsProp}
       />
-    )
+    );
+  }
+
+  renderChart() {
+    const { chartData, selectedOptions } = this.props;
+    if (!chartData || !chartData.data) return null;
+
+    return (
+      <Chart
+        theme={chartData.config.theme}
+        type={
+          selectedOptions &&
+            selectedOptions.chartType &&
+            selectedOptions.chartType.value
+        }
+        config={chartData.config}
+        data={chartData.data}
+        domain={chartData.domain}
+        dataOptions={chartData.dataOptions}
+        dataSelected={chartData.dataSelected}
+        height={500}
+        loading={chartData.loading}
+        getCustomYLabelFormat={chartData.config.yLabelFormat}
+        onLegendChange={v =>
+          this.handleLegendChange(v)}
+        showUnit
+      />
+    );
   }
 
   render() {
-    const { metaParams, selectedOptions, chartData, t } = this.props
+    const { indicatorParams, metadataParams, provinceISO, t } = this.props;
+    const icons = { line: lineIcon, area: areaIcon };
 
-    const icons = { line: lineIcon, area: areaIcon }
-
-    const isDataPresent = (chartData && chartData.data) ? true : false
+    const sources = [ 'RADGRK', 'SIGNSa' ];
+    const downloadURI = `emissions/download?source=${sources.join(
+      ','
+    )}&location=${provinceISO}`;
 
     return (
       <div className={styles.page}>
@@ -101,77 +141,52 @@ class Economy extends PureComponent {
           title={t('pages.regions.economy.title')}
           description={t('pages.regions.economy.description')}
         />
-        <div className={styles.filtersGroup}>
-          <div className={styles.filters}>
-            {this.renderDropdown('indicators')}
-            {this.renderDropdown('locations', true)}
-            {this.renderDropdown('sectors', true)}
-            {this.renderDropdown('chartType', false, icons)}
-            <Button theme={{ button: cx(button.darkBlue, styles.button) }}>
-              <NavLink
-                exact={'/en/national-context' || false}
-                key={'/en/national-context'}
-                to={`/en/national-context`}
-                activeClassName={styles.active}
-                onTouchStart={undefined}
-                onMouseDown={undefined}
-              >
-                Jelajahi di Tingkat Nasional
-              </NavLink>
-            </Button>
+        <div>
+          <div className={styles.chartMapContainer}>
+            <div className={styles.filtersChartContainer}>
+              <div className={styles.dropdowns}>
+                {this.renderDropdown('indicator', false)}
+                {this.renderDropdown('district', true)}
+                {this.renderDropdown('sector', true)}
+                {this.renderDropdown('chartType', false, icons)}
+                <InfoDownloadToolbox
+                  className={{ buttonWrapper: styles.buttonWrapper }}
+                  slugs={sources}
+                  downloadUri={downloadURI}
+                />
+              </div>
+              <div className={styles.chartContainer}>
+                {this.renderChart()}
+              </div>
+            </div>
           </div>
         </div>
-        <div className={styles.chartContainer}>
-          {isDataPresent ? (chartData && chartData.data && (
-            <Chart
-              theme={{
-                legend: styles.legend,
-                projectedLegend: styles.projectedLegend,
-              }}
-              type={
-                selectedOptions &&
-                selectedOptions.chartType &&
-                selectedOptions.chartType.value
-              }
-              config={chartData.config}
-              data={chartData.data}
-              domain={chartData.domain}
-              dataOptions={chartData.dataOptions}
-              dataSelected={chartData.dataSelected}
-              getCustomYLabelFormat={chartData.config.yLabelFormat}
-              onLegendChange={v =>
-                this.handleFilterChange('locations', v)}
-              height={500}
-              loading={chartData.loading}
-              showUnit
-            />
-          )) : (<div className={styles.noData}>No data available</div>)}
-        </div>
-        <ProvinceMetaProvider metaParams={metaParams} />
-        <IndicatorProvider />
+        {metadataParams && <ProvinceMetaProvider metaParams={metadataParams} />}
+        {indicatorParams && <IndicatorProvider params={indicatorParams} />}
       </div>
-    )
+    );
   }
 }
 
-Economy.propTypes = {
+Economies.propTypes = {
   t: PropTypes.func.isRequired,
-  downloadURI: PropTypes.string,
   chartData: PropTypes.object,
-  metaParams: PropTypes.object,
-  filterOptions: PropTypes.object,
-  onFilterChange: PropTypes.func.isRequired,
+  indicatorParams: PropTypes.object,
+  metadataParams: PropTypes.object,
   selectedOptions: PropTypes.object,
-  provinceISO: PropTypes.string,
-}
+  filterOptions: PropTypes.object,
+  provinceISO: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+  selectedModel: PropTypes.string
+};
 
-Economy.defaultProps = {
+Economies.defaultProps = {
   chartData: undefined,
-  downloadURI: undefined,
-  metaParams: {},
-  filterOptions: undefined,
+  indicatorParams: undefined,
+  metadataParams: undefined,
   selectedOptions: undefined,
-  provinceISO: '',
-}
+  filterOptions: undefined,
+  selectedModel: undefined
+};
 
-export default Economy
+export default Economies;

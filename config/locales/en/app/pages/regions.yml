@@ -52,10 +52,10 @@ en:
           title: Ekonomi
           description: Provinsi Papua Barat mencatat pertumbuhan sebesar -0.5% pada kuartal II 2019. Namun angka pertumbuhan ini lebih baik dibandingkan kuartal sebelumnya yang -12.83 %.
           labels:
-            indicators: Indikator
-            locations: Kabupaten
-            sectors: Sektor
-            chart-type: Grafik 
+            indicator: Indicator
+            district: District
+            sector: Sector
+            chart-type: Chart Type
           indicators:
             grdp: PRDB
             grdp_capita: PRDB Per Kapita
@@ -74,6 +74,14 @@ en:
             district: Regency
         policy:
           title: Melacak Kebijakan 
+          description: Upaya-upaya Papua Barat dalam rangka penurunan emisi diwujudkan dengan dikeluarkannya berbagai instrumen kebijakan.
+          labels:
+            indicator: Indicator 
+            regency: Regency
+            sector: Sector
+            chart-type: Chart Type
+        map:
+          title: Peta
           description: Upaya-upaya Papua Barat dalam rangka penurunan emisi diwujudkan dengan dikeluarkannya berbagai instrumen kebijakan.
           labels:
             indicator: Indicator 
