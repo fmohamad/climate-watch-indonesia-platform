@@ -12,7 +12,7 @@ import kebabCase from 'lodash/kebabCase'
 import castArray from 'lodash/castArray'
 import uniq from 'lodash/uniq'
 import flatMap from 'lodash/flatMap'
-import CustomTooltip from './bar-chart-tooltip'
+import { appendParamsToURL } from 'utils';
 import PopulationMap from './population-map'
 
 import styles from './region-population-styles'
@@ -49,15 +49,14 @@ class RegionPopulation extends PureComponent {
         ? newSelectedOption.value
         : uniq(
             flatMap(removedAnyPreviousOverride, (v) =>
-              String(v.value).split(',')
-            )
+              String(v.value).split(','))
           ).join(',')
 
     onFilterChange({ [field]: values })
   }
 
   handleSwitchChange = (option) => {
-    const { selectedOptions, provinceISO, updateFiltersSelected } = this.props
+    const { provinceISO, updateFiltersSelected } = this.props
 
     updateFiltersSelected({
       section: 'region-population',
@@ -92,7 +91,7 @@ class RegionPopulation extends PureComponent {
     const value = selectedOptions && selectedOptions[field]
     const options = filterOptions[field] || []
 
-    const label = t(`pages.regions.economy.labels.${kebabCase(field)}`)
+    const label = t(`pages.regions.region-population.labels.${kebabCase(field)}`)
 
     return (
       <Dropdown
@@ -118,10 +117,7 @@ class RegionPopulation extends PureComponent {
       popDensity,
       popGrowth,
       popSexRatio,
-      selectedOptions
     } = this.props
-
-    console.log(this.props)
 
     if (selectedModel.value === 'population') {
       return (
@@ -206,11 +202,15 @@ class RegionPopulation extends PureComponent {
   }
 
   render() {
-    const { t, params, metaParams, provinceISO, selectedModel } = this.props
+    const { t, params, metaParams, selectedModel, query } = this.props
     const sources = ['RADGRK', 'SIGNSa']
-    const downloadURI = `emissions/download?source=${sources.join(
-      ','
-    )}&location=${provinceISO}`
+
+    const section = 'wp_population'
+    const downloadURI = `indicators.zip?section=${section}`
+    const pdfURI = `indicators.pdf?section=${section}`
+    const shareLink = `region-population`
+
+    const shareableLink = `${window.location.origin}/${appendParamsToURL(shareLink, query)}`
 
     return (
       <div className={styles.page}>
@@ -227,8 +227,8 @@ class RegionPopulation extends PureComponent {
                 className={{ buttonWrapper: styles.buttonWrapper }}
                 slugs={sources}
                 downloadUri={downloadURI}
-                pdfUri='pdfuri'
-                shareableLink='link'
+                pdfUri={pdfURI}
+                shareableLink={shareableLink}
               />
             )}
           </div>
@@ -246,7 +246,10 @@ class RegionPopulation extends PureComponent {
 
 RegionPopulation.propTypes = {
   t: PropTypes.func.isRequired,
+  chart: PropTypes.object,
+  chartData: PropTypes.array,
   selectedOptions: PropTypes.object,
+  selectedModel: PropTypes.object,
   filterOptions: PropTypes.object,
   onFilterChange: PropTypes.func.isRequired,
   popTotal: PropTypes.string,
@@ -255,19 +258,26 @@ RegionPopulation.propTypes = {
   popSexRatio: PropTypes.string,
   params: PropTypes.object,
   metaParams: PropTypes.object,
-  provinceISO: PropTypes.string
+  provinceISO: PropTypes.string,
+  query: PropTypes.object,
+  updateFiltersSelected: PropTypes.func,
 }
 
 RegionPopulation.defaultProps = {
-  selectedOptions: undefined,
-  filterOptions: undefined,
+  chart: {},
+  chartData: [],
+  selectedOptions: {},
+  filterOptions: {},
   popTotal: "",
   popGrowth: "",
   popDensity: "",
   popSexRatio: "",
   params: {},
   metaParams: {},
-  provinceISO: ""
+  provinceISO: "",
+  query: {},
+  updateFiltersSelected: undefined,
+  selectedModel: '',
 }
 
 export default RegionPopulation

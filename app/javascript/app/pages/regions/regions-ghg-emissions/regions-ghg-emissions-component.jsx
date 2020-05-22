@@ -135,6 +135,8 @@ class RegionsGhgEmissions extends PureComponent {
       ','
     )}&location=${provinceISO}`;
 
+    console.log('download', downloadURI)
+
     return (
       <div className={styles.page}>
         <SectionTitle

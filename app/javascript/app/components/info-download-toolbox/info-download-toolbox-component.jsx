@@ -26,20 +26,28 @@ class InfoDownloadToolbox extends PureComponent {
   }
 
   handleClickOutside = () => {
-    // this.setState({ opened: false });
+    this.setState({ opened: false });
   };
 
+  handleShareClick = () => {
+    const { shareableLink } = this.props;
+    if (shareableLink) {
+      const url = `https://www.facebook.com/sharer/sharer.php?u=${shareableLink}`
+      window.open(url, '_blank');
+    }
+  }
+
   handleDownloadClick = () => {
-    /*const { downloadUri, locale } = this.props;
+    const { downloadUri, locale } = this.props;
     if (downloadUri) {
       const url = appendParamsToURL(getURL(downloadUri), { locale });
       handleAnalytics('Data Download', 'Download', url);
       window.open(url, '_blank');
-    }*/
+    }
   };
 
   handleMenuDownloadClick = option => {
-    /*const { locale } = this.props;
+    const { locale } = this.props;
     const isPDF = option.value === 'pdf';
     handleAnalytics('Data Download', 'Download', option.url);
 
@@ -48,11 +56,11 @@ class InfoDownloadToolbox extends PureComponent {
     } else {
       const url = appendParamsToURL(getURL(option.url), { locale });
       window.open(url, '_blank');
-    }*/
+    }
   };
 
   handleInfoClick = () => {
-    /*const { slugs, setModalMetadata, t } = this.props;
+    const { slugs, setModalMetadata, t } = this.props;
 
     if (!slugs) return;
 
@@ -63,7 +71,7 @@ class InfoDownloadToolbox extends PureComponent {
       slugs,
       open: true,
       customTitle: t('common.metadata.modal-default-title')
-    });*/
+    });
   };
 
   render() {
@@ -144,7 +152,7 @@ class InfoDownloadToolbox extends PureComponent {
     const renderShareButton = () => (
       <div data-for="blueTooltip" data-tip={downloadTooltipdata || 'Share'}>
         <Button
-          onClick={this.handleDownloadClick}
+          onClick={this.handleShareClick}
           theme={{
               button: cx(buttonThemes.outline, styles.button, theme.infobutton)
             }}

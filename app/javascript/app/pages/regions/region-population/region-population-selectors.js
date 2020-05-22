@@ -4,6 +4,7 @@ import filter from 'lodash/filter'
 import get from 'lodash/get'
 import find from 'lodash/find'
 import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
 
 import {
   getAllSelectedOption,
@@ -145,6 +146,8 @@ const getCardData = createSelector(
   [getIndicatorPopulation, getSelectedOptions],
   (data, options) => {
     if (!data) return null
+    if (isEmpty(options)) return null
+    if (isNil(options.district) || isNil(options.value)) return null
 
     const year = options.year.value
     const district = options.district.value

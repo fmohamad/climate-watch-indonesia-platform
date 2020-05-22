@@ -2,14 +2,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import ResultsList from 'components/results-list';
+import isNil from 'lodash/isNil'
 import Search from 'components/search';
-import RegionsMap from './regions-map';
 import { TabletLandscape } from 'components/responsive';
 
 import layout from 'styles/layout.scss';
-import resultsListLightTheme from 'styles/themes/results-list/results-list-light.scss';
 import searchCountriesTheme from 'styles/themes/search/search-countries.scss';
 import styles from './regions-select-styles.scss';
+import RegionsMap from './regions-map';
 
 class RegionsSelect extends PureComponent {
   constructor(props) {
@@ -31,6 +31,7 @@ class RegionsSelect extends PureComponent {
   }
 
   handleClickOutside = e => {
+    if (isNil(this.node)) return
     if(this.node.contains(e.target)) {
       return
     } 
