@@ -2,6 +2,7 @@ import { createStructuredSelector, createSelector } from 'reselect';
 import castArray from 'lodash/castArray';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
+import { format } from 'd3-format';
 import {
   ALL_SELECTED,
   API_TARGET_DATA_SCALE,
@@ -239,6 +240,16 @@ const parseChartData = createSelector(
 
 let colorCache = {};
 
+// Y LABEL FORMATS
+const getCustomYLabelFormat = unit => {
+  const formatY = {
+    'tCO2e': value => `${format(',.2f')(value/1e6)} juta`,
+    'tCO2e /Capita': value => value,
+    'tCO2e/billion Rupiahs': value => `${format(',.0f')(value/1e3)} ribu`
+  };
+  return formatY[unit];
+};
+
 export const getChartConfig = createSelector(
   [
     getProvinceEmissionsData,
@@ -271,12 +282,15 @@ export const getChartConfig = createSelector(
       projectedLabel: {}
     };
 
+    const yLabelFormat = getCustomYLabelFormat(unit)
+
     const config = {
       axes,
       theme: colorCache,
       tooltip,
       animation: false,
-      columns: { x: [ { label: 'year', value: 'x' } ], y: yColumnOptions }
+      columns: { x: [ { label: 'year', value: 'x' } ], y: yColumnOptions },
+      yLabelFormat
     };
 
     const hasTargetEmissions = targetEmissionsData &&
@@ -314,7 +328,7 @@ const parseTargetEmissionsData = createSelector(
 );
 
 const getChartLoading = ({ metadata = {}, GHGEmissions = {} }) =>
-  metadata && metadata.ghgindo.loading || GHGEmissions && GHGEmissions.loading;
+  (metadata && metadata.ghgindo.loading) || (GHGEmissions && GHGEmissions.loading);
 
 const getDataLoading = createSelector(
   [ getChartLoading, parseChartData ],

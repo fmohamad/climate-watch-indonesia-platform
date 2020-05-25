@@ -248,7 +248,7 @@ const config = () => ({
     }
   },
   tooltip: { 
-    y: { label: 'People' },
+    y: { label: 'Jumlah jiwa' },
     indicator: 'Age' 
   },
   animation: false,

@@ -1,112 +1,99 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import castArray from 'lodash/castArray';
-import toArray from 'lodash/toArray';
-import kebabCase from 'lodash/kebabCase';
-import groupBy from 'lodash/groupBy';
-import uniq from 'lodash/uniq';
-import flatMap from 'lodash/flatMap';
-import { format } from 'd3-format';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import castArray from 'lodash/castArray'
+import toArray from 'lodash/toArray'
+import kebabCase from 'lodash/kebabCase'
+import groupBy from 'lodash/groupBy'
+import uniq from 'lodash/uniq'
+import flatMap from 'lodash/flatMap'
 
-import { Chart, Dropdown, Multiselect } from 'cw-components';
+import { Chart, Dropdown, Multiselect } from 'cw-components'
 
-import { TabletLandscape } from 'components/responsive';
-import InfoDownloadToolbox from 'components/info-download-toolbox';
-import SectionTitle from 'components/section-title';
-import MetadataProvider from 'providers/metadata-provider';
-import GHGEmissionsProvider from 'providers/ghg-emissions-provider';
-import GHGTargetEmissionsProvider from 'providers/ghg-target-emissions-provider';
-import dropdownStyles from 'styles/dropdown.scss';
-import GHGMap from './ghg-map';
-import EmissionTargetChart from './emission-target-chart';
+import { TabletLandscape } from 'components/responsive'
+import InfoDownloadToolbox from 'components/info-download-toolbox'
+import SectionTitle from 'components/section-title'
+import MetadataProvider from 'providers/metadata-provider'
+import GHGEmissionsProvider from 'providers/ghg-emissions-provider'
+import GHGTargetEmissionsProvider from 'providers/ghg-target-emissions-provider'
+import dropdownStyles from 'styles/dropdown.scss'
+import GHGMap from './ghg-map'
+import EmissionTargetChart from './emission-target-chart'
 
-import styles from './regions-ghg-emissions-styles.scss';
+import styles from './regions-ghg-emissions-styles.scss'
 
 class RegionsGhgEmissions extends PureComponent {
   handleFilterChange = (field, selected) => {
-    const { onFilterChange, selectedOptions } = this.props;
+    const { onFilterChange, selectedOptions } = this.props
 
     const prevSelectedOptionValues = castArray(selectedOptions[field]).map(
-      o => o.value
-    );
-    const selectedArray = castArray(selected);
+      (o) => o.value
+    )
+    const selectedArray = castArray(selected)
     const newSelectedOption = selectedArray.find(
-      o => !prevSelectedOptionValues.includes(o.value)
-    );
+      (o) => !prevSelectedOptionValues.includes(o.value)
+    )
 
     const removedAnyPreviousOverride = selectedArray
-      .filter(v => v)
-      .filter(v => !v.override);
+      .filter((v) => v)
+      .filter((v) => !v.override)
 
-    const values = newSelectedOption && newSelectedOption.override
-      ? newSelectedOption.value
-      : uniq(
-        flatMap(removedAnyPreviousOverride, v => String(v.value).split(','))
-      ).join(',');
+    const values =
+      newSelectedOption && newSelectedOption.override
+        ? newSelectedOption.value
+        : uniq(
+            flatMap(removedAnyPreviousOverride, (v) =>
+              String(v.value).split(','))
+          ).join(',')
 
-    onFilterChange({ [field]: values });
-  };
+    onFilterChange({ [field]: values })
+  }
 
   renderDropdown(field, multi) {
-    const { selectedOptions, filterOptions, t } = this.props;
-    const value = selectedOptions && selectedOptions[field];
-    const options = filterOptions[field] || [];
+    const { selectedOptions, filterOptions, t } = this.props
+    const value = selectedOptions && selectedOptions[field]
+    const options = filterOptions[field] || []
 
     const label = t(
       `pages.regions.regions-ghg-emissions.labels.${kebabCase(field)}`
-    );
+    )
     if (multi) {
-      const values = castArray(value).filter(v => v);
+      const values = castArray(value).filter((v) => v)
       return (
         <Multiselect
           key={field}
           label={label}
           options={options}
-          onValueChange={selected => this.handleFilterChange(field, selected)}
+          onValueChange={(selected) => this.handleFilterChange(field, selected)}
           values={values}
           theme={{ wrapper: dropdownStyles.select }}
           hideResetButton
         />
-      );
+      )
     }
     return (
       <Dropdown
         key={field}
         label={label}
         options={options}
-        onValueChange={selected => this.handleFilterChange(field, selected)}
+        onValueChange={(selected) => this.handleFilterChange(field, selected)}
         value={value || null}
         theme={{ select: dropdownStyles.select }}
         hideResetButton
       />
-    );
-  }
-
-  numberFormat(value) {
-    if(value >= 1000000) {
-      value = (value/ 1000000).toFixed(0) + ' juta'
-    } else if(value >= 1000) {
-      value = (value/ 1000).toFixed(0) + ' ribu'
-    } else if(value <= -1000000) {
-      value = (value/ 1000000).toFixed(0) + ' juta'
-    } else if(value <= -1000) {
-      value = (value/ 1000).toFixed(0) + ' ribu'
-    }
-
-    return value;
+    )
   }
 
   renderChart() {
-    const { chartData, onYearChange } = this.props;
-    if (!chartData || !chartData.data) return null;
+    const { chartData, onYearChange } = this.props
+    if (!chartData || !chartData.data || !chartData.config) return null
 
     return (
       <Chart
         theme={{
           legend: styles.legend,
-          projectedLegend: styles.projectedLegend
+          projectedLegend: styles.projectedLegend,
         }}
-        type="line"
+        type='line'
         config={chartData.config}
         data={chartData.data}
         projectedData={chartData.projectedData || []}
@@ -115,42 +102,40 @@ class RegionsGhgEmissions extends PureComponent {
         dataSelected={chartData.dataSelected}
         height={500}
         loading={chartData.loading}
-        getCustomYLabelFormat={value => this.numberFormat(value)}
         showUnit
-        onLegendChange={v => this.handleFilterChange('sector', v)}
+        onLegendChange={(v) => this.handleFilterChange('sector', v)}
+        getCustomYLabelFormat={chartData.config.yLabelFormat}
         onMouseMove={onYearChange}
-        margin={{top: 45, right: 0, left: 0, bottom: 0}}
+        margin={{ top: 45, right: 0, left: 0, bottom: 0 }}
       />
-    );
+    )
   }
 
   renderPieCharts() {
-    const { emissionTargets } = this.props;
+    const { emissionTargets } = this.props
 
-    if (!emissionTargets || !emissionTargets.length) return null;
+    if (!emissionTargets || !emissionTargets.length) return null
 
     const groupedTargets = toArray(
-      groupBy(emissionTargets, et => `${et.year} - ${et.label}`)
-    );
+      groupBy(emissionTargets, (et) => `${et.year} - ${et.label}`)
+    )
 
     return (
       <div className={styles.targetChartsContainer}>
-        {groupedTargets.map(targets => (
+        {groupedTargets.map((targets) => (
           <EmissionTargetChart emissionTargets={targets} />
         ))}
       </div>
-    );
+    )
   }
 
   render() {
-    const { emissionParams, selectedYear, provinceISO, t, query } = this.props;
+    const { emissionParams, selectedYear, provinceISO, t, query } = this.props
 
-    const sources = [ 'RADGRK', 'SIGNSa' ];
+    const sources = ['RADGRK', 'SIGNSa']
     const downloadURI = `emissions/download?source=${sources.join(
       ','
-    )}&location=${provinceISO}`;
-
-    console.log('download', downloadURI)
+    )}&location=${provinceISO}`
 
     return (
       <div className={styles.page}>
@@ -171,23 +156,19 @@ class RegionsGhgEmissions extends PureComponent {
                   downloadUri={downloadURI}
                 />
               </div>
-              <div className={styles.chartContainer}>
-                {this.renderChart()}
-              </div>
+              <div className={styles.chartContainer}>{this.renderChart()}</div>
             </div>
             <TabletLandscape>
               <GHGMap selectedYear={selectedYear} query={query} />
             </TabletLandscape>
           </div>
         </div>
-        <div>
-          {this.renderPieCharts()}
-        </div>
-        <MetadataProvider meta="ghgindo" />
+        <div>{this.renderPieCharts()}</div>
+        <MetadataProvider meta='ghgindo' />
         {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
         {emissionParams && <GHGTargetEmissionsProvider />}
       </div>
-    );
+    )
   }
 }
 
@@ -202,8 +183,8 @@ RegionsGhgEmissions.propTypes = {
   provinceISO: PropTypes.string.isRequired,
   onFilterChange: PropTypes.func.isRequired,
   onYearChange: PropTypes.func.isRequired,
-  query: PropTypes.object
-};
+  query: PropTypes.object,
+}
 
 RegionsGhgEmissions.defaultProps = {
   chartData: undefined,
@@ -212,7 +193,7 @@ RegionsGhgEmissions.defaultProps = {
   selectedOptions: undefined,
   filterOptions: undefined,
   selectedYear: null,
-  query: null
-};
+  query: null,
+}
 
-export default RegionsGhgEmissions;
+export default RegionsGhgEmissions

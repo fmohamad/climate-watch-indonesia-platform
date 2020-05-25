@@ -254,9 +254,10 @@ const parseChartData = createSelector(
 // Y LABEL FORMATS
 const getCustomYLabelFormat = unit => {
   const formatY = {
-    'million-rp': value => format(',.2f')(value/1000000),
+    'million-rp': value => format(',.2f')(value/1e6),
     'million Rp': value => `${value}`,
-    '%': value => `${value}%`
+    '%': value => `${value}%`,
+    'satuan': value => `${format(',.2f')(value/1e3)} ribu`
   };
   return formatY[unit];
 };
@@ -284,7 +285,7 @@ export const getChartConfig = createSelector(
       xBottom: { name: year, unit: year, format: 'YYYY' },
       yLeft: {
         name: options.indicator.label,
-        unit: t(`pages.regions.economy.unit.million-rp`),
+        unit: t(`pages.regions.economy.unit.${unit}`),
         format: 'number',
       }
     }
