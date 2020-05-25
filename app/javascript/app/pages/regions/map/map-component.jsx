@@ -7,9 +7,9 @@ import InfoDownloadToolbox from 'components/info-download-toolbox';
 import Chart from 'components/chart';
 import { Switch, Card, Dropdown, Button, Icon } from 'cw-components';
 import { TabletLandscape } from 'components/responsive';
-import MapGL, {Source, Layer} from 'react-map-gl';
+import MapGL, {Source, Layer, SVGOverlay } from 'react-map-gl';
+// import MapGL, {Source, Layer, SVGOverlay } from 'mapbox-gl/dist/mapbox-gl'
 import {fromJS} from 'immutable';
-import {SVGOverlay} from 'react-map-gl';
 import {range} from 'd3-array';
 import {scaleQuantile} from 'd3-scale';
 import mapboxgl from 'mapbox-gl';
