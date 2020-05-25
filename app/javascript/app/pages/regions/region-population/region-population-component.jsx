@@ -189,7 +189,6 @@ class RegionPopulation extends PureComponent {
           data={chartData}
           theme={{ legend: styles.legend }}
           getCustomYLabelFormat={getCustomYLabelFormat}
-          customTooltip={<CustomTooltip />}
           domain={chart.domain}
           dataOptions={chart.dataOptions}
           dataSelected={chart.dataSelected}
@@ -253,10 +252,10 @@ RegionPopulation.propTypes = {
   selectedModel: PropTypes.object,
   filterOptions: PropTypes.object,
   onFilterChange: PropTypes.func.isRequired,
-  popTotal: PropTypes.string,
-  popGrowth: PropTypes.string,
-  popDensity: PropTypes.string,
-  popSexRatio: PropTypes.string,
+  popTotal: PropTypes.number,
+  popGrowth: PropTypes.number,
+  popDensity: PropTypes.number,
+  popSexRatio: PropTypes.number,
   params: PropTypes.object,
   metaParams: PropTypes.object,
   provinceISO: PropTypes.string,

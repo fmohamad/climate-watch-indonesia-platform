@@ -8,7 +8,6 @@ import styles from './population-map-styles.scss';
 
 const MAP_ZOOM_STEP = 2;
 const MAP_ZOOM_DEFAULT = 40;
-const MAP_ZOOM_FOCUS = 60;
 const MAP_ZOOM_MIN = 6;
 
 const MapTooltip = ({ properties }) => (
@@ -83,16 +82,19 @@ class PopulationMap extends PureComponent {
 PopulationMap.propTypes = {
   paths: PropTypes.array,
   mapCenter: PropTypes.array,
-  linkToDistrict: PropTypes.func.isRequired,
-  query: PropTypes.func.isRequired,
-  selectedOptions: PropTypes.object.isRequired,
+  linkToDistrict: PropTypes.func,
+  query: PropTypes.object,
+  selectedOptions: PropTypes.object,
 };
 
 PopulationMap.defaultProps = {
   mapCenter: [ 132.825, -1.32525],
   paths: [],
   buckets: [],
-  unit: ''
+  unit: '',
+  query: null,
+  linkToDistrict: undefined,
+  selectedOptions: undefined,
 };
 
 export default PopulationMap;

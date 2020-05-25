@@ -5,7 +5,6 @@ import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
-import kebabCase from 'lodash/kebabCase'
 import { format } from 'd3-format';
 import {
   SECTOR_TOTAL,
@@ -212,6 +211,9 @@ const parseChartData = createSelector(
     if (!yColumnOptions) return null;
 
     const filteredData = filteredDataBySelectedOptions(indicatorData, selectedOptions)
+
+    if (isEmpty(filteredData)) return null
+
     const yearAxis = filteredData[0].values.map(o => o.year)
 
     const data = []
@@ -332,8 +334,7 @@ const getTableData = createSelector(
 
     const filteredData = filteredDataBySelectedOptions(indicatorData, options)
 
-    console.log('unit', unit)
-    let tableData = []
+    const tableData = []
     if (model === KABUPATEN) {
       filteredData.forEach(data => {
         const objectData = {}

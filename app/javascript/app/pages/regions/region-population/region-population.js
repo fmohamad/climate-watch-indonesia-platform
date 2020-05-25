@@ -21,30 +21,9 @@ class RegionPopulationContainer extends PureComponent {
       query: updateQueryParams(query, filter),
     })
   }
-  /* updateIndicatorFilter = newFilter => {
-    this.onFilterChange({
-      popNationalIndicator: newFilter.value,
-      popProvince: undefined
-    });
-  }; */
-  /* updateLegendFilter = newFilter => {
-    let values;
-    if (isArray(newFilter)) {
-      values = newFilter.map(v => v.value).join(',');
-    } else {
-      values = newFilter.value;
-    }
-    this.onFilterChange({ popProvince: values });
-  }; */
+
   render() {
-    return (
-      <Component
-        {...this.props}
-        onFilterChange={this.onFilterChange}
-        /* onIndicatorChange={this.updateIndicatorFilter} */
-        /* onLegendChange={this.updateLegendFilter} */
-      />
-    )
+    return <Component {...this.props} onFilterChange={this.onFilterChange} />
   }
 }
 
@@ -52,9 +31,13 @@ RegionPopulationContainer.propTypes = {
   updateFiltersSelected: PropTypes.func.isRequired,
   query: PropTypes.object,
   provinceISO: PropTypes.string,
-  onFilterChange: PropTypes.func.isRequired
+  onFilterChange: PropTypes.func,
 }
 
-RegionPopulationContainer.defaultProps = { query: {}, provinceISO: '' }
+RegionPopulationContainer.defaultProps = {
+  query: {},
+  provinceISO: '',
+  onFilterChange: undefined,
+}
 
 export default connect(mapStateToProps, actions)(RegionPopulationContainer)

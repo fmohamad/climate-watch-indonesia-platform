@@ -10,10 +10,6 @@ import * as actions from './economy-actions';
 const mapStateToProps = getEconomies;
 
 class EconomyContainer extends PureComponent {
-  constructor() {
-    super();
-    this.state = { year: null };
-  }
 
   onFilterChange = (filter) => {
     const { updateFiltersSelected, query, provinceISO } = this.props;

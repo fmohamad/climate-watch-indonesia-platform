@@ -147,7 +147,7 @@ const getCardData = createSelector(
   (data, options) => {
     if (!data) return null
     if (isEmpty(options)) return null
-    if (isNil(options.district) || isNil(options.value)) return null
+    if (isNil(options.district) || isNil(options.year)) return null
 
     const year = options.year.value
     const district = options.district.value
@@ -214,12 +214,11 @@ const getChartData = createSelector(
     if (isEmpty(indicators)) return null
     const selectedYear = options.year.value
     const xAxis = indicators.map(data => data.category)
-    let yAxis = []
-    let data = []
+    const data = []
     xAxis.forEach(x => {
       const { values } = filter(indicators, ['category', x])[0]
-      let object = {
-        x: x,
+      const object = {
+        x,
         y: find(values, ['year', selectedYear]).value
       }
       data.push(object)
@@ -261,8 +260,8 @@ const config = () => ({
 });
 
 const getChart = createStructuredSelector({
-  domain: domain,
-  config: config
+  domain,
+  config,
 });
 
 export const getRegionPopulation = createStructuredSelector({
