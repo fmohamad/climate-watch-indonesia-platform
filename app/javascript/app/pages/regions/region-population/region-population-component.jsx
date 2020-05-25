@@ -175,13 +175,6 @@ class RegionPopulation extends PureComponent {
           <div className={styles.dropdown}>
             {this.renderDropdown('year')}
           </div>
-          <InfoDownloadToolbox
-            className={{ buttonWrapper: styles.buttonWrapper }}
-            /* slugs={sources} */
-            /* downloadUri={downloadURI} */
-            pdfUri='pdfuri'
-            shareableLink='link'
-          />
         </div>
         <Chart
           type='bar'
@@ -207,7 +200,6 @@ class RegionPopulation extends PureComponent {
 
     const section = 'wp_population'
     const downloadURI = `indicators.zip?section=${section}`
-    const pdfURI = `indicators.pdf?section=${section}`
     const shareLink = `region-population`
 
     const shareableLink = `${window.location.origin}/${appendParamsToURL(shareLink, query)}`
@@ -227,7 +219,6 @@ class RegionPopulation extends PureComponent {
                 className={{ buttonWrapper: styles.buttonWrapper }}
                 slugs={sources}
                 downloadUri={downloadURI}
-                pdfUri={pdfURI}
                 shareableLink={shareableLink}
               />
             )}

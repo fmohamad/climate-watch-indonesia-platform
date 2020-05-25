@@ -4,7 +4,6 @@ import castArray from 'lodash/castArray';
 import kebabCase from 'lodash/kebabCase';
 import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
-import { format } from 'd3-format';
 
 import { Chart, Dropdown, Multiselect, Table } from 'cw-components';
 
@@ -15,7 +14,6 @@ import IndicatorProvider from 'providers/indicators-provider'
 import dropdownStyles from 'styles/dropdown.scss';
 import lineIcon from 'assets/icons/line_chart.svg';
 import areaIcon from 'assets/icons/area_chart.svg';
-import { WEST_PAPUA } from 'constants/constants';
 
 import styles from './economy-styles.scss';
 
@@ -153,13 +151,13 @@ class Economies extends PureComponent {
   }
 
   render() {
-    const { indicatorParams, metadataParams, provinceISO, t } = this.props;
+    const { indicatorParams, metadataParams, t } = this.props;
     const icons = { line: lineIcon, area: areaIcon };
 
     const sources = [ 'RADGRK', 'SIGNSa' ];
-    const downloadURI = `emissions/download?source=${sources.join(
-      ','
-    )}&location=${provinceISO}`;
+
+    const section = 'wp_economic'
+    const downloadURI = `indicators.zip?section=${section}`
 
     return (
       <div className={styles.page}>
