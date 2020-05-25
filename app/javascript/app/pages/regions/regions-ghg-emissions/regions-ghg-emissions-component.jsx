@@ -82,6 +82,20 @@ class RegionsGhgEmissions extends PureComponent {
     );
   }
 
+  numberFormat(value) {
+    if(value >= 1000000) {
+      value = (value/ 1000000).toFixed(0) + ' juta'
+    } else if(value >= 1000) {
+      value = (value/ 1000).toFixed(0) + ' ribu'
+    } else if(value <= -1000000) {
+      value = (value/ 1000000).toFixed(0) + ' juta'
+    } else if(value <= -1000) {
+      value = (value/ 1000).toFixed(0) + ' ribu'
+    }
+
+    return value;
+  }
+
   renderChart() {
     const { chartData, onYearChange } = this.props;
     if (!chartData || !chartData.data) return null;
@@ -101,10 +115,11 @@ class RegionsGhgEmissions extends PureComponent {
         dataSelected={chartData.dataSelected}
         height={500}
         loading={chartData.loading}
-        getCustomYLabelFormat={value => format('.3s')(value)}
+        getCustomYLabelFormat={value => this.numberFormat(value)}
         showUnit
         onLegendChange={v => this.handleFilterChange('sector', v)}
         onMouseMove={onYearChange}
+        margin={{top: 45, right: 0, left: 0, bottom: 0}}
       />
     );
   }
@@ -147,9 +162,9 @@ class RegionsGhgEmissions extends PureComponent {
           <div className={styles.chartMapContainer}>
             <div className={styles.filtersChartContainer}>
               <div className={styles.dropdowns}>
+                {this.renderDropdown('metric', false)}
                 {this.renderDropdown('sector', true)}
                 {this.renderDropdown('gas', true)}
-                {this.renderDropdown('metric', false)}
                 <InfoDownloadToolbox
                   className={{ buttonWrapper: styles.buttonWrapper }}
                   slugs={sources}

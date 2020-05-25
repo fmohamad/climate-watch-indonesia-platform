@@ -11,7 +11,7 @@ en:
           labels:
             sector: Sektor
             gas: Gas
-            metric: Metrik 
+            metric: Indikator 
           emission-target-by: Emission target by
           projected-bau-by: Projected BAU emission by
         sectoral-circumstances:
@@ -79,6 +79,14 @@ en:
             district: Regency
         policy:
           title: Melacak Kebijakan 
+          description: Upaya-upaya Papua Barat dalam rangka penurunan emisi diwujudkan dengan dikeluarkannya berbagai instrumen kebijakan.
+          labels:
+            indicator: Indicator 
+            regency: Regency
+            sector: Sector
+            chart-type: Chart Type
+        map:
+          title: Peta
           description: Upaya-upaya Papua Barat dalam rangka penurunan emisi diwujudkan dengan dikeluarkannya berbagai instrumen kebijakan.
           labels:
             indicator: Indicator 

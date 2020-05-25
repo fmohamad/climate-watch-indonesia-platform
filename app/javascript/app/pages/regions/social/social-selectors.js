@@ -118,11 +118,11 @@ const getIndicatorOptions = createSelector(
       return filter(indicators, function(o) {
         return edu.includes(o.value)
       });
+    } else {
+      return filter(indicators, function(o) {
+        return health.includes(o.value)
+      })
     }
-
-    const data = filter(indicators, function(o) {
-      return health.includes(o.value)
-    })
   }
 );
 

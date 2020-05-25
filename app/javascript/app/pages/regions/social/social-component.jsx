@@ -7,6 +7,7 @@ import castArray from 'lodash/castArray'
 import uniq from 'lodash/uniq'
 import flatMap from 'lodash/flatMap'
 import isEmpty from 'lodash/isEmpty'
+import { format } from 'd3-format';
 import SectionTitle from 'components/section-title';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import ProvinceMetaProvider from 'providers/province-meta-provider'
@@ -103,7 +104,10 @@ class RegionPopulation extends PureComponent {
     )
   }
 
+
   renderChart() {
+    const getCustomYLabelFormat = (value) =>
+        `${format('.2s')(`${value / 1000}`)}`
     const { chart, chartData, t } = this.props
     return (
       <Chart
@@ -116,8 +120,18 @@ class RegionPopulation extends PureComponent {
         barSize={30}
         customMessage={t('common.chart-no-data')}
         showUnit
+        getCustomYLabelFormat={getCustomYLabelFormat}
       />
     );
+  }
+
+  numberFormat(value) {
+    if(value>=1000000) {
+      value=(value/1000000)+" Juta"
+    } else if(value>=1000) {
+      value=(value/1000)+" Ribu";
+    }
+    return value;
   }
 
   render() {
@@ -136,8 +150,6 @@ class RegionPopulation extends PureComponent {
     const downloadURI = `emissions/download?source=${sources.join(
       ','
     )}&location=${provinceISO}`;
-
-    console.log('this.props', this.props)
 
     return (
       <div className={styles.page}>

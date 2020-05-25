@@ -189,6 +189,7 @@ class RegionPopulation extends PureComponent {
           data={chartData}
           theme={{ legend: styles.legend }}
           getCustomYLabelFormat={getCustomYLabelFormat}
+          customTooltip={<CustomTooltip />}
           domain={chart.domain}
           dataOptions={chart.dataOptions}
           dataSelected={chart.dataSelected}

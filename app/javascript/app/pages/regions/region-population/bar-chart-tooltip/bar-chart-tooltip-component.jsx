@@ -6,7 +6,7 @@ import styles from './bar-chart-tooltip-styles.scss';
 const renderValue = ({ formatFunction }, value) => {
   if (!value) return 'n/a';
   if (formatFunction) return formatFunction(value);
-  return value;
+  return value.toLocaleString('ID');
 };
 
 class CustomTooltip extends PureComponent {
@@ -40,7 +40,7 @@ class CustomTooltip extends PureComponent {
                         {tooltipConfig[k].label}
                       </span>
                       <span className={styles.value}>
-                        {renderValue(tooltipConfig, payload[k])}
+                        {renderValue(tooltipConfig, payload[k])} jiwa
                       </span>
                     </div>
                     ))
