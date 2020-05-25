@@ -137,7 +137,7 @@ export const getSelectedOptions = createStructuredSelector({
 export const getUnit = createSelector(
   [getMetadataData, getSelectedOptions],
   (meta, options) => {
-    if (isEmpty(meta) || !meta.indicators) return null;
+    if (isEmpty(meta) || isEmpty(meta.indicators)) return null;
     const indicator = find(meta.indicators, ['code', options.indicator.code])
 
     return indicator.unit
