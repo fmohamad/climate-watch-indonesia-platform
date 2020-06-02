@@ -98,11 +98,6 @@ class WestPapua::ImportIndicators
 
   def section(row)
     section = row[:section]
-    if %w(population economic social).include?(section)
-      'west_papua_circumstances'
-    else
-      section
-    end
   end
 
   def values(row)
