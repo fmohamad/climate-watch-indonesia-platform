@@ -2,25 +2,38 @@ module  Api
   module V1
     module Province
       class PoliciesController < ApiController
-        before_action :fetch_values, only: :policy
-
-        ProvincePolicy = Struct.new(
-          :policies,
-          :sectors,
-          :locations
-        )
 
         def index
-          province_policies = ProvincePolicy.new(
-            fetch_policies,
-            fetch_sectors,
-            fetch_locations
-          )
+          policies = ::Policy.all
+          policies = policies.where(code: codes) if codes
+          policies = policies.where(section: sections) if sections
+
+          values = ::PolicyValue.includes(:location, :policy, :category)
+          values = values.where(locations: { iso_code3: locations }) if locations
+          values = values.where(policies: { section: sections }) if sections
+          values = values.where(policies: { code: codes }) if codes
 
           respond_to do |format|
             format.json do
-              render json: province_policies,
-                each_serializer: Api::V1::Province::PolicySerializer
+              render json: {
+                values: ActiveModelSerializers::SerializableResource.new(
+                  values,
+                  each_serializer: PolicyValueSerializer
+                ).as_json,
+                policies: ActiveModelSerializers::SerializableResource.new(
+                  policies,
+                  each_serializer: PolicySerializer
+                ).as_json
+              }
+            end
+            format.zip do
+              data_sources = DataSource.all
+              data_sources = data_sources.where(short_title: sources) if sources
+
+              render zip: {
+                'policies.csv' => PolicyValueSerializer.new(values).to_csv,
+                'data_sources.csv' => data_sources.to_csv
+              }
             end
           end
         end
@@ -28,65 +41,19 @@ module  Api
         private
 
         def location
-          params[:location]
+          params[:location]&.split(',')
         end
 
         def sections
           params[:sections]&.split(',')
         end
 
-        def selected_model
-          params[:code]&.split('-')&.last
+        def codes
+          params[:code]&.split(',')
         end
 
-        def fetch_policies
-          policies = ::Policy.all
-          policies = policies.where(section: sections) if sections
-          policies.map do |policy|
-            {
-              id: policy.id,
-              section: policy.section,
-              code: policy.code,
-              name: policy.name,
-              unit: policy.unit,
-              description: policy.description,
-              override: true
-            }
-          end
-        end
-
-        def fetch_sectors
-          ::PolicyCategory.where(id: category_ids).map do |category|
-            {
-              id: category.id,
-              name: category.name,
-              code: category.code
-            }
-          end
-        end
-
-        def fetch_locations
-          province = ::Location.find_by(iso_code3: location)
-          locations = ::Location.includes(:location_members)
-          locations = locations.where(location_member: { member_id: province.id })
-          locations.map do |loc|
-            {
-              id: loc.id,
-              iso_code3: loc.iso_code3,
-              name: loc.wri_standard_name
-            }
-          end
-        end
-
-        def fetch_values
-          policies = ::Policy.where(section: sections) if sections
-          values = ::PolicyValue.includes(:location, :policy, :category)
-          values = values.where(locations:  { iso_code: location }) if location
-          values = values.where(policies: { id: policies.pluck(:id) })
-        end
-
-        def category_ids
-          fetch_values.pluck(:category_id).compact.uniq
+        def sources
+          params[:source]&.split(',')
         end
 
       end

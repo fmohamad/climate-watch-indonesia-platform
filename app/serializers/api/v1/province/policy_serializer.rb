@@ -2,9 +2,7 @@ module Api
   module V1
     module Province
       class PolicySerializer < ActiveModel::Serializer
-        attribute :policies
-        attribute :sectors
-        attribute :locations
+        attributes :section, :code, :name, :unit, :description
       end
     end
   end
