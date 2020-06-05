@@ -9,7 +9,7 @@ module Api
         def to_csv
           year_columns = @values.flat_map(&:values).map { |vh| vh['year'] }.compact.uniq.sort
 
-          headers = %w(source location_code location_name policy_code policy_name category).concat(year_columns)
+          headers = %w(source location_code location_name policy_code policy_name category description).concat(year_columns)
 
           CSV.generate do |csv|
             csv << headers
@@ -23,9 +23,10 @@ module Api
                 plc_value.source,
                 plc_value.location.iso_code3,
                 plc_value.location.wri_standard_name,
-                plc_value.indicator.code,
-                plc_value.indicator.name,
+                plc_value.policy.code,
+                plc_value.policy.name,
                 plc_value.category&.name,
+                plc_value.description
                 year_columns.map { |yc| value_by_year[yc] }
               ].flatten
             end
