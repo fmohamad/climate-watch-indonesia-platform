@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
       namespace :province do
         resources :climate_plans, only: [:index]
+        resources :policies, only: [:index]
         resources :development_plans, only: [:index]
         resources :metadata , only: [:index]
       end

@@ -40,7 +40,7 @@ module  Api
 
         private
 
-        def location
+        def locations
           params[:location]&.split(',')
         end
 
