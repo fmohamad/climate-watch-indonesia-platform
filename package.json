@@ -32,6 +32,7 @@
     "child_process": "^1.0.2",
     "classnames": "2.2.5",
     "compression-webpack-plugin": "1.0.0",
+    "copy-to-clipboard": "3.0.8",
     "core-js": "2.5.3",
     "css-loader": "0.28.7",
     "cw-components": "github:ClimateWatch-Vizzuality/climate-watch-components#1.50.1",

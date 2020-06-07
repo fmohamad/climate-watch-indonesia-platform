@@ -6,10 +6,11 @@ import SectionTitle from 'components/section-title';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import Chart from 'components/chart';
 import { Switch, Card, Dropdown, Button, Icon } from 'cw-components';
+import shareIcon from 'assets/icons/share';
+import ModalShare from 'components/modal-share';
 import { TabletLandscape } from 'components/responsive';
 import dropdownStyles from 'styles/dropdown';
 import buttonThemes from 'styles/themes/button';
-import shareIcon from 'assets/icons/share';
 import ProvinceMetaProvider from 'providers/province-meta-provider'
 import IndicatorsProvider from 'providers/indicators-provider';
 
@@ -197,6 +198,7 @@ class Policy extends PureComponent {
         label: "Tujuan",
         value: "tujuan",
       },
+      isOpen: false
     };
   }
 
@@ -280,8 +282,9 @@ class Policy extends PureComponent {
 
   render() {
     const { t, provinceISO, indicatorParams, metaParams } = this.props;
-    const { chartData, indicatorOptions, selectedIndicator, cardOptions, selectedCard } = this.state;
-    console.log('props', this.props);
+    const { chartData, indicatorOptions, selectedIndicator, cardOptions, selectedCard, isOpen } = this.state;
+    
+    const shareableLink = `${window.location.href}`
     return (
       <div className={styles.page}>
         <div className={styles.chartMapContainer}>
@@ -294,11 +297,11 @@ class Policy extends PureComponent {
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <div>
               <Button
-                theme={{
-                    button: cx(styles.button)
-                  }}
+                theme={{ button: cx(styles.shareButton) }}
+                onClick={() => this.setState({isOpen: !isOpen})}
               >
-                <p>Share | <Icon icon={shareIcon} /></p>
+                <Icon icon={shareIcon} />
+                <span className={styles.shareText}>Share</span>
               </Button>
             </div>
           </div>
@@ -604,6 +607,7 @@ class Policy extends PureComponent {
             </table>
           </div>
         </div>
+        <ModalShare isOpen={isOpen} closeModal={() => this.setState({isOpen: false})} sharePath={shareableLink} />
         <IndicatorsProvider params={indicatorParams} />
         <ProvinceMetaProvider metaParams={metaParams} />
       </div>

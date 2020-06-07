@@ -57,12 +57,6 @@ class GHGMap extends PureComponent {
 
     return (
       <div className={styles.mapContainer}>
-        <MapChoroplethLegend
-          buckets={buckets}
-          unit={unit}
-          title={mapLegendTitle}
-          theme={{ container: styles.mapLegendContainer }}
-        />
         <Map
           zoom={mapZoom}
           paths={paths}
@@ -75,6 +69,12 @@ class GHGMap extends PureComponent {
           tooltip={MapTooltip}
           zoomEnable
           forceUpdate
+        />
+        <MapChoroplethLegend
+          buckets={buckets}
+          unit={unit}
+          title={mapLegendTitle}
+          theme={{ container: styles.mapLegendContainer }}
         />
       </div>
     );

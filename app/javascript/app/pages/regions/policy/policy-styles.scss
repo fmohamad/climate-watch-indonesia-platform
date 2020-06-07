@@ -57,6 +57,17 @@ $dropdown-max-width: 265px;
   box-shadow: none;
 }
 
+.shareButton {
+  margin-top: 22px;
+  width: 120px;
+  color: $theme-color;
+  background-color: $action-color;
+
+  .shareText {
+    margin-left: 10px;
+  }
+}
+
 .chartMapContainer {
   @include columns(6,6);
 

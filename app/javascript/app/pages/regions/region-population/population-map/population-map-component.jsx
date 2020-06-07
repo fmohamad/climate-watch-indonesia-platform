@@ -41,6 +41,22 @@ class PopulationMap extends PureComponent {
     
   };
 
+  handleEnter = e => {
+    const { query, linkToDistrict, selectedOptions } = this.props;
+    const year = selectedOptions.year.value
+    const districtISO = e.properties && e.properties.iso_code3;
+    const filter = ({district: districtISO, year })
+    const provinceISO = 'ID.PB'
+
+    if (!districtISO) return;
+
+    linkToDistrict({
+      section: 'region-population',
+      region: provinceISO,
+      query: updateQueryParams(query, filter)
+    });
+  };
+
   handleZoomIn = () => {
     this.setState(({ mapZoom }) => ({ mapZoom: mapZoom * MAP_ZOOM_STEP }));
   };
@@ -55,7 +71,7 @@ class PopulationMap extends PureComponent {
   render() {
     const { paths, mapCenter } = this.props;
     const { mapZoom } = this.state;
-    const mapStyle = { width: '100%', height: '100%', fill: '#FFFFFF' };
+    const mapStyle = { width: '100%', height: '100%', fill: '#FFFFFF', outline: 'none' };
 
     return (
       <div className={styles.mapContainer}>

@@ -30,6 +30,17 @@ $dropdown-max-width: 265px;
   margin-right: 10px;
 }
 
+.shareButton {
+  margin-top: 22px;
+  width: 120px;
+  color: $theme-color;
+  background-color: $action-color;
+
+  .shareText {
+    margin-left: 10px;
+  }
+}
+
 /*.buttonWrapper {
   align-self: flex-end;
   max-width: 100px;
@@ -50,6 +61,7 @@ $dropdown-max-width: 265px;
 .buttonWrapper {
   margin-top: 22px;
   max-width: 200px;
+  margin-right: 15px;
 }
 
 .chartMapContainer {

@@ -66,7 +66,7 @@ class InteractiveMap extends PureComponent {
       viewport: {
         latitude: -2.2571064091448814,
         longitude: 132.07214355468753,
-        zoom: 5.5,
+        zoom: 6.4,
         bearing: 0,
         pitch: 0
       },
@@ -209,7 +209,7 @@ class InteractiveMap extends PureComponent {
             <div style={{position: 'absolute', right: 10, top: 10}}>
               <NavigationControl />
             </div>
-            <div className={styles.mapButtonWrapper}>
+            <div className={styles.mapButtonWrapper} style={{zIndex: 2}}>
               <div className={styles.mapButton} onClick={() => this.toggleLayer('faskes')}>
                 <Icon icon={mapFaskes} style={{height: 25, width: 25}} />
                 <p className={styles.buttonText}>

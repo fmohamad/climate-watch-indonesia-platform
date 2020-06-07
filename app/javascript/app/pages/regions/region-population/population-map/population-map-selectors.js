@@ -19,8 +19,8 @@ const getMapStyles = color => ({
     strokeWidth: 0.05,
     outline: 'none'
   },
-  hover: { fill: color, stroke: '#ffffff', strokeWidth: 0.2, outline: 'none' },
-  pressed: { fill: color, stroke: '#ffffff', strokeWidth: 0.3, outline: 'none' }
+  hover: { fill: color, stroke: '#ffffff', strokeWidth: 0.08, outline: 'none' },
+  pressed: { fill: color, stroke: '#ffffff', strokeWidth: 0.1, outline: 'none' }
 });
 
 export const getMap = createSelector(

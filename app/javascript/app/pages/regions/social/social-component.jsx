@@ -12,8 +12,10 @@ import InfoDownloadToolbox from 'components/info-download-toolbox'
 import ProvinceMetaProvider from 'providers/province-meta-provider'
 import IndicatorsProvider from 'providers/indicators-provider'
 import Chart from 'components/chart'
-import { Switch, Dropdown, Button } from 'cw-components'
+import { Switch, Dropdown, Button, Icon } from 'cw-components'
 import cx from 'classnames'
+import shareIcon from 'assets/icons/share';
+import ModalShare from 'components/modal-share';
 import { appendParamsToURL } from 'utils'
 
 import dropdownStyles from 'styles/dropdown'
@@ -21,6 +23,14 @@ import button from 'styles/themes/button'
 import styles from './social-styles'
 
 class RegionPopulation extends PureComponent {
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      isOpen: false
+    };
+  }
+
   handleSwitchChange = (option) => {
     const { provinceISO, updateFiltersSelected } = this.props
 
@@ -102,6 +112,7 @@ class RegionPopulation extends PureComponent {
 
   renderChart() {
     const { chart, chartData, t } = this.props
+
     return (
       <Chart
         type='bar'
@@ -127,16 +138,19 @@ class RegionPopulation extends PureComponent {
       chartData,
       query,
     } = this.props
+    const { isOpen } = this.state
 
     const sources = ['RADGRK', 'SIGNSa']
     const section = 'wp_social'
     const downloadURI = `indicators.zip?section=${section}`
 
     const shareLink = `social`
-    const shareableLink = `${window.location.origin}/${appendParamsToURL(
+    /*const shareableLink = `${window.location.origin}/${appendParamsToURL(
       shareLink,
       query
-    )}`
+    )}`*/
+
+    const shareableLink = `${window.location.href}`
 
     return (
       <div className={styles.page}>
@@ -152,8 +166,15 @@ class RegionPopulation extends PureComponent {
               className={{ buttonWrapper: styles.buttonWrapper }}
               slugs={sources}
               downloadUri={downloadURI}
-              shareableLink={shareableLink}
+              // shareableLink={shareableLink}
             />
+            <Button
+              theme={{ button: cx(styles.shareButton) }}
+              onClick={() => this.setState({isOpen: !isOpen})}
+            >
+              <Icon icon={shareIcon} />
+              <span className={styles.shareText}>Share</span>
+            </Button>
           </div>
         </div>
         <div>
@@ -184,6 +205,7 @@ class RegionPopulation extends PureComponent {
             {!isEmpty(chartData) && this.renderChart()}
           </div>
         </div>
+        <ModalShare isOpen={isOpen} closeModal={() => this.setState({isOpen: false})} sharePath={shareableLink} />
         <IndicatorsProvider params={indicatorParams} />
         <ProvinceMetaProvider metaParams={metaParams} />
       </div>

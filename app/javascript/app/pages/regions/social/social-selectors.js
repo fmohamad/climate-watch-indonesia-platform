@@ -117,7 +117,7 @@ const getDistrictOptions = createSelector(getMetadata, (metadata) => {
 const getFilterOptions = createStructuredSelector({
   model: getModelOptions,
   indicator: getIndicatorOptions,
-  district: withAllSelected(getDistrictOptions),
+  district: getDistrictOptions,
 })
 
 // DEFAULTS

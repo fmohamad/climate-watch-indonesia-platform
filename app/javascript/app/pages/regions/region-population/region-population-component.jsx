@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import SectionTitle from 'components/section-title'
 import InfoDownloadToolbox from 'components/info-download-toolbox'
 import Chart from 'components/chart'
-import { Switch, Card, Dropdown } from 'cw-components'
+import cx from 'classnames';
+import { Switch, Card, Dropdown, Button, Icon } from 'cw-components'
 import dropdownStyles from 'styles/dropdown'
 import ProvinceMetaProvider from 'providers/province-meta-provider'
 import IndicatorsProvider from 'providers/indicators-provider';
@@ -14,6 +15,9 @@ import uniq from 'lodash/uniq'
 import flatMap from 'lodash/flatMap'
 import { appendParamsToURL } from 'utils';
 import PopulationMap from './population-map'
+import CustomTooltip from './bar-chart-tooltip';
+import shareIcon from 'assets/icons/share';
+import ModalShare from 'components/modal-share';
 
 import styles from './region-population-styles'
 
@@ -27,6 +31,14 @@ const cardTheme = {
 }
 
 class RegionPopulation extends PureComponent {
+
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      isOpen: false
+    };
+  }
 
   handleFilterChange = (field, selected) => {
 
@@ -167,7 +179,7 @@ class RegionPopulation extends PureComponent {
     }
 
     const getCustomYLabelFormat = (value) =>
-      `${format('.2s')(`${value / 1000}`)}`
+      `${format('.2s')(`${value / 1000}`)} jiwa`
 
     return (
       <div className={styles.container}>
@@ -189,6 +201,7 @@ class RegionPopulation extends PureComponent {
           barSize={30}
           customMessage={t('common.chart-no-data')}
           showUnit
+          customTooltip={<CustomTooltip />}
         />
       </div>
     )
@@ -196,14 +209,14 @@ class RegionPopulation extends PureComponent {
 
   render() {
     const { t, params, metaParams, selectedModel, query } = this.props
+    const { isOpen } = this.state
     const sources = ['RADGRK', 'SIGNSa']
 
     const section = 'wp_population'
     const downloadURI = `indicators.zip?section=${section}`
     const shareLink = `region-population`
-
-    const shareableLink = `${window.location.origin}/${appendParamsToURL(shareLink, query)}`
-
+    // const shareableLink = `${window.location.origin}/${appendParamsToURL(shareLink, query)}`
+    const shareableLink = `${window.location.href}`
     return (
       <div className={styles.page}>
         <div className={styles.chartMapContainer}>
@@ -215,12 +228,21 @@ class RegionPopulation extends PureComponent {
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             {selectedModel.value === 'population' && (
-              <InfoDownloadToolbox
-                className={{ buttonWrapper: styles.buttonWrapper }}
-                slugs={sources}
-                downloadUri={downloadURI}
-                shareableLink={shareableLink}
-              />
+              <div>
+                <InfoDownloadToolbox
+                  className={{ buttonWrapper: styles.buttonWrapper }}
+                  slugs={sources}
+                  downloadUri={downloadURI}
+                  // shareableLink={shareableLink}
+                />
+                <Button
+                  theme={{ button: cx(styles.shareButton) }}
+                  onClick={() => this.setState({isOpen: !isOpen})}
+                >
+                  <Icon icon={shareIcon} />
+                  <span className={styles.shareText}>Share</span>
+                </Button>
+              </div>
             )}
           </div>
         </div>
@@ -228,6 +250,7 @@ class RegionPopulation extends PureComponent {
           <div className={styles.dropdowns}>{this.renderSwitch()}</div>
           {this.renderContent()}
         </div>
+        <ModalShare isOpen={isOpen} closeModal={() => this.setState({isOpen: false})} sharePath={shareableLink} />
         <IndicatorsProvider params={params} />
         <ProvinceMetaProvider metaParams={metaParams} />
       </div>
