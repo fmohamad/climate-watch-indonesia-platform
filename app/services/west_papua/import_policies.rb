@@ -1,9 +1,9 @@
 class WestPapua::ImportPolicies
   include ClimateWatchEngine::CSVImporter
 
-  headers policies: [:section, :plc_code, :policy, :unit, :description],
+  headers policies: [:section, :plc_code, :policy, :unit],
           policies_id: [:plc_code, :policy],
-          policy_values: [:geoid, :plc_code, :source]
+          policy_values: [:geoid, :plc_code, :source, :description]
 
   POLICIES_FILEPATH = "#{CW_FILES_PREFIX}west_papua_policies/wp_policies.csv"
   POLICIES_ID_FILEPATH = "#{CW_FILES_PREFIX}west_papua_policies/wp_policies_id.csv"
@@ -63,8 +63,7 @@ class WestPapua::ImportPolicies
         code: code,
         section: section(row),
         name: row[:policy],
-        unit: row[:unit],
-        description: row[:description]
+        unit: row[:unit]
       )
     end
   end
@@ -90,6 +89,7 @@ class WestPapua::ImportPolicies
         policy: policy,
         category: category,
         source: source,
+        description: row[:description],
         values: values(row)
       )
     end
