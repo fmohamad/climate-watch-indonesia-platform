@@ -10,40 +10,22 @@ import Component from './policy-component';
 const mapStateToProps = getPolicy;
 
 class PolicyContainer extends PureComponent {
-  /* onFilterChange = filter => {
-    const { updateFiltersSelected, query } = this.props;
+  onFilterChange = filter => {
+    const { updateFiltersSelected, query, provinceISO } = this.props;
 
-    updateFiltersSelected({ query: { ...query, ...filter } });
-  }; */
-  /* updateIndicatorFilter = newFilter => {
-    this.onFilterChange({
-      popNationalIndicator: newFilter.value,
-      popProvince: undefined
+    updateFiltersSelected({
+      section: 'policy',
+      region: provinceISO,
+      query: { ...query, ...filter }
     });
-  }; */
-  /* updateLegendFilter = newFilter => {
-    let values;
-    if (isArray(newFilter)) {
-      values = newFilter.map(v => v.value).join(',');
-    } else {
-      values = newFilter.value;
-    }
-    this.onFilterChange({ popProvince: values });
-  }; */
+  };
+
   render() {
-    return (
-      <Component
-        {...this.props}
-        /* onFilterChange={this.onFilterChange} */
-        /* onIndicatorChange={this.updateIndicatorFilter} */
-        /* onLegendChange={this.updateLegendFilter} */
-      />
-    );
+    return <Component {...this.props} onFilterChange={this.onFilterChange} />;
   }
 }
 
 PolicyContainer.propTypes = {
-  // updateFiltersSelected: PropTypes.func.isRequired,
   query: PropTypes.object,
   provinceISO: PropTypes.string
 };

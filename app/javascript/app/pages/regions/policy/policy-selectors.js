@@ -18,47 +18,134 @@ import {
 import {
   getAllSelectedOption,
   findOption,
-  withAllSelected,
-} from 'selectors/filters-selectors'
-import { ALL_SELECTED } from 'constants/constants'
+  withAllSelected
+} from 'selectors/filters-selectors';
+import { ALL_SELECTED } from 'constants/constants';
 import { getProvince } from 'selectors/provinces-selectors';
 
-const section = 'wp_policy'
-const provinceISO = 'ID.PB'
+const section = 'wp_policies_data';
+const provinceISO = 'ID.PB';
 
-const getIndicatorParams = () => ({ section })
+const getParams = () => ({ section, location: provinceISO });
 
-const getMetaParams = () => ({ section, location: provinceISO })
+const getQuery = ({ location }) => location && (location.query || null);
 
-const getQuery = ({ location }) => location && (location.query || null)
+const getPolicies = ({ policies }) => policies && policies.data;
 
-const getIndicator = ({ indicators }) => indicators && indicators.data
+const getIndicator = ({ indicators }) => indicators && indicators.data;
 
-const getMetadata = ({ provinceMeta }) => provinceMeta && provinceMeta.data
+const indicatorOptions = {
+  indicator: [
+    {
+      label: 'Index Lingkungan Hidup',
+      value: 'index_lingdup',
+      code: 'index_lingdup'
+    }
+  ]
+};
 
-const getIndicatorOptions = createSelector(
-  getIndicator,
-  indicators => {
-    if (isEmpty(indicators)) return null
-      console.log('indicators', indicators);
-    /*const data = filter(indicators.values, function(data) {
-      return (
-        data.indicator_code === 'wp_hdi' ||
-        data.indicator_code === 'wp_literacy_rate' ||
-        data.indicator_code === 'wp_illiterate' ||
-        data.indicator_code === 'wp_health_infrastructure' ||
-        data.indicator_code === 'wp_drinking_access'
-      )
-    })
+const getFilterOptions = createSelector(getPolicies, data => {
+  if (isEmpty(data)) return indicatorOptions;
 
-    return data;*/
-    return indicators
-  }
+  const indicator = data.policies.map(item => ({
+    label: item.name,
+    value: item.code,
+    code: item.code
+  }));
+
+  return { indicator };
+});
+
+const getDefault = createSelector(getFilterOptions, options => ({
+  indicator: get(options, 'indicator[0]')
+}));
+
+// Selected
+// const getSelectedOptions = createSelector(
+//   [getQuery, getDefault],
+//   (query, def) => {
+//     if (!query || !query.indicator) return def
+//     return null
+//   }
+// )
+// DEFAULTS
+const getDefaults = createSelector([ getFilterOptions ], options => ({
+  indicator: get(options, 'indicator[0]')
+}));
+
+// SELECTED
+const getFieldSelected = field => state => {
+  const { query } = state.location;
+  if (!query || !query[field]) return getDefaults(state)[field];
+  const queryValue = String(query[field]);
+  const findSelectedOption = value =>
+    findOption(getFilterOptions(state)[field], value);
+
+  const options = queryValue
+    .split(',')
+    .map(v => findSelectedOption(v))
+    .filter(v => v);
+
+  if (options.length > 1) return options;
+  return options.length ? options[0] : getDefaults(state)[field];
+};
+
+const getSelectedOptions = createStructuredSelector({
+  indicator: getFieldSelected('indicator')
+});
+
+const getIndicatorOptions = createSelector(getIndicator, indicators => {
+  if (isEmpty(indicators)) return null;
+
+  return indicators;
+});
+
+const getGoals = createSelector(
+  getTranslate,
+  t => t('pages.regions.policy.section-one.goals.content')
 );
+
+const getObjectives = createSelector(
+  getTranslate,
+  t => t('pages.regions.policy.section-one.objectives.content')
+);
+
+const parseChartData = createSelector([ getPolicies, getSelectedOptions ], (
+  data,
+  options
+) =>
+  {
+    if (isEmpty(data) || isEmpty(options)) return null;
+
+    const { values } = data;
+
+    const filteredData = filter(values, function(o) {
+      return o.policy_code == options.indicator.code;
+    });
+
+    const yearAxis = filteredData[0].values.map(o => o.year);
+    console.log('', filteredData, yearAxis);
+    const policiesData = [];
+
+    return null;
+  });
+
+const getChartData = createStructuredSelector({
+  // config: getChartConfig,
+  // loading: getDataLoading,
+  // dataOptions: getLegendDataOptions,
+  // dataSelected: getLegendDataSelected
+  data: parseChartData
+});
 
 export const getPolicy = createStructuredSelector({
   t: getTranslate,
-  indicatorParams: getIndicatorParams,
-  metaParams: getMetaParams,
-  indicatorOptions: getIndicatorOptions
+  params: getParams,
+  filterOptions: getFilterOptions,
+  selectedOptions: getSelectedOptions,
+  goals: getGoals,
+  objectives: getObjectives,
+  indicatorOptions: getIndicatorOptions,
+  provinceISO: getProvince,
+  chartData: getChartData
 });
