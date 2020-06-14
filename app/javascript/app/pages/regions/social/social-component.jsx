@@ -17,6 +17,7 @@ import cx from 'classnames'
 import shareIcon from 'assets/icons/share';
 import ModalShare from 'components/modal-share';
 import { appendParamsToURL } from 'utils'
+import CustomTooltip from './bar-chart-tooltip';
 
 import dropdownStyles from 'styles/dropdown'
 import button from 'styles/themes/button'
@@ -125,6 +126,7 @@ class RegionPopulation extends PureComponent {
         customMessage={t('common.chart-no-data')}
         showUnit
         getCustomYLabelFormat={chart.config.yLabelFormat}
+        customTooltip={<CustomTooltip />}
       />
     )
   }

@@ -432,10 +432,8 @@ class Policy extends PureComponent {
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <InfoDownloadToolbox
                 className={{ buttonWrapper: styles.buttonWrapper }}
-                slugs={'sources'}
-                downloadUri={'downloadURI'}
-                pdfUri="pdfuri"
-                shareableLink="link"
+                slugs={['RADGRK', 'SIGNSa']}
+                downloadUri={'indicators.zip?section=wp_policy'}
               />
             </div>
           </div>
@@ -465,7 +463,7 @@ class Policy extends PureComponent {
             dataSelected={chartData.dataSelected}
             height={500}
             loading={chartData.loading}
-            getCustomYLabelFormat={value => format('.3s')(value)}
+            getCustomYLabelFormat={value => value.toLocaleString('id')}
             showUnit
             // onLegendChange={v => this.handleFilterChange('sector', v)}
             // onMouseMove={onYearChange}

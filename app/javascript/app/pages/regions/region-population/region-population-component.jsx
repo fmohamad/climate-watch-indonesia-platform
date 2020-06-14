@@ -150,18 +150,18 @@ class RegionPopulation extends PureComponent {
           <div className={styles.cardContainer}>
             <Card theme={cardTheme} title='Total Populasi Penduduk (Kabupaten)'>
               <div className={styles.cardContent}>
-                <p>{popTotal}</p>
+                <p>{popTotal !== null && popTotal.toLocaleString('id')}</p>
               </div>
             </Card>
             <Card theme={cardTheme} title='Laju pertumbuhan penduduk per tahun'>
               <div className={styles.cardContent}>
-                <p>{popGrowth}</p>
+                <p>{popGrowth !== null && popGrowth.toLocaleString('id')}</p>
               </div>
             </Card>
             <Card theme={cardTheme} title='Kepadatan penduduk'>
               <div className={styles.cardContent}>
                 <p>
-                  {popDensity} Jiwa/Km<sup>2</sup>
+                  {popDensity !== null && popDensity.toLocaleString('id')} Jiwa/Km<sup>2</sup>
                 </p>
               </div>
             </Card>
@@ -170,7 +170,7 @@ class RegionPopulation extends PureComponent {
               title='Rasio Jenis Kelamin (Perempuan/ Laki-laki)'
             >
               <div className={styles.cardContent}>
-                <p>{popSexRatio}</p>
+                <p>{popSexRatio !== null && popSexRatio.toLocaleString('id')}</p>
               </div>
             </Card>
           </div>
@@ -227,23 +227,21 @@ class RegionPopulation extends PureComponent {
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            {selectedModel.value === 'population' && (
-              <div>
-                <InfoDownloadToolbox
-                  className={{ buttonWrapper: styles.buttonWrapper }}
-                  slugs={sources}
-                  downloadUri={downloadURI}
-                  // shareableLink={shareableLink}
-                />
-                <Button
-                  theme={{ button: cx(styles.shareButton) }}
-                  onClick={() => this.setState({isOpen: !isOpen})}
-                >
-                  <Icon icon={shareIcon} />
-                  <span className={styles.shareText}>Share</span>
-                </Button>
-              </div>
-            )}
+            <div>
+              <InfoDownloadToolbox
+                className={{ buttonWrapper: styles.buttonWrapper }}
+                slugs={sources}
+                downloadUri={downloadURI}
+                // shareableLink={shareableLink}
+              />
+              <Button
+                theme={{ button: cx(styles.shareButton) }}
+                onClick={() => this.setState({isOpen: !isOpen})}
+              >
+                <Icon icon={shareIcon} />
+                <span className={styles.shareText}>Share</span>
+              </Button>
+            </div>
           </div>
         </div>
         <div>

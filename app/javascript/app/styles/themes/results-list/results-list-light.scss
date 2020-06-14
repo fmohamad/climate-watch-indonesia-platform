@@ -4,12 +4,12 @@
   border: none;
   background-color: transparent;
   -ms-overflow-style: none;
-  overflow: -moz-scrollbars-none;
+  // overflow: -moz-scrollbars-none;
   overflow-y: auto;
 
-  &::-webkit-scrollbar {
+  /*&::-webkit-scrollbar {
     width: 0;
-  }
+  }*/
 }
 
 .listItem {

@@ -70,6 +70,7 @@ class RegionsSelect extends PureComponent {
       paths,
     } = this.props
     const { search, region } = this.state
+
     return (
       opened && (
         <React.Fragment>

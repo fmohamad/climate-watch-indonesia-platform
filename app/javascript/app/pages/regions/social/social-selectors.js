@@ -200,7 +200,7 @@ const getChartData = createSelector(
     xAxis.forEach((x) => {
       const object = {
         x,
-        y: filteredIndicators[0].values.find((o) => o.year === x).value,
+        y: filteredIndicators[0].values.find((o) => o.year === x).value
       }
 
       data.push(object)
