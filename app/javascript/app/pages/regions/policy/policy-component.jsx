@@ -81,25 +81,20 @@ class Policy extends PureComponent {
 
   renderChart() {
     const { chartData, selectedOptions } = this.props;
-    console.log('chartdata', chartData);
-    if (!chartData || !chartData.data) return null;
+    console.log('tran', this.props)
+    if (!chartData || !chartData.data || chartData.config) return null;
 
     return (
       <Chart
-        theme={chartData.config.theme}
-        type={
-          selectedOptions &&
-            selectedOptions.chartType &&
-            selectedOptions.chartType.value
-        }
+        // type={
+        //   selectedOptions &&
+        //     selectedOptions.chartType &&
+        //     selectedOptions.chartType.value
+        // }
+        type='line'
         config={chartData.config}
         data={chartData.data}
-        domain={chartData.domain}
-        dataOptions={chartData.dataOptions}
-        dataSelected={chartData.dataSelected}
         height={500}
-        loading={chartData.loading}
-        getCustomYLabelFormat={chartData.config.yLabelFormat}
         onLegendChange={v => this.handleLegendChange(v)}
         showUnit
       />

@@ -5,6 +5,8 @@ import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
 import get from 'lodash/get';
+import find from 'lodash/find';
+import isNil from 'lodash/isNil';
 import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import sortBy from 'lodash/sortBy';
@@ -120,18 +122,54 @@ const parseChartData = createSelector([ getPolicies, getSelectedOptions ], (
     const { values } = data;
 
     const filteredData = filter(values, function(o) {
-      return o.policy_code == options.indicator.code;
+      return o.policy_code === options.indicator.code;
     });
 
     const yearAxis = filteredData[0].values.map(o => o.year);
-    console.log('', filteredData, yearAxis);
     const policiesData = [];
 
-    return null;
-  });
+    yearAxis.forEach(element => {
+      const object = {}
+
+      object.x = element
+      object.yInd = find(filteredData[0].values, ['year', element]).value
+
+      policiesData.push(object)
+    });
+
+    return policiesData;
+});
+
+export const getChartConfig = createSelector(
+  [
+    parseChartData,
+    getSelectedOptions,
+  ],
+  (data, options, t) => {
+    if (!data) return null
+    if (isNil(options.indicator)) return null
+
+    const axes = {
+      xBottom: { name: 'year', unit: 'year', format: 'YYYY' },
+      yLeft: {
+        name: options.indicator.label,
+        unit: 'percent',
+        format: 'number',
+      }
+    }
+
+    const columns = { x: [ { label: 'year', value: 'x' } ], y: [{ label: options.indicator.label, value: 'yInd' }]}
+
+    return {
+      axes,
+      animation: false,
+      columns
+    }
+  }
+);
 
 const getChartData = createStructuredSelector({
-  // config: getChartConfig,
+  config: getChartConfig,
   // loading: getDataLoading,
   // dataOptions: getLegendDataOptions,
   // dataSelected: getLegendDataSelected
