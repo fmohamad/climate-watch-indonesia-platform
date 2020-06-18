@@ -46,7 +46,7 @@ class Policy extends PureComponent {
     const data = field === 'goals' ? goals : objectives;
     return (
       <ul>
-        {data.map((item, index) => <li key={index}>- {item}</li>)}
+        {data.map((item) => <li key={item}>- {item}</li>)}
       </ul>
     );
   }
@@ -115,9 +115,8 @@ class Policy extends PureComponent {
   }
 
   render() {
-    const { t, params, filterOptions } = this.props;
+    const { t, params } = this.props;
 
-    const test = t(`pages.regions.policy.section-one.goals.content`);
     return (
       <div className={styles.page}>
         <div className={styles.chartMapContainer}>
@@ -192,9 +191,27 @@ class Policy extends PureComponent {
 
 Policy.propTypes = {
   t: PropTypes.func.isRequired,
-  provinceISO: PropTypes.string
+  onFilterChange: PropTypes.func,
+  selectedOptions: PropTypes.object,
+  goals: PropTypes.array,
+  objectives: PropTypes.array,
+  filterOptions: PropTypes.object,
+  chartData: PropTypes.object,
+  tableData: PropTypes.array,
+  tableConfig: PropTypes.object,
+  params: PropTypes.object
 };
 
-Policy.defaultProps = {};
+Policy.defaultProps = {
+  onFilterChange: undefined,
+  selectedOptions: undefined,
+  goals: undefined,
+  objectives: undefined,
+  filterOptions: undefined,
+  chartData: undefined,
+  tableData: undefined,
+  tableConfig: undefined,
+  params: undefined
+};
 
 export default Policy;
