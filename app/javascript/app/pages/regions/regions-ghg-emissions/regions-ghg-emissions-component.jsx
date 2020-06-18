@@ -86,7 +86,7 @@ class RegionsGhgEmissions extends PureComponent {
   renderChart() {
     const { chartData, onYearChange } = this.props
     if (!chartData || !chartData.data || !chartData.config) return null
-
+      
     return (
       <Chart
         theme={{

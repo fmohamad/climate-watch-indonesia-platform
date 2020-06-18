@@ -19,7 +19,7 @@ const getMapStyles = color => ({
     strokeWidth: 0.05,
     outline: 'none'
   },
-  hover: { fill: color, stroke: '#ffffff', strokeWidth: 0.08, outline: 'none' },
+  hover: { fill: '#ffd771', stroke: '#ffffff', strokeWidth: 0.08, outline: 'none' },
   pressed: { fill: color, stroke: '#ffffff', strokeWidth: 0.1, outline: 'none' }
 });
 
