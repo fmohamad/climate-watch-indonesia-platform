@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import castArray from 'lodash/castArray';
 import kebabCase from 'lodash/kebabCase';
 import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
 
-import { Chart, Dropdown, Multiselect, Table } from 'cw-components';
+import { Chart, Dropdown, Multiselect, Table, Button, Icon } from 'cw-components';
 
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import SectionTitle from 'components/section-title';
@@ -14,10 +15,19 @@ import IndicatorProvider from 'providers/indicators-provider'
 import dropdownStyles from 'styles/dropdown.scss';
 import lineIcon from 'assets/icons/line_chart.svg';
 import areaIcon from 'assets/icons/area_chart.svg';
+import shareIcon from 'assets/icons/share';
+import ModalShare from 'components/modal-share';
 
 import styles from './economy-styles.scss';
 
 class Economies extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isOpen: false
+    };
+  }
 
   handleLegendChange = (selected) => {
     const { selectedModel } = this.props
@@ -63,7 +73,7 @@ class Economies extends PureComponent {
     const iconsProp = icons ? { icons } : {};
     console.log('options component', options);
     const disabled = (field === 'sector' && selectedModel === 'kabupaten') ||
-                     (field === 'district' && selectedModel === 'sektor')
+      (field === 'district' && selectedModel === 'sektor')
 
     const label = t(
       `pages.regions.economy.labels.${kebabCase(field)}`
@@ -108,8 +118,8 @@ class Economies extends PureComponent {
         theme={chartData.config.theme}
         type={
           selectedOptions &&
-            selectedOptions.chartType &&
-            selectedOptions.chartType.value
+          selectedOptions.chartType &&
+          selectedOptions.chartType.value
         }
         config={chartData.config}
         data={chartData.data}
@@ -131,7 +141,7 @@ class Economies extends PureComponent {
     if (!tableData) return null
 
     const setColumnWidth = column => {
-      if (tableConfig.narrowColumns.includes(column)) return 100 
+      if (tableConfig.narrowColumns.includes(column)) return 100
       return 230
     }
 
@@ -155,8 +165,11 @@ class Economies extends PureComponent {
   render() {
     const { indicatorParams, metadataParams, t } = this.props;
     const icons = { line: lineIcon, area: areaIcon };
+    const shareableLink = `${window.location.href}`
 
-    const sources = [ 'RADGRK', 'SIGNSa' ];
+    const { isOpen } = this.state
+
+    const sources = ['PBdA2019m', 'PBdA2019k', 'PBdA2019l']
 
     const section = 'wp_economic'
     const downloadURI = `indicators.zip?section=${section}`
@@ -167,6 +180,7 @@ class Economies extends PureComponent {
           title={t('pages.regions.economy.title')}
           description={t('pages.regions.economy.description')}
         />
+
         <div>
           <div className={styles.chartMapContainer}>
             <div className={styles.filtersChartContainer}>
@@ -180,6 +194,13 @@ class Economies extends PureComponent {
                   slugs={sources}
                   downloadUri={downloadURI}
                 />
+                <Button
+                  theme={{ button: cx(styles.shareButton) }}
+                  onClick={() => this.setState({ isOpen: !isOpen })}
+                >
+                  <Icon icon={shareIcon} />
+                  <span className={styles.shareText}>Share</span>
+                </Button>
               </div>
               <div className={styles.chartContainer}>
                 {this.renderChart()}
@@ -190,6 +211,7 @@ class Economies extends PureComponent {
             </div>
           </div>
         </div>
+        <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
         {metadataParams && <ProvinceMetaProvider metaParams={metadataParams} />}
         {indicatorParams && <IndicatorProvider params={indicatorParams} />}
       </div>

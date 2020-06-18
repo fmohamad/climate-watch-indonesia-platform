@@ -184,7 +184,7 @@ class Policy extends PureComponent {
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <InfoDownloadToolbox
                 className={{ buttonWrapper: styles.buttonWrapper }}
-                slugs={['RADGRK', 'SIGNSa']}
+                slugs={[]}
                 downloadUri='province/policies.zip'
               />
             </div>

@@ -20,3 +20,7 @@ en:
         citation: Citation
         modal-default-title: Data sources
         not-specified: Not specified
+      dimension:
+        thousand: ribu
+        million: juta
+

@@ -26,7 +26,7 @@ import styles from './social-styles'
 class RegionPopulation extends PureComponent {
   constructor(props) {
     super(props);
-  
+
     this.state = {
       isOpen: false
     };
@@ -61,9 +61,9 @@ class RegionPopulation extends PureComponent {
       newSelectedOption && newSelectedOption.override
         ? newSelectedOption.value
         : uniq(
-            flatMap(removedAnyPreviousOverride, (v) =>
-              String(v.value).split(','))
-          ).join(',')
+          flatMap(removedAnyPreviousOverride, (v) =>
+            String(v.value).split(','))
+        ).join(',')
 
     onFilterChange({ [field]: values })
   }
@@ -138,19 +138,13 @@ class RegionPopulation extends PureComponent {
       metaParams,
       selectedModel,
       chartData,
-      query,
     } = this.props
     const { isOpen } = this.state
 
-    const sources = ['RADGRK', 'SIGNSa']
+    const sources = ['PBdA2019n', 'PBdA2019o', 'PBdA2019p']
+
     const section = 'wp_social'
     const downloadURI = `indicators.zip?section=${section}`
-
-    const shareLink = `social`
-    /*const shareableLink = `${window.location.origin}/${appendParamsToURL(
-      shareLink,
-      query
-    )}`*/
 
     const shareableLink = `${window.location.href}`
 
@@ -168,11 +162,11 @@ class RegionPopulation extends PureComponent {
               className={{ buttonWrapper: styles.buttonWrapper }}
               slugs={sources}
               downloadUri={downloadURI}
-              // shareableLink={shareableLink}
+            // shareableLink={shareableLink}
             />
             <Button
               theme={{ button: cx(styles.shareButton) }}
-              onClick={() => this.setState({isOpen: !isOpen})}
+              onClick={() => this.setState({ isOpen: !isOpen })}
             >
               <Icon icon={shareIcon} />
               <span className={styles.shareText}>Share</span>
@@ -207,7 +201,7 @@ class RegionPopulation extends PureComponent {
             {!isEmpty(chartData) && this.renderChart()}
           </div>
         </div>
-        <ModalShare isOpen={isOpen} closeModal={() => this.setState({isOpen: false})} sharePath={shareableLink} />
+        <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
         <IndicatorsProvider params={indicatorParams} />
         <ProvinceMetaProvider metaParams={metaParams} />
       </div>

@@ -119,9 +119,9 @@ class RegionPopulation extends PureComponent {
   }
 
   renderContent() {
-    const { selectedModel } = this.props
     const {
       t,
+      selectedModel,
       chart,
       chartData,
       popTotal,
@@ -177,8 +177,9 @@ class RegionPopulation extends PureComponent {
       )
     }
 
+    const unit = t('common.dimension.thousand')
     const getCustomYLabelFormat = (value) =>
-      `${format('.2s')(`${value / 1000}`)} jiwa`
+      `${format('.2s')(`${value/1000}`)} ${unit}`
 
     return (
       <div className={styles.container}>
@@ -209,7 +210,7 @@ class RegionPopulation extends PureComponent {
   render() {
     const { t, params, metaParams, selectedModel } = this.props
     const { isOpen } = this.state
-    const sources = ['RADGRK', 'SIGNSa']
+    const sources = ['PBdA2019a', 'PBdA2019b','PBdA2019c','PBdA2019d']
 
     const section = 'wp_population'
     const downloadURI = `indicators.zip?section=${section}`
