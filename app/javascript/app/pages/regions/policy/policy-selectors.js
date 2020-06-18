@@ -1,28 +1,18 @@
 import { createStructuredSelector, createSelector } from 'reselect';
 import { getTranslate } from 'selectors/translation-selectors';
-import { format } from 'd3-format';
-import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
 import get from 'lodash/get';
 import find from 'lodash/find';
 import isNil from 'lodash/isNil';
-import camelCase from 'lodash/camelCase';
-import upperFirst from 'lodash/upperFirst';
-import sortBy from 'lodash/sortBy';
+import castArray from 'lodash/castArray';
 import {
   getThemeConfig,
   getTooltipConfig,
-  getUniqueYears,
-  setLegendOptions,
-  CHART_COLORS
 } from 'utils/graphs';
 import {
-  getAllSelectedOption,
   findOption,
-  withAllSelected
 } from 'selectors/filters-selectors';
-import { ALL_SELECTED } from 'constants/constants';
 import { getProvince } from 'selectors/provinces-selectors';
 
 const section = 'wp_policies_data';
@@ -58,20 +48,7 @@ const getFilterOptions = createSelector(getPolicies, data => {
   return { indicator };
 });
 
-const getDefault = createSelector(getFilterOptions, options => ({
-  indicator: get(options, 'indicator[0]')
-}));
-
-// Selected
-// const getSelectedOptions = createSelector(
-//   [getQuery, getDefault],
-//   (query, def) => {
-//     if (!query || !query.indicator) return def
-//     return null
-//   }
-// )
-// DEFAULTS
-const getDefaults = createSelector([ getFilterOptions ], options => ({
+const getDefaults = createSelector([getFilterOptions], options => ({
   indicator: get(options, 'indicator[0]')
 }));
 
@@ -112,32 +89,31 @@ const getObjectives = createSelector(
   t => t('pages.regions.policy.section-one.objectives.content')
 );
 
-const parseChartData = createSelector([ getPolicies, getSelectedOptions ], (
+const parseChartData = createSelector([getPolicies, getSelectedOptions], (
   data,
   options
-) =>
-  {
-    if (isEmpty(data) || isEmpty(options)) return null;
+) => {
+  if (isEmpty(data) || isEmpty(options)) return null;
 
-    const { values } = data;
+  const { values } = data;
 
-    const filteredData = filter(values, function(o) {
-      return o.policy_code === options.indicator.code;
-    });
+  const filteredData = filter(values, function (o) {
+    return o.policy_code === options.indicator.code;
+  });
 
-    const yearAxis = filteredData[0].values.map(o => o.year);
-    const policiesData = [];
+  const yearAxis = filteredData[0].values.map(o => o.year);
+  const policiesData = [];
 
-    yearAxis.forEach(element => {
-      const object = {}
+  yearAxis.forEach(element => {
+    const object = {}
 
-      object.x = element
-      object.yInd = find(filteredData[0].values, ['year', element]).value
+    object.x = element
+    object.y = find(filteredData[0].values, ['year', element]).value
 
-      policiesData.push(object)
-    });
+    policiesData.push(object)
+  });
 
-    return policiesData;
+  return policiesData;
 });
 
 export const getChartConfig = createSelector(
@@ -145,9 +121,16 @@ export const getChartConfig = createSelector(
     parseChartData,
     getSelectedOptions,
   ],
-  (data, options, t) => {
+  (data, options) => {
     if (!data) return null
     if (isNil(options.indicator)) return null
+
+    const { code, label } = options.indicator
+
+    const yColumnOptions = [{code, label, value: 'y'}]
+
+    const tooltip = getTooltipConfig(yColumnOptions);
+    const theme = getThemeConfig(yColumnOptions);
 
     const axes = {
       xBottom: { name: 'year', unit: 'year', format: 'YYYY' },
@@ -158,26 +141,86 @@ export const getChartConfig = createSelector(
       }
     }
 
-    const columns = { x: [ { label: 'year', value: 'x' } ], y: [{ label: options.indicator.label, value: 'yInd' }]}
+    const columns = { x: [{ label: 'year', value: 'x' }], y: yColumnOptions }
 
     return {
       axes,
       animation: false,
-      columns
+      columns,
+      tooltip,
+      theme
     }
   }
 );
 
+const getDataOptions = createSelector(
+  getFilterOptions,
+  (options) => {
+
+    if (!options && !options.indicator) return null
+
+    return castArray(options.indicator)
+  }
+)
+
+const getDataSelected = createSelector(
+  getSelectedOptions,
+  (options) => {
+
+    if (!options && !options.indicator) return null
+
+    return castArray(options.indicator)
+  }
+)
+
 const getChartData = createStructuredSelector({
   config: getChartConfig,
   // loading: getDataLoading,
-  // dataOptions: getLegendDataOptions,
-  // dataSelected: getLegendDataSelected
+  dataOptions: getDataOptions,
+  dataSelected: getDataSelected,
   data: parseChartData
+});
+
+const getTableData = createSelector(
+  [getPolicies, getSelectedOptions],
+  (data, options) => {
+    if (isEmpty(data) || isEmpty(data.values) || !options) return null
+
+    const { code } = options.indicator
+
+    const filteredData = find(data.values, function(o) {
+      return o.category === 'rencana_awal' && o.policy_code === code
+    })
+
+    const mappedData = filteredData.values.map(o => (
+      {tahun: o.year, rencana: `${o.value} %`, aktualisasi: '0 %', deskripsi: 'data belum tersedia'}
+    ))
+
+    return mappedData
+  }
+)
+
+const getDefaultColumns = createSelector(
+  parseChartData,
+  data => {
+    if (!data || isEmpty(data)) return null
+    const defaultColumns = ['tahun', 'rencana', 'aktualisasi', 'deskripsi']
+
+    return defaultColumns
+  }
+)
+
+const firstColumnHeaders = () => (['tahun', 'rencana'])
+
+const getTableConfig = createStructuredSelector({
+  defaultColumns: getDefaultColumns,
+  firstColumnHeaders
 });
 
 export const getPolicy = createStructuredSelector({
   t: getTranslate,
+  tableData: getTableData,
+  tableConfig: getTableConfig,
   params: getParams,
   filterOptions: getFilterOptions,
   selectedOptions: getSelectedOptions,

@@ -4,10 +4,8 @@ import cx from 'classnames';
 import SectionTitle from 'components/section-title';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import Chart from 'components/chart';
-import { Switch, Card, Dropdown, Button, Icon } from 'cw-components';
-import { TabletLandscape } from 'components/responsive';
+import { Dropdown, Button, Icon, Table } from 'cw-components';
 import dropdownStyles from 'styles/dropdown';
-import buttonThemes from 'styles/themes/button';
 import shareIcon from 'assets/icons/share';
 import PoliciesProvider from 'providers/policies-provider';
 
@@ -16,12 +14,6 @@ import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
 import styles from './policy-styles';
 
-const cardTheme = {
-  card: styles.card,
-  contentContainer: styles.contentContainer,
-  data: styles.data,
-  title: styles.title
-};
 
 class Policy extends PureComponent {
   handleFilterChange = selected => {
@@ -80,25 +72,46 @@ class Policy extends PureComponent {
   }
 
   renderChart() {
-    const { chartData, selectedOptions } = this.props;
-    console.log('tran', this.props)
-    if (!chartData || !chartData.data || chartData.config) return null;
+    const { chartData } = this.props;
+    if (!chartData || !chartData.data) return null;
 
     return (
       <Chart
-        // type={
-        //   selectedOptions &&
-        //     selectedOptions.chartType &&
-        //     selectedOptions.chartType.value
-        // }
         type='line'
         config={chartData.config}
+        theme={chartData.config.theme}
         data={chartData.data}
+        dataOptions={chartData.dataOptions}
+        dataSelected={chartData.dataSelected}
+        loading={false}
         height={500}
         onLegendChange={v => this.handleLegendChange(v)}
         showUnit
       />
     );
+  }
+
+  renderTable() {
+    const { tableData, tableConfig } = this.props
+    if (!tableData) return null
+
+    const setColumnWidth = () => 250
+
+    return (
+      <Table
+        data={tableData}
+        hasColumnSelect
+        parseMarkdown
+        firstColumnHeaders={tableConfig.firstColumnHeaders}
+        narrowColumns={tableConfig.narrowColumns}
+        emptyValueLabel='Data belum tersedia'
+        defaultColumns={tableConfig.defaultColumns}
+        horizontalScroll
+        dinamicRowsHeight
+        shouldOverflow
+        setColumnWidth={setColumnWidth}
+      />
+    )
   }
 
   render() {
@@ -168,6 +181,7 @@ class Policy extends PureComponent {
           </div>
           <div className={styles.chartContainer}>
             {this.renderChart()}
+            {this.renderTable()}
           </div>
         </div>
         {params && <PoliciesProvider params={params} />}
