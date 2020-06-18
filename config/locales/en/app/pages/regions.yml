@@ -81,13 +81,31 @@ en:
             unit: ipm
             percent: '%'
         policy:
-          title: Melacak Kebijakan 
-          description: Upaya-upaya Papua Barat dalam rangka penurunan emisi diwujudkan dengan dikeluarkannya berbagai instrumen kebijakan.
-          labels:
-            indicator: Indicator 
-            regency: Regency
-            sector: Sector
-            chart-type: Chart Type
+          title: Melacak Kebijakan
+          section-one:
+            title: Melacak Kebijakan 
+            description: Upaya-upaya Papua Barat dalam rangka penurunan emisi diwujudkan dengan dikeluarkannya berbagai instrumen kebijakan.
+            goals:
+              title: Tujuan
+              description: Tujuan implemantasi Strategi dan Rencana Aksi di Provinsi Papua Barat
+              content:
+                - Mengurangi degradasi dan deforestasi akibat konversi lahan hutan dan alih fungsi kawasan hutan
+                - Meningkatkan upaya-upaya rehabilitasi lahan kritis dan pengembangan hutan tanaman rakyat
+                - Mengembangkan ekonomi kerakyatan sektor kehutanan melalui usaha pemanfaatan hasil hutan non kayu dan jasa hutan
+                - Meningkatkan kapasitas masyarakat dalam rangka adaptasi gejala perubahan iklim, resiko bencana dan kerawanan pangan
+            objectives:
+              title: Sasaran
+              description: Tujuan implemantasi Strategi dan Rencana Aksi di Provinsi Papua Barat
+              content:
+                - Mengurangi degradasi dan deforestasi akibat konversi lahan hutan dan alih fungsi kawasan hutan
+                - Meningkatkan upaya-upaya rehabilitasi lahan kritis dan pengembangan hutan tanaman rakyat
+                - Mengembangkan ekonomi kerakyatan sektor kehutanan melalui usaha pemanfaatan hasil hutan non kayu dan jasa hutan
+                - Meningkatkan kapasitas masyarakat dalam rangka adaptasi gejala perubahan iklim, resiko bencana dan kerawanan pangan
+          section-two:
+            title: Alur Kebijakan
+            labels:
+              indicator: indicator
+           
         map:
           title: Peta
           description: Upaya-upaya Papua Barat dalam rangka penurunan emisi diwujudkan dengan dikeluarkannya berbagai instrumen kebijakan.

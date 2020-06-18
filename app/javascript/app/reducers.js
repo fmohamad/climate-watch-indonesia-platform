@@ -15,6 +15,7 @@ import {
 
 // Providers
 import { reduxModule as indicators } from 'providers/indicators-provider';
+import { reduxModule as policies } from 'providers/policies-provider';
 import { reduxModule as provinceMeta } from 'providers/province-meta-provider';
 import {
   reduxModule as emissionActivites
@@ -30,7 +31,9 @@ import {
   reduxModule as ndcContentOverview
 } from 'providers/ndc-content-overview-provider';
 import { reduxModule as timeline } from 'providers/timeline-provider';
-import { reduxModule as ndcCountryAccordion } from 'components/ndcs-country-accordion';
+import {
+  reduxModule as ndcCountryAccordion
+} from 'components/ndcs-country-accordion';
 
 // Router
 import router from './router';
@@ -48,6 +51,7 @@ const componentsReducers = {
 const providerReducers = {
   translations: handleModule(translations),
   indicators: handleModule(indicators),
+  policies: handleModule(policies),
   provinceMeta: handleModule(provinceMeta),
   emissionActivities: handleModule(emissionActivites),
   adaptation: handleModule(adaptation),

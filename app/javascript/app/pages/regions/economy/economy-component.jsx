@@ -101,6 +101,8 @@ class Economies extends PureComponent {
     const { chartData, selectedOptions } = this.props;
     if (!chartData || !chartData.data) return null;
 
+    console.log(chartData)
+
     return (
       <Chart
         theme={chartData.config.theme}

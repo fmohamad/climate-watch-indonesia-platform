@@ -26,7 +26,7 @@ module Api
                 plc_value.policy.code,
                 plc_value.policy.name,
                 plc_value.category&.name,
-                plc_value.description
+                plc_value.description,
                 year_columns.map { |yc| value_by_year[yc] }
               ].flatten
             end
@@ -36,3 +36,4 @@ module Api
     end
   end
 end
+
