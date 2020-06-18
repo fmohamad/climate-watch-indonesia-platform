@@ -12,15 +12,14 @@ import InfoDownloadToolbox from 'components/info-download-toolbox'
 import ProvinceMetaProvider from 'providers/province-meta-provider'
 import IndicatorsProvider from 'providers/indicators-provider'
 import Chart from 'components/chart'
-import { Switch, Dropdown, Button, Icon } from 'cw-components'
+import { Switch, Dropdown, Button, Icon, Multiselect } from 'cw-components'
 import cx from 'classnames'
 import shareIcon from 'assets/icons/share';
 import ModalShare from 'components/modal-share';
-import { appendParamsToURL } from 'utils'
-import CustomTooltip from './bar-chart-tooltip';
 
 import dropdownStyles from 'styles/dropdown'
 import button from 'styles/themes/button'
+import CustomTooltip from './bar-chart-tooltip';
 import styles from './social-styles'
 
 class RegionPopulation extends PureComponent {
@@ -89,13 +88,28 @@ class RegionPopulation extends PureComponent {
     )
   }
 
-  renderDropdown(field) {
+  renderDropdown(field, multi) {
     const { selectedOptions, filterOptions, t } = this.props
 
     const value = (selectedOptions && selectedOptions[field]) || []
     const options = filterOptions[field] || []
 
     const label = t(`pages.regions.economy.labels.${kebabCase(field)}`)
+
+    if (multi) {
+      const values = castArray(value).filter(v => v);
+      return (
+        <Multiselect
+          key={field}
+          label={label}
+          options={options}
+          onValueChange={selected => this.handleFilterChange(field, selected)}
+          values={values}
+          theme={{ wrapper: dropdownStyles.select }}
+          hideResetButton
+        />
+      );
+    }
 
     return (
       <Dropdown
@@ -122,7 +136,7 @@ class RegionPopulation extends PureComponent {
         theme={{ legend: styles.legend }}
         domain={chart.domain}
         height={300}
-        barSize={30}
+        barSize={20}
         customMessage={t('common.chart-no-data')}
         showUnit
         getCustomYLabelFormat={chart.config.yLabelFormat}
@@ -182,7 +196,7 @@ class RegionPopulation extends PureComponent {
                   {this.renderDropdown('indicator')}
                 </div>
                 <div className={styles.dropdown}>
-                  {this.renderDropdown('district')}
+                  {this.renderDropdown('district', true)}
                 </div>
               </div>
               <Button theme={{ button: cx(button.darkBlue, styles.button) }}>
@@ -215,7 +229,6 @@ RegionPopulation.propTypes = {
   updateFiltersSelected: PropTypes.func,
   onFilterChange: PropTypes.func,
   selectedOptions: PropTypes.object,
-  query: PropTypes.object,
   filterOptions: PropTypes.object,
   selectedModel: PropTypes.string,
   chart: PropTypes.object,
@@ -229,7 +242,6 @@ RegionPopulation.defaultProps = {
   updateFiltersSelected: undefined,
   onFilterChange: undefined,
   selectedOptions: {},
-  query: null,
   filterOptions: {},
   selectedModel: 'education',
   chart: {},

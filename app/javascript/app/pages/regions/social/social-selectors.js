@@ -2,15 +2,24 @@ import { createStructuredSelector, createSelector } from 'reselect'
 import { getTranslate } from 'selectors/translation-selectors'
 import { format } from 'd3-format'
 import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
 import filter from 'lodash/filter'
 import get from 'lodash/get'
+import find from 'lodash/find'
 import {
   getAllSelectedOption,
   findOption,
-  withAllSelected,
 } from 'selectors/filters-selectors'
+
+import {
+  getThemeConfig,
+  getYColumnValue,
+  getTooltipConfig
+} from 'utils/graphs';
+
 import { ALL_SELECTED } from 'constants/constants'
 import { getProvince } from 'selectors/provinces-selectors'
+import { castArray } from 'lodash-es'
 
 const getModelOptions = () => [
   {
@@ -161,21 +170,55 @@ const getSelectedOptions = createStructuredSelector({
   district: getFieldSelected('district'),
 })
 
+// DATA
+const getLegendDataOptions = createSelector(
+  [getSelectedModel, getFilterOptions],
+  (model, options) => {
+    if (!model) return null
+    if (isEmpty(options)) return null
+
+    return options.district
+  }
+)
+
+const getLegendDataSelected = createSelector(
+  [getSelectedOptions],
+  (options) => {
+
+    if (isEmpty(options) || isNil(options.district)) return null
+    
+    return castArray(options.district)
+  }
+)
+
+const getYColumnOptions = createSelector(
+  [getLegendDataSelected],
+  legendDataSelected => {
+    if (!legendDataSelected) return null;
+
+    const selectedLegend = legendDataSelected.filter(data => data.value !== 'all-selected')
+    return selectedLegend.map(d => ({
+      ...d,
+      value: getYColumnValue(d.value)
+    }));
+  }
+);
+
 const getChartData = createSelector(
-  [getSelectedModel, getIndicatorSocial, getSelectedOptions],
-  (model, indicators, options) => {
+  [getSelectedModel, getIndicatorSocial, getSelectedOptions, getYColumnOptions],
+  (model, indicators, options, yColumnOptions) => {
     if (isEmpty(indicators)) return null
     if (!options || !options.indicator || !options.district) return null
     if (!model) return null
 
     const edu = ['wp_hdi', 'wp_illiterate', 'wp_literacy_rate']
     const health = ['wp_health_infrastructure', 'wp_drinking_access']
+
     const selectedModel = model.value
     const selectedInd = options.indicator.value
-    const selectedDist =
-      options.district.value === ALL_SELECTED
-        ? provinceISO
-        : options.district.value
+    const selectedDist = castArray(options.district)
+
+    const mappedDist = selectedDist.map(o => o.value)
 
     let selectedIndicators = []
     if (selectedModel === 'education') {
@@ -191,17 +234,21 @@ const getChartData = createSelector(
     const filteredIndicators = filter(selectedIndicators, function (o) {
       return (
         o.indicator_code === selectedInd &&
-        o.location_iso_code3 === selectedDist
+        mappedDist.includes(o.location_iso_code3)
       )
     })
 
     const xAxis = selectedIndicators[0].values.map((val) => val.year)
     const data = []
     xAxis.forEach((x) => {
-      const object = {
-        x,
-        y: filteredIndicators[0].values.find((o) => o.year === x).value
-      }
+      const object = {}
+
+      object.x = x
+
+      yColumnOptions.forEach(yColumn => {
+        const filterByCode = find(filteredIndicators, ['location_iso_code3', yColumn.code])
+        object[yColumn.value] = find(filterByCode.values, ['year', x]).value
+      })
 
       data.push(object)
     })
@@ -212,42 +259,7 @@ const getChartData = createSelector(
 
 const domain = () => ({ x: ['auto', 'auto'], y: [0, 'auto'] })
 
-const getChartConfig = createSelector(
-  [getSelectedOptions, getSelectedModel],
-  (options, model) => {
-    if (!options) return null
-    const { unit } = options.indicator
-    const name = options.indicator.label
-
-    const axes = {
-      xBottom: {
-        name: 'Year',
-        unit: 'year',
-        format: 'number',
-        label: { dx: 0, dy: 0, className: '' },
-      },
-      yLeft: {
-        name,
-        unit,
-        format: 'number',
-        label: { dx: 0, dy: 10, className: '' },
-      },
-    }
-
-    const tooltip = { y: { label: unit } }
-    const columns = {
-      x: [{ label: 'year', value: 'x' }],
-      y: [{ label: unit, value: 'y' }],
-    }
-
-    return {
-      axes,
-      tooltip,
-      animation: false,
-      columns,
-    }
-  }
-)
+let colorCache = {};
 
 // Y LABEL FORMATS
 const getCustomYLabelFormat = (unit) => {
@@ -258,43 +270,54 @@ const getCustomYLabelFormat = (unit) => {
   return formatY[unit]
 }
 
-const config = createSelector(
-  [getSelectedOptions, getSelectedModel, getTranslate],
-  (options, model, t) => {
-    if (!options) return null
-    const { unit } = options.indicator
+const getChartConfig = createSelector(
+  [
+    getChartData,
+    getYColumnOptions,
+    getSelectedOptions,
+    getTranslate
+  ],
+  (data, yColumnOptions, options, t) => {
+    if (!yColumnOptions || !data) return null
+    if (isNil(options.indicator)) return null
+
     const name = options.indicator.label
+    const { unit } = options.indicator
+
+    const tooltip = getTooltipConfig(yColumnOptions);
+    const theme = getThemeConfig(yColumnOptions);
+    colorCache = { ...theme, ...colorCache };
+
+    const year = t(
+      `pages.regions.economy.unit.year}`
+    );
+
+    const axes = {
+      xBottom: { name: year, unit: year, format: 'YYYY' },
+      yLeft: {
+        name,
+        unit: t(`pages.regions.social.unit.${unit}`),
+        format: 'string',
+        label: { dx: 0, dy: 10, className: '' },
+      },
+    }
+
+    const yLabelFormat = getCustomYLabelFormat(unit)
+    const columns = { x: [ { label: 'year', value: 'x' } ], y: yColumnOptions }
 
     return {
-      axes: {
-        xBottom: {
-          name: 'Year',
-          unit: 'year',
-          format: 'string',
-          label: { dx: 0, dy: 0, className: '' },
-        },
-        yLeft: {
-          name,
-          unit: t(`pages.regions.social.unit.${unit}`),
-          format: 'string',
-          label: { dx: 0, dy: 10, className: '' },
-        },
-      },
-      tooltip: { y: { label: name } },
+      axes,
+      theme: colorCache,
       animation: false,
-      columns: {
-        x: [{ label: 'year', value: 'x' }],
-        y: [{ label: unit, value: 'y' }],
-      },
-      theme: { y: { stroke: '', fill: '#f5b335' } },
-      yLabelFormat: getCustomYLabelFormat(unit),
+      tooltip,
+      columns,
+      yLabelFormat
     }
   }
-)
+);
 
 const getChart = createStructuredSelector({
-  config,
-  domain,
+  config: getChartConfig
 })
 
 export const getRegionSocial = createStructuredSelector({
