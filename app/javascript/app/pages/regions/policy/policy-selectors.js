@@ -6,6 +6,7 @@ import get from 'lodash/get';
 import find from 'lodash/find';
 import isNil from 'lodash/isNil';
 import castArray from 'lodash/castArray';
+import { format, formatSpecifier } from 'd3-format';
 import {
   getThemeConfig,
   getTooltipConfig,
@@ -186,6 +187,8 @@ const getTableData = createSelector(
   (data, options) => {
     if (isEmpty(data) || isEmpty(data.values) || !options) return null
 
+    console.log(data.values)
+
     const { code } = options.indicator
 
     const filteredData = find(data.values, function(o) {
@@ -193,7 +196,7 @@ const getTableData = createSelector(
     })
 
     const mappedData = filteredData.values.map(o => (
-      {tahun: o.year, rencana: `${o.value} %`, aktualisasi: '0 %', deskripsi: 'data belum tersedia'}
+      {tahun: o.year, rencana: `${format(',.2f')(o.value)} %`, aktualisasi: '0 %', deskripsi: 'data belum tersedia'}
     ))
 
     return mappedData

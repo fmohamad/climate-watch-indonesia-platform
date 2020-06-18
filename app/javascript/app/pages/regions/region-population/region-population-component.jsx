@@ -13,11 +13,10 @@ import kebabCase from 'lodash/kebabCase'
 import castArray from 'lodash/castArray'
 import uniq from 'lodash/uniq'
 import flatMap from 'lodash/flatMap'
-import { appendParamsToURL } from 'utils';
-import PopulationMap from './population-map'
-import CustomTooltip from './bar-chart-tooltip';
 import shareIcon from 'assets/icons/share';
 import ModalShare from 'components/modal-share';
+import PopulationMap from './population-map'
+import CustomTooltip from './bar-chart-tooltip';
 
 import styles from './region-population-styles'
 
@@ -208,14 +207,12 @@ class RegionPopulation extends PureComponent {
   }
 
   render() {
-    const { t, params, metaParams, selectedModel, query } = this.props
+    const { t, params, metaParams, selectedModel } = this.props
     const { isOpen } = this.state
     const sources = ['RADGRK', 'SIGNSa']
 
     const section = 'wp_population'
     const downloadURI = `indicators.zip?section=${section}`
-    const shareLink = `region-population`
-    // const shareableLink = `${window.location.origin}/${appendParamsToURL(shareLink, query)}`
     const shareableLink = `${window.location.href}`
     return (
       <div className={styles.page}>
@@ -271,7 +268,6 @@ RegionPopulation.propTypes = {
   params: PropTypes.object,
   metaParams: PropTypes.object,
   provinceISO: PropTypes.string,
-  query: PropTypes.object,
   updateFiltersSelected: PropTypes.func,
 }
 
@@ -287,7 +283,6 @@ RegionPopulation.defaultProps = {
   params: {},
   metaParams: {},
   provinceISO: "",
-  query: {},
   updateFiltersSelected: undefined,
   selectedModel: '',
 }
