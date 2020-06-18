@@ -31,7 +31,7 @@ module  Api
               data_sources = data_sources.where(short_title: sources) if sources
 
               render zip: {
-                'policies.csv' => PolicyValueSerializer.new(values).to_csv,
+                'policies.csv' => PolicyValueCSVSerializer.new(values).to_csv,
                 'data_sources.csv' => data_sources.to_csv
               }
             end

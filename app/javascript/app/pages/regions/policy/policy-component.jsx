@@ -185,7 +185,7 @@ class Policy extends PureComponent {
               <InfoDownloadToolbox
                 className={{ buttonWrapper: styles.buttonWrapper }}
                 slugs={['RADGRK', 'SIGNSa']}
-                downloadUri={'indicators.zip?section=wp_policy'}
+                downloadUri={'province/policies.zip'}
               />
             </div>
           </div>
