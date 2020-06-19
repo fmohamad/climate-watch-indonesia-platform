@@ -1,6 +1,5 @@
 import { createStructuredSelector, createSelector } from 'reselect'
 import { getTranslate } from 'selectors/translation-selectors'
-import { format } from 'd3-format'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import filter from 'lodash/filter'
@@ -20,6 +19,11 @@ import {
 import { ALL_SELECTED } from 'constants/constants'
 import { getProvince } from 'selectors/provinces-selectors'
 import { castArray } from 'lodash-es'
+
+const getChartType = () => ([
+  { label: 'line', value: 'line' },
+  { label: 'bar', value: 'bar' },
+])
 
 const getModelOptions = () => [
   {
@@ -73,13 +77,13 @@ const getSelectedModel = createSelector(
 const getIndicatorSocial = createSelector(getIndicator, (indicators) => {
   if (isEmpty(indicators)) return null
 
-  const data = filter(indicators.values, function (data) {
+  const data = filter(indicators.values, function (datum) {
     return (
-      data.indicator_code === 'wp_hdi' ||
-      data.indicator_code === 'wp_literacy_rate' ||
-      data.indicator_code === 'wp_illiterate' ||
-      data.indicator_code === 'wp_health_infrastructure' ||
-      data.indicator_code === 'wp_drinking_access'
+      datum.indicator_code === 'wp_hdi' ||
+      datum.indicator_code === 'wp_literacy_rate' ||
+      datum.indicator_code === 'wp_illiterate' ||
+      datum.indicator_code === 'wp_health_infrastructure' ||
+      datum.indicator_code === 'wp_drinking_access'
     )
   })
 
@@ -127,6 +131,7 @@ const getFilterOptions = createStructuredSelector({
   model: getModelOptions,
   indicator: getIndicatorOptions,
   district: getDistrictOptions,
+  chartType: getChartType,
 })
 
 // DEFAULTS
@@ -142,6 +147,7 @@ const getDefaults = createSelector(
     indicator:
       model.value === 'education' ? defaultIndicator[0] : defaultIndicator[1],
     district: get(options, 'district[0]'),
+    chartType: get(options, 'chartType[0]'),
   })
 )
 
@@ -168,6 +174,7 @@ const getSelectedOptions = createStructuredSelector({
   model: getFieldSelected('model'),
   indicator: getFieldSelected('indicator'),
   district: getFieldSelected('district'),
+  chartType: getFieldSelected('chartType'),
 })
 
 // DATA
@@ -257,8 +264,6 @@ const getChartData = createSelector(
   }
 )
 
-const domain = () => ({ x: ['auto', 'auto'], y: [0, 'auto'] })
-
 let colorCache = {};
 
 // Y LABEL FORMATS
@@ -330,5 +335,7 @@ export const getRegionSocial = createStructuredSelector({
   filterOptions: getFilterOptions,
   selectedOptions: getSelectedOptions,
   chartData: getChartData,
+  dataOptions: getLegendDataOptions,
+  dataSelected: getLegendDataSelected,
   chart: getChart,
 })

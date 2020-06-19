@@ -15,6 +15,8 @@ import Chart from 'components/chart'
 import { Switch, Dropdown, Button, Icon, Multiselect } from 'cw-components'
 import cx from 'classnames'
 import shareIcon from 'assets/icons/share';
+import lineIcon from 'assets/icons/line_chart.svg';
+import barIcon from 'assets/icons/barChart.svg';
 import ModalShare from 'components/modal-share';
 
 import dropdownStyles from 'styles/dropdown'
@@ -88,11 +90,12 @@ class RegionPopulation extends PureComponent {
     )
   }
 
-  renderDropdown(field, multi) {
+  renderDropdown(field, multi, icons) {
     const { selectedOptions, filterOptions, t } = this.props
 
     const value = (selectedOptions && selectedOptions[field]) || []
     const options = filterOptions[field] || []
+    const iconsProp = icons ? { icons } : {};
 
     const label = t(`pages.regions.economy.labels.${kebabCase(field)}`)
 
@@ -121,24 +124,33 @@ class RegionPopulation extends PureComponent {
         value={value || null}
         theme={{ select: dropdownStyles.select }}
         hideResetButton
+        {...iconsProp}
       />
     )
   }
 
   renderChart() {
-    const { chart, chartData, t } = this.props
+    const { chart, chartData, selectedOptions, dataOptions, dataSelected, t } = this.props
 
     return (
       <Chart
-        type='bar'
+        type={
+          selectedOptions &&
+          selectedOptions.chartType &&
+          selectedOptions.chartType.value
+        }
         config={chart.config}
         data={chartData}
         theme={{ legend: styles.legend }}
         domain={chart.domain}
-        height={300}
+        height={400}
+        dataOptions={dataOptions}
+        dataSelected={dataSelected}
         barSize={20}
         customMessage={t('common.chart-no-data')}
         showUnit
+        onLegendChange={v =>
+          this.handleFilterChange('district', v)}
         getCustomYLabelFormat={chart.config.yLabelFormat}
         customTooltip={<CustomTooltip />}
       />
@@ -153,14 +165,13 @@ class RegionPopulation extends PureComponent {
       selectedModel,
       chartData,
     } = this.props
+
     const { isOpen } = this.state
-
     const sources = ['PBdA2019n', 'PBdA2019o', 'PBdA2019p']
-
     const section = 'wp_social'
     const downloadURI = `indicators.zip?section=${section}`
-
     const shareableLink = `${window.location.href}`
+    const icons = { line: lineIcon, bar: barIcon };
 
     return (
       <div className={styles.page}>
@@ -197,6 +208,9 @@ class RegionPopulation extends PureComponent {
                 </div>
                 <div className={styles.dropdown}>
                   {this.renderDropdown('district', true)}
+                </div>
+                <div className={styles.dropdown}>
+                  {this.renderDropdown('chartType', false, icons)}
                 </div>
               </div>
               <Button theme={{ button: cx(button.darkBlue, styles.button) }}>
@@ -235,6 +249,8 @@ RegionPopulation.propTypes = {
   chartData: PropTypes.array,
   indicatorParams: PropTypes.object,
   metaParams: PropTypes.object,
+  dataOptions: PropTypes.array,
+  dataSelected: PropTypes.array,
 }
 
 RegionPopulation.defaultProps = {
@@ -247,7 +263,9 @@ RegionPopulation.defaultProps = {
   chart: {},
   chartData: [],
   indicatorParams: null,
-  metaParams: null
+  metaParams: null,
+  dataOptions: [],
+  dataSelected: []
 }
 
 export default RegionPopulation

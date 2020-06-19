@@ -71,7 +71,6 @@ class Economies extends PureComponent {
     const value = selectedOptions && selectedOptions[field];
     const options = filterOptions[field] || [];
     const iconsProp = icons ? { icons } : {};
-    console.log('options component', options);
     const disabled = (field === 'sector' && selectedModel === 'kabupaten') ||
       (field === 'district' && selectedModel === 'sektor')
 
@@ -110,8 +109,6 @@ class Economies extends PureComponent {
   renderChart() {
     const { chartData, selectedOptions } = this.props;
     if (!chartData || !chartData.data) return null;
-
-    console.log(chartData)
 
     return (
       <Chart
