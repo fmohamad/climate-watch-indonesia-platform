@@ -22,6 +22,7 @@ $dropdown-max-width: 265px;
 
 .dropdownContainer {
   display: flex;
+  margin-bottom: 20px;
 }
 
 .dropdown {
@@ -134,10 +135,10 @@ $dropdown-max-width: 265px;
 }
 
 .cardContainer {
-  @include columns($columns: (6,6));
+  @include columns($columns: (4,8));
 
   @media #{$tablet-landscape} {
-    @include columns($columns: (6,6));
+    @include columns($columns: (4,8));
   }
 
   margin-bottom: 20px;

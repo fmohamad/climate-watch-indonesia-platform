@@ -37,6 +37,11 @@ const indicatorOptions = {
   ]
 };
 
+const defaultDataOptions = () => [
+  { label: 'Rencana', value: 'rencana', code: 'rencana' },
+  { label: 'Aktualisasi', value: 'aktualisasi', code: 'aktualisasi' },
+]
+
 const getFilterOptions = createSelector(getPolicies, data => {
   if (isEmpty(data)) return indicatorOptions;
 
@@ -102,6 +107,9 @@ const parseChartData = createSelector([getPolicies, getSelectedOptions], (
     return o.policy_code === options.indicator.code;
   });
 
+  const dataRencana = find(filteredData, ['category', 'rencana_awal'])
+  const dataAktualisasi = find(filteredData, ['category', 'aktualisasi'])
+
   const yearAxis = filteredData[0].values.map(o => o.year);
   const policiesData = [];
 
@@ -109,7 +117,8 @@ const parseChartData = createSelector([getPolicies, getSelectedOptions], (
     const object = {}
 
     object.x = element
-    object.y = find(filteredData[0].values, ['year', element]).value
+    object.rencana = find(dataRencana.values, ['year', element]).value
+    object.aktualisasi = find(dataAktualisasi.values, ['year', element]).value
 
     policiesData.push(object)
   });
@@ -126,12 +135,14 @@ export const getChartConfig = createSelector(
     if (!data) return null
     if (isNil(options.indicator)) return null
 
-    const { code, label } = options.indicator
-
-    const yColumnOptions = [{code, label, value: 'y'}]
+    const yColumnOptions = [{label: 'Rencana', value: 'rencana'}, {label: 'Aktualisasi', value: 'aktualisasi'}]
 
     const tooltip = getTooltipConfig(yColumnOptions);
-    const theme = getThemeConfig(yColumnOptions);
+
+    const theme = {
+      rencana: { stroke: "#0677b3", fill: "0677b3" },
+      aktualisasi: { stroke: "#a83232", fill: "#a83232" },
+    }
 
     const axes = {
       xBottom: { name: 'year', unit: 'year', format: 'YYYY' },
@@ -154,31 +165,11 @@ export const getChartConfig = createSelector(
   }
 );
 
-const getDataOptions = createSelector(
-  getFilterOptions,
-  (options) => {
-
-    if (!options && !options.indicator) return null
-
-    return castArray(options.indicator)
-  }
-)
-
-const getDataSelected = createSelector(
-  getSelectedOptions,
-  (options) => {
-
-    if (!options && !options.indicator) return null
-
-    return castArray(options.indicator)
-  }
-)
-
 const getChartData = createStructuredSelector({
   config: getChartConfig,
   // loading: getDataLoading,
-  dataOptions: getDataOptions,
-  dataSelected: getDataSelected,
+  dataOptions: defaultDataOptions,
+  dataSelected: defaultDataOptions,
   data: parseChartData
 });
 
@@ -189,15 +180,37 @@ const getTableData = createSelector(
 
     const { code } = options.indicator
 
-    const filteredData = find(data.values, function(o) {
-      return o.category === 'rencana_awal' && o.policy_code === code
+    const filteredData = filter(data.values, function(o) {
+      return o.policy_code === code
     })
 
-    const mappedData = filteredData.values.map(o => (
-      {tahun: o.year, rencana: `${format(',.1f')(o.value)} %`, aktualisasi: '0 %', deskripsi: 'data belum tersedia'}
-    ))
+    // console.log('filter', filteredData)
 
-    return mappedData
+    const years = filteredData[0].values.map(x => x.year)
+
+    // const mappedData = filteredData.values.map(o => (
+    //   {tahun: o.year, rencana: `${format(',.1f')(o.value)} %`, aktualisasi: '0 %', deskripsi: 'data belum tersedia'}
+    // ))
+
+    const tableData = []
+    years.forEach(x => {
+      const object = {}
+      object.tahun = x
+
+      const rencanaData = find(filteredData, ['category', 'rencana_awal'])
+      const rencanaValue = find(rencanaData.values, ['year', x]).value
+      object.rencana = `${format(',.1f')(rencanaValue)} %`
+
+      const aktualisasiData = find(filteredData, ['category', 'aktualisasi'])
+      const aktualisasiValue = find(aktualisasiData.values, ['year', x]).value
+      object.aktualisasi = `${format(',.1f')(aktualisasiValue)} %`
+
+      object.deskripsi = '-'
+
+      tableData.push(object)
+    })
+
+    return tableData
   }
 )
 

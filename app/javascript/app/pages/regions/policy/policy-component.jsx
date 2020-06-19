@@ -19,8 +19,22 @@ import styles from './policy-styles';
 class Policy extends PureComponent {
   constructor(props) {
     super(props);
-  
+
     this.state = {
+      selectedCard: {
+        label: "Tujuan",
+        value: "tujuan",
+      },
+      cardOptions: [
+        {
+          label: 'Tujuan',
+          value: 'tujuan'
+        },
+        {
+          label: 'Sasaran',
+          value: 'sasaran'
+        }
+      ],
       isOpen: false
     };
   }
@@ -50,6 +64,10 @@ class Policy extends PureComponent {
     onFilterChange({ indicator: values });
   };
 
+  handleDropdownChange = (field, selected) => {
+    this.setState({ [field]: selected });
+  };
+
   renderCardData(field) {
     const { goals, objectives } = this.props;
     const data = field === 'goals' ? goals : objectives;
@@ -65,7 +83,7 @@ class Policy extends PureComponent {
     const value = selectedOptions && selectedOptions.indicator;
     const options = filterOptions.indicator || [];
 
-    const label = t(`pages.regions.policy.section-two.labels.indicator}`);
+    const label = t(`pages.regions.policy.section-two.labels.indicator`);
 
     return (
       <Dropdown
@@ -127,7 +145,7 @@ class Policy extends PureComponent {
     const shareableLink = `${window.location.href}`
     const { t, params } = this.props;
 
-    const { isOpen } = this.state
+    const { isOpen, selectedCard, cardOptions } = this.state
 
     return (
       <div className={styles.page}>
@@ -142,7 +160,7 @@ class Policy extends PureComponent {
             <div>
               <Button
                 theme={{ button: cx(styles.shareButton) }}
-                onClick={() => this.setState({isOpen: !isOpen})}
+                onClick={() => this.setState({ isOpen: !isOpen })}
               >
                 <Icon icon={shareIcon} />
                 <span className={styles.shareText}>Share</span>
@@ -152,53 +170,80 @@ class Policy extends PureComponent {
         </div>
         <div className={styles.cardContainer}>
           <div>
-            <SectionTitle
-              title={t('pages.regions.policy.section-one.goals.title')}
-            />
-            <p>
-              {t('pages.regions.policy.section-one.goals.description')}
-            </p>
-            <br />
-            <div className={styles.card}>
-              {this.renderCardData('goals')}
+            <div className={styles.dropdownContainer}>
+              <div className={styles.dropdown}>
+                <Dropdown
+                  key="indicator"
+                  label="Indikator"
+                  placeholder="Filter by"
+                  options={cardOptions}
+                  onValueChange={value => this.handleDropdownChange('selectedCard', value)}
+                  value={selectedCard}
+                  theme={{ select: dropdownStyles.select }}
+                  hideResetButton
+                />
+              </div>
             </div>
-          </div>
-          <div>
-            <SectionTitle
-              title={t('pages.regions.policy.section-one.objectives.title')}
-            />
-            <p>
-              {t('pages.regions.policy.section-one.objectives.description')}
-            </p>
-            <br />
-            <div className={styles.card}>
-              {this.renderCardData('objectives')}
-            </div>
-          </div>
-        </div>
-        <div className={styles.chartContainer}>
-          <div className={styles.chartMapContainer}>
-            <div>
-              <SectionTitle title="Alur Kebijakan" />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <InfoDownloadToolbox
-                className={{ buttonWrapper: styles.buttonWrapper }}
-                slugs={[]}
-                downloadUri='province/policies.zip'
-              />
-            </div>
-          </div>
-          <div style={{ width: '25%' }}>
-            {this.renderDropdown()}
+            {
+              selectedCard.value === 'tujuan' && (
+                <div>
+                  <SectionTitle
+                    title={t('pages.regions.policy.section-one.goals.title')}
+                  />
+                  <p>
+                    {t('pages.regions.policy.section-one.goals.description')}
+                  </p>
+                  <br />
+                  <div className={styles.card}>
+                    {this.renderCardData('goals')}
+                  </div>
+                </div>
+              )}
+            {
+              selectedCard.value === 'sasaran' && (
+                <div>
+                  <SectionTitle
+                    title={t('pages.regions.policy.section-one.objectives.title')}
+                  />
+                  <p>
+                    {t('pages.regions.policy.section-one.objectives.description')}
+                  </p>
+                  <br />
+                  <div className={styles.card}>
+                    {this.renderCardData('objectives')}
+                  </div>
+                </div>
+              )}
           </div>
           <div className={styles.chartContainer}>
-            {this.renderChart()}
-            {this.renderTable()}
+            <div className={styles.dropdownContainer}>
+              <div className={styles.dropdown}>
+                {this.renderDropdown()}
+              </div>
+            </div>
+            <div className={styles.chartMapContainer}>
+              <div>
+                <SectionTitle title={t('pages.regions.policy.section-two.title')} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <InfoDownloadToolbox
+                  className={{ buttonWrapper: styles.buttonWrapper }}
+                  slugs={['RADGRK', 'SIGNSa']}
+                  downloadUri='province/policies.zip'
+                />
+              </div>
+            </div>
+            <div className={styles.chartContainer}>
+              {this.renderChart()}
+            </div>
           </div>
+          <div />
+        </div>
+        <div className={styles.chartContainer}>
+          {this.renderTable()}
         </div>
         {params && <PoliciesProvider params={params} />}
-        <ModalShare isOpen={isOpen} closeModal={() => this.setState({isOpen: false})} sharePath={shareableLink} />
+        <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
       </div>
     );
   }
