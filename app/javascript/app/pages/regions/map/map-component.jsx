@@ -55,6 +55,16 @@ const faskesSource = {
   }
 }
 
+const closeFieldSource = {
+  "closeField": {
+    "type": "raster",
+    "tiles": [
+      "http://dbgis.menlhk.go.id/arcgis/rest/services/KLHK/Penutupan_Lahan_Tahun_2019/MapServer/tile/{z}/{y}/{x}",
+      // "mapbox://styles/mapbox/light-v9",
+    ]
+  }
+}
+
 class InteractiveMap extends PureComponent {
   constructor(props) {
     super(props);
@@ -107,11 +117,17 @@ class InteractiveMap extends PureComponent {
         ]
       },
       faskesLayer: {
-        id: 'landuse_park',
+        id: 'faskes',
         type: 'raster',
         source: faskesSource.faskes,
       },
-      faskesVisible: false
+      faskesVisible: false,
+      closeFieldLayer: {
+        id: 'closeField',
+        type: 'raster',
+        source: closeFieldSource.closeField,
+      },
+      closeFieldVisible: false
     };
   }
 
@@ -181,18 +197,22 @@ class InteractiveMap extends PureComponent {
   }
 
   toggleLayer(layer) {
-    if(layer !== 'faskes') {
-      alert('Data belum tersedia!')
-    } else {
+    if(layer === 'faskes') {
       this.setState({
         faskesVisible: !this.state.faskesVisible
       })
+    } else if(layer === 'field') {
+      this.setState({
+        closeFieldVisible: !this.state.closeFieldVisible
+      })
+    } else {
+      alert('Data belum tersedia!')
     }
   }
 
   render() {
-    const { rasterStyle } = this.state
-    // console.log('rasterStyleasd', rasterStyle);
+    const { rasterStyle, faskesLayer, closeFieldLayer, faskesVisible, closeFieldVisible } = this.state
+
     return (
      <div className={styles.page}> 
       <div className={styles.mapContainer}>
@@ -205,7 +225,8 @@ class InteractiveMap extends PureComponent {
             mapboxApiAccessToken={'pk.eyJ1IjoidGlhcmFjaG1hZCIsImEiOiJjazFoajR0aWsxZzNrM2RudHd0em1jaGpsIn0.ya8VHSENAPSps9q0vzdE-g'}
             mapStyle={"mapbox://styles/mapbox/light-v9"}
           >
-            <Layer {...this.state.faskesLayer} layout={{'visibility': this.state.faskesVisible? 'visible' : 'none'}} />
+            <Layer {...closeFieldLayer} layout={{'visibility': closeFieldVisible ? 'visible' : 'none'}} />
+            <Layer {...faskesLayer} layout={{'visibility': faskesVisible ? 'visible' : 'none'}} />
             <div style={{position: 'absolute', right: 10, top: 10}}>
               <NavigationControl />
             </div>
@@ -234,10 +255,10 @@ class InteractiveMap extends PureComponent {
                   KLIMATOLOGI
                 </p>
               </div>
-              <div className={styles.mapButton} onClick={() => this.toggleLayer('land')}>
+              <div className={styles.mapButton} onClick={() => this.toggleLayer('field')}>
                 <Icon icon={mapLand} style={{height: 25, width: 25}} />
                 <p className={styles.buttonText}>
-                  KARAKTERISTIK PENGGUNAAN LAHAN
+                  PENUTUPAN LAHAN
                 </p>
               </div>
               <div className={styles.mapButton} onClick={() => this.toggleLayer('disaster')}>
