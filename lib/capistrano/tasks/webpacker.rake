@@ -46,8 +46,8 @@ namespace :webpacker do
       end
     end
   
-    after "deploy:check", "webpacker:check"
-    after "deploy:updated", "webpacker:compile"
+    # after "deploy:check", "webpacker:check"
+    # after "deploy:updated", "webpacker:compile"
   end
   
   namespace :load do
