@@ -59,8 +59,7 @@ const closeFieldSource = {
   "closeField": {
     "type": "raster",
     "tiles": [
-      "http://dbgis.menlhk.go.id/arcgis/rest/services/KLHK/Penutupan_Lahan_Tahun_2019/MapServer/tile/{z}/{y}/{x}",
-      // "mapbox://styles/mapbox/light-v9",
+      "https://gis-gfw.wri.org/arcgis/services/commodities/MapServer/WMSServer?bbox={bbox-epsg-3857}&format=image/png&service=WMS&version=1.3&request=GetMap&crs=EPSG:3857&transparent=true&width=256&height=256&layers=12&styles=default",
     ]
   }
 }
@@ -80,67 +79,19 @@ class InteractiveMap extends PureComponent {
         bearing: 0,
         pitch: 0
       },
-      rasterStyle: {
-        "version": 8,
-        "name": 'faskes',
-        "sources": {
-          "base": {
-            "type": "raster",
-            "tiles": [
-                "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            ]
-          },
-          "faskes": {
-            "type": "raster",
-            "tiles": [
-              "https://portal.ina-sdi.or.id/gis/services/Kemenkes/Faskes_Puskesmas/MapServer/WmsServer?&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=0&STYLES=&FORMAT=png&TRANSPARENT=true&HEIGHT=256&WIDTH=256&SRS=EPSG%3A3857&bbox={bbox-epsg-3857}",
-              // "mapbox://styles/mapbox/light-v9",
-            ]
-          }
-        },
-        "layers": [
-          {
-            "id": "base",
-            "type": "raster",
-            "source": "base",
-          },
-          {
-            "id": "faskes",
-            "type": "raster",
-            "source": "faskes",
-            "layout": {
-              "visibility": "none",
-            },
-          }
-        ]
-      },
+      visibleLayer: '',
       faskesLayer: {
         id: 'faskes',
         type: 'raster',
         source: faskesSource.faskes,
       },
-      faskesVisible: false,
       closeFieldLayer: {
         id: 'closeField',
         type: 'raster',
         source: closeFieldSource.closeField,
-      },
-      closeFieldVisible: false
+      }
     };
   }
-
-  /*componentDidMount() {
-    requestJson(
-      'https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/us-income.geojson',
-      (error, response) => {
-        if (!error) {
-          this._loadData(response);
-        }
-      }
-    );
-  }*/
 
   async componentDidMount() {
     const response = await fetch(`https://raw.githubusercontent.com/uber/react-map-gl/master/examples/.data/us-income.geojson`);
@@ -197,21 +148,13 @@ class InteractiveMap extends PureComponent {
   }
 
   toggleLayer(layer) {
-    if(layer === 'faskes') {
-      this.setState({
-        faskesVisible: !this.state.faskesVisible
-      })
-    } else if(layer === 'field') {
-      this.setState({
-        closeFieldVisible: !this.state.closeFieldVisible
-      })
-    } else {
-      alert('Data belum tersedia!')
-    }
+    this.setState({
+      visibleLayer: layer
+    })
   }
 
   render() {
-    const { rasterStyle, faskesLayer, closeFieldLayer, faskesVisible, closeFieldVisible } = this.state
+    const { faskesLayer, closeFieldLayer, visibleLayer } = this.state
 
     return (
      <div className={styles.page}> 
@@ -225,43 +168,43 @@ class InteractiveMap extends PureComponent {
             mapboxApiAccessToken={'pk.eyJ1IjoidGlhcmFjaG1hZCIsImEiOiJjazFoajR0aWsxZzNrM2RudHd0em1jaGpsIn0.ya8VHSENAPSps9q0vzdE-g'}
             mapStyle={"mapbox://styles/mapbox/light-v9"}
           >
-            <Layer {...closeFieldLayer} layout={{'visibility': closeFieldVisible ? 'visible' : 'none'}} />
-            <Layer {...faskesLayer} layout={{'visibility': faskesVisible ? 'visible' : 'none'}} />
+            <Layer {...closeFieldLayer} layout={{'visibility': visibleLayer === 'field' ? 'visible' : 'none'}} />
+            <Layer {...faskesLayer} layout={{'visibility': visibleLayer === 'faskes' ? 'visible' : 'none'}} />
             <div style={{position: 'absolute', right: 10, top: 10}}>
               <NavigationControl />
             </div>
             <div className={styles.mapButtonWrapper} style={{zIndex: 2}}>
-              <div className={styles.mapButton} onClick={() => this.toggleLayer('faskes')}>
-                <Icon icon={mapFaskes} style={{height: 25, width: 25}} />
-                <p className={styles.buttonText}>
-                  FASILITAS KESEHATAN
-                </p>
-              </div>
-              <div className={styles.mapButton} onClick={() => this.toggleLayer('topography')}>
-                <Icon icon={mapTopography} style={{height: 25, width: 25}} />
-                <p className={styles.buttonText}>
-                  TOPOGRAFI
-                </p>
-              </div>
-              <div className={styles.mapButton} onClick={() => this.toggleLayer('geology')}>
-                <Icon icon={mapGeology} style={{height: 25, width: 25}} />
-                <p className={styles.buttonText}>
-                  GEOLOGI
-                </p>
-              </div>
-              <div className={styles.mapButton} onClick={() => this.toggleLayer('climatology')}>
-                <Icon icon={mapClimate} style={{height: 25, width: 25}} />
-                <p className={styles.buttonText}>
-                  KLIMATOLOGI
-                </p>
-              </div>
-              <div className={styles.mapButton} onClick={() => this.toggleLayer('field')}>
+              <div className={visibleLayer === 'field' ? styles.mapButtonActive : styles.mapButton} onClick={() => this.toggleLayer('field')}>
                 <Icon icon={mapLand} style={{height: 25, width: 25}} />
                 <p className={styles.buttonText}>
                   PENUTUPAN LAHAN
                 </p>
               </div>
-              <div className={styles.mapButton} onClick={() => this.toggleLayer('disaster')}>
+              <div className={visibleLayer === 'faskes' ? styles.mapButtonActive : styles.mapButton} onClick={() => this.toggleLayer('faskes')}>
+                <Icon icon={mapFaskes} style={{height: 25, width: 25}} />
+                <p className={styles.buttonText}>
+                  FASILITAS KESEHATAN
+                </p>
+              </div>
+              <div className={styles.mapButton} onClick={() => alert('Data belum tersedia!')}>
+                <Icon icon={mapTopography} style={{height: 25, width: 25}} />
+                <p className={styles.buttonText}>
+                  TOPOGRAFI
+                </p>
+              </div>
+              <div className={styles.mapButton} onClick={() => alert('Data belum tersedia!')}>
+                <Icon icon={mapGeology} style={{height: 25, width: 25}} />
+                <p className={styles.buttonText}>
+                  GEOLOGI
+                </p>
+              </div>
+              <div className={styles.mapButton} onClick={() => alert('Data belum tersedia!')}>
+                <Icon icon={mapClimate} style={{height: 25, width: 25}} />
+                <p className={styles.buttonText}>
+                  KLIMATOLOGI
+                </p>
+              </div>
+              <div className={styles.mapButton} onClick={() => alert('Data belum tersedia!')}>
                 <Icon icon={mapDisaster} style={{height: 25, width: 25}} />
                 <p className={styles.buttonText}>
                   INDEX RESIKO BENCANA
@@ -277,8 +220,6 @@ class InteractiveMap extends PureComponent {
 }
 
 InteractiveMap.propTypes = {
-  t: PropTypes.func.isRequired,
-  provinceISO: PropTypes.string
 };
 
 InteractiveMap.defaultProps = { 
