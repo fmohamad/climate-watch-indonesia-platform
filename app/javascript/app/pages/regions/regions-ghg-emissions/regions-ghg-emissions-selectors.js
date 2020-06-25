@@ -216,9 +216,6 @@ const parseChartData = createSelector(
       emissionsData,
       selectedOptions
     );
-    console.log('emissionsData', emissionsData);
-    console.log('selectedOptions', selectedOptions);
-    console.log('filteredData', filteredData);
     const dataParsed = [];
     yearValues.forEach(x => {
       const yItems = {};

@@ -6,7 +6,7 @@ import styles from './bar-chart-tooltip-styles.scss';
 const renderValue = ({ formatFunction }, value) => {
   if (!value) return 'n/a';
   if (formatFunction) return formatFunction(value);
-  return value.toLocaleString('ID');
+  return value;
 };
 
 class CustomTooltip extends PureComponent {
@@ -19,8 +19,7 @@ class CustomTooltip extends PureComponent {
         .keys(payload)
         .filter(k => k !== 'x')
         .sort((a, b) => payload[b] - payload[a]);
-    
-        console.log(config.tooltip)
+
     return (
       <div className={styles.tooltip}>
         {
@@ -28,21 +27,32 @@ class CustomTooltip extends PureComponent {
             <div>
               <div className={styles.tooltipHeader}>
                 <span>
-                  {tooltipConfig.indicator}
+                  {payload.x}
                 </span>
                 <span>
-                  {payload.x}
+                  {tooltipConfig.indicator}
                 </span>
               </div>
               <div className={styles.content}>
                 {
                   yKeys && yKeys.map(k => (
                     <div className={styles.yDataContainer}>
+                      {
+                          tooltipConfig.theme &&
+                            (
+                              <span
+                                style={{
+                                  backgroundColor: tooltipConfig.theme[k].fill
+                                }}
+                                className={styles.dot}
+                              />
+                            )
+                        }
                       <span className={styles.yLabel}>
                         {tooltipConfig[k].label}
                       </span>
                       <span className={styles.value}>
-                        {renderValue(tooltipConfig, payload[k])} jiwa
+                        {renderValue(tooltipConfig, payload[k])}
                       </span>
                     </div>
                     ))

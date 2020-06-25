@@ -17,6 +17,7 @@ import lineIcon from 'assets/icons/line_chart.svg';
 import areaIcon from 'assets/icons/area_chart.svg';
 import shareIcon from 'assets/icons/share';
 import ModalShare from 'components/modal-share';
+import CustomTooltip from './bar-chart-tooltip';
 
 import styles from './economy-styles.scss';
 
@@ -106,6 +107,7 @@ class Economies extends PureComponent {
     );
   }
 
+
   renderChart() {
     const { chartData, selectedOptions } = this.props;
     if (!chartData || !chartData.data) return null;
@@ -120,12 +122,12 @@ class Economies extends PureComponent {
         }
         config={chartData.config}
         data={chartData.data}
-        domain={chartData.domain}
         dataOptions={chartData.dataOptions}
         dataSelected={chartData.dataSelected}
         height={500}
         loading={chartData.loading}
         getCustomYLabelFormat={chartData.config.yLabelFormat}
+        customTooltip={<CustomTooltip />}
         onLegendChange={v =>
           this.handleLegendChange(v)}
         showUnit

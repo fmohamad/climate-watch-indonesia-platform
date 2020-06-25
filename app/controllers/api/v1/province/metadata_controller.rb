@@ -32,11 +32,11 @@ module Api
         end
 
         def sections
-          params[:section]&.split(',')
+          params[:section]&.split(",")
         end
 
         def selected_model
-          params[:code]&.split('-')&.last
+          params[:code]&.split("-")&.last
         end
 
         def fetch_meta_indicators
@@ -49,7 +49,7 @@ module Api
               code: indicator.code,
               name: indicator.name,
               unit: indicator.unit,
-              override: true
+              override: true,
             }
           end
         end
@@ -59,7 +59,7 @@ module Api
             {
               id: category.id,
               name: category.name,
-              code: category.code
+              code: category.id,
             }
           end
         end
@@ -67,12 +67,12 @@ module Api
         def fetch_locations
           province = ::Location.find_by(iso_code3: location)
           locations = ::Location.includes(:location_members)
-          locations = locations.where(location_members: {member_id: province.id})
+          locations = locations.where(location_members: { member_id: province.id })
           locations.map do |loc|
             {
               id: loc.id,
               iso_code3: loc.iso_code3,
-              name: loc.wri_standard_name
+              name: loc.wri_standard_name,
             }
           end
         end
@@ -80,8 +80,8 @@ module Api
         def fetch_values
           indicators = ::Indicator.where(section: sections) if sections
           values = ::IndicatorValue.includes(:location, :indicator, :category)
-          values = values.where(locations: {iso_code3: location}) if location
-          values = values.where(indicators: {id: indicators.pluck(:id)})
+          values = values.where(locations: { iso_code3: location }) if location
+          values = values.where(indicators: { id: indicators.pluck(:id) })
         end
 
         def category_ids

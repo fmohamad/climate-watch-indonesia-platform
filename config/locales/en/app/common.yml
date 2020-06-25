@@ -23,4 +23,11 @@ en:
       dimension:
         thousand: ribu
         million: juta
+      unit:
+        million-idr: juta rupiah
+        million: juta rupiah
+        idr: rupiah
+        year: tahun
+        percent: percent
+        people: thousand of heads
 

@@ -5,11 +5,11 @@ import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
-import { format } from 'd3-format';
+import upperFirst from 'lodash/upperFirst';
+import sortBy from 'lodash/sortBy';
 import {
   ALL_SELECTED,
-  SECTOR_TOTAL,
-  WEST_PAPUA
+  WEST_PAPUA,
 } from 'constants/constants';
 
 import {
@@ -29,8 +29,6 @@ import {
 const section = 'wp_economic'
 const KABUPATEN = 'kabupaten'
 const SEKTOR = 'sektor'
-
-const FRONTEND_FILTERED_FIELDS = [ 'indicator', 'sector', 'district' ];
 
 const getQuery = ({ location }) => location && (location.query || null);
 
@@ -67,7 +65,14 @@ const getSelectedModel = createSelector(
 const getFieldOptionsNotFiltered = field => createSelector(
   [ getMetadataData, getQuery ],
   metadata => get(metadata, field, [])
-    .map(o => ({ label: o.label || o.name, value: String(o.value || o.code || o.iso_code3), code: o.code || o.iso_code3 }))
+    .map(o => ({ label: o.label || o.name, value: o.id, code: o.code || o.iso_code3 }))
+    .filter(o => o)
+);
+
+const getIndicatorOptions = field => createSelector(
+  [ getMetadataData, getQuery ],
+  metadata => get(metadata, field, [])
+    .map(o => ({ label: o.label || o.name, value: o.code, code: o.code || o.iso_code3 }))
     .filter(o => o)
 );
 
@@ -81,15 +86,10 @@ const getFieldOptions = field =>
       modelSelected
     ) =>
     {
-      const ALL_SELECTED = { label: 'All Selected', override: true, value: 'all-selected' }
-      if (field === 'indicators') {
-        return options;
-      }
 
       if (modelSelected === KABUPATEN) {
-        options.unshift(ALL_SELECTED)
-        if (field === 'locations') return options
-        return options.filter(o => o.code === SECTOR_TOTAL);
+        if (field === 'locations') return sortBy(options, ['label'])
+        return options.filter(o => o.label === 'total');
       }
 
       if (field === 'locations') {
@@ -97,15 +97,14 @@ const getFieldOptions = field =>
         return options
       }
 
-      options.unshift(ALL_SELECTED)
-      return options.filter(o => o.code !== SECTOR_TOTAL);
+      return sortBy(options.filter(o => o.label !== 'total'), ['label']);
     }
   );
 
 const getFilterOptions = createStructuredSelector({
-  indicator: getFieldOptions('indicators'),
-  district: getFieldOptions('locations'),
-  sector: getFieldOptions('sectors'),
+  indicator: getIndicatorOptions('indicators'),
+  district: withAllSelected(getFieldOptions('locations')),
+  sector: withAllSelected(getFieldOptions('sectors')),
   chartType: getChartType,
 });
 
@@ -172,21 +171,21 @@ const getLegendDataSelected = createSelector(
     if (!model) return null
     if (isEmpty(options) || isNil(options.district) || isNil(options.sector) ) return null
     if (isEmpty(filterOptions) || isNil(filterOptions.district) || isNil(filterOptions.sector) ) return null
+
     
     if (model === KABUPATEN) {
       if(options.district.value === 'all-selected'){
         return castArray(filterOptions.district)
-      } else {
-        return castArray(options.district)
-      }
+      } 
+
+      return castArray(options.district)
     }
-    // if (model === KABUPATEN) return castArray(options.district)
+
     if(options.sector.value === 'all-selected'){
       return castArray(filterOptions.sector)
-    } else {
-      return castArray(options.sector)
     }
-    // return castArray(options.sector)
+
+    return castArray(options.sector)
   }
 )
 
@@ -202,30 +201,23 @@ const getYColumnOptions = createSelector(
   }
 );
 
-const filteredDataBySelectedOptions = (data, selectedOptions) => {
+const filteredDataBySelectedOptions = (model, data, selectedOptions) => {
     const selectedIndicator = selectedOptions.indicator.value
     const selectedDistricts = castArray(selectedOptions.district).map(o => o.value)
-    const selectedSectors = castArray(selectedOptions.sector).map(o => o.label)
+    const selectedSectors = castArray(selectedOptions.sector).map(o => o.value)
 
     const filterByInd = filter(data, function(o) {
       return o.indicator_code === selectedIndicator
     })
 
-    const filterByDist = selectedDistricts[0] === ALL_SELECTED ? 
-      filterByInd.filter(data => data.location_iso_code3 !== 'ID.PB') 
-    : 
-      filter(filterByInd, function(o) {
-        return selectedDistricts.includes(o.location_iso_code3)
-      })
-    
-    const filteredData = selectedSectors[0] === "All Selected" ? 
-      filterByDist 
-    : 
-      filter(filterByDist, function(o) {
-        return selectedSectors.includes(o.category)
-      })
-    
-    return filteredData
+    const selectAllDistrict = selectedDistricts[0] === ALL_SELECTED
+    const selectAllSector = selectedSectors[0] === ALL_SELECTED
+
+    if (model === KABUPATEN) {
+      return selectAllDistrict ? filterByInd : filter(filterByInd, o => selectedDistricts.includes(o.location_id))
+    }
+
+    return selectAllSector ? filterByInd : filter(filterByInd, o => selectedSectors.includes(o.category_id))
 }
 
 const parseChartData = createSelector(
@@ -239,9 +231,9 @@ const parseChartData = createSelector(
     if (isEmpty(indicatorData)) return null
     if (!yColumnOptions) return null;
 
-    const filteredData = filteredDataBySelectedOptions(indicatorData, selectedOptions)
+    const filteredData = filteredDataBySelectedOptions(model, indicatorData, selectedOptions)
 
-    if (isEmpty(filteredData)) return null
+    if (isEmpty(filteredData) || isNil(filteredData)) return null
 
     const yearAxis = filteredData[0].values.map(o => o.year)
 
@@ -265,10 +257,9 @@ const parseChartData = createSelector(
         const object = {}
 
         object.x = x
-
         yColumnOptions.forEach(option => {
-          const dataByOption = find(filteredData, ['category', option.label])
-          object[option.value] = find(dataByOption.values, ['year', x]).value
+          const dataByOption = find(filteredData, ['category_id', option.code])
+          object[option.value] = find(dataByOption.values, ['year', x]).value 
         })
 
         data.push(object)
@@ -282,13 +273,32 @@ const parseChartData = createSelector(
 // Y LABEL FORMATS
 const getCustomYLabelFormat = unit => {
   const formatY = {
-    'million-rp': value => format(',.2f')(value/1e6),
-    'million Rp': value => `${value}`,
-    '%': value => `${value}%`,
-    'satuan': value => `${format(',.2f')(value/1e3)} ribu`
+    'million-idr': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value/1e3),
+    'percent': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
+    'people': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
   };
   return formatY[unit];
 };
+
+const getFormatFunction = unit => {
+  const formatY = {
+    'million-idr': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value/1e3),
+    'percent': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
+    'people': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
+  }
+
+  return formatY[unit]
+}
+
+const getTableValueFormat = (unit, value) => {
+  const formatY = {
+    'million-idr': Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value/1e3),
+    'percent': Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
+    'people': Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
+  }
+
+  return formatY[unit]
+}
 
 let colorCache = {};
 
@@ -304,25 +314,30 @@ export const getChartConfig = createSelector(
     if (!yColumnOptions || !data) return null
     if (!unit || isNil(options.indicator)) return null
 
-    const tooltip = getTooltipConfig(yColumnOptions);
     const theme = getThemeConfig(yColumnOptions);
-    colorCache = { ...theme, ...colorCache };
 
-    const year = t(
-      `pages.regions.economy.unit.year}`
-    );
+    const year = upperFirst(t(`common.unit.year}`));
+
+    const tooltip = {
+      ...getTooltipConfig(yColumnOptions),
+      x: { label: year },
+      theme,
+      formatFunction: getFormatFunction(unit)
+    }
+
+    colorCache = { ...theme, ...colorCache };
 
     const axes = {
       xBottom: { name: year, unit: year, format: 'YYYY' },
       yLeft: {
         name: options.indicator.label,
-        unit: t(`pages.regions.economy.unit.${unit}`),
-        format: 'number',
+        unit: upperFirst(t(`common.unit.${unit}`)),
+        format: 'number'
       }
     }
 
     const yLabelFormat = getCustomYLabelFormat(unit)
-    const columns = { x: [ { label: 'year', value: 'x' } ], y: yColumnOptions }
+    const columns = { x: [ { label: year, value: 'x' } ], y: yColumnOptions }
 
     return {
       axes,
@@ -364,7 +379,7 @@ const getTableData = createSelector(
   (model, columns, indicatorData, parsedData, options, unit, t) => {
     if (!parsedData || !options || !unit || !model) return null
 
-    const filteredData = filteredDataBySelectedOptions(indicatorData, options)
+    const filteredData = filteredDataBySelectedOptions(model, indicatorData, options)
 
     const tableData = []
     if (model === KABUPATEN) {
@@ -372,10 +387,10 @@ const getTableData = createSelector(
         const objectData = {}
 
         objectData.indicator = data.location
-        objectData.unit =  t(`pages.regions.economy.unit.${unit}`)
+        objectData.unit = upperFirst(t(`common.unit.${unit}`))
 
         data.values.forEach(value => {
-          objectData[value.year] = value.value
+          objectData[value.year] = getTableValueFormat(unit, value.value)
         })
 
         tableData.push(objectData)
@@ -388,10 +403,10 @@ const getTableData = createSelector(
         const objectData = {}
 
         objectData.indicator = data.category
-        objectData.unit = unit
+        objectData.unit = upperFirst(t(`common.unit.${unit}`))
 
         data.values.forEach(value => {
-          objectData[value.year] = value.value
+          objectData[value.year] = getTableValueFormat(unit, value.value)
         })
 
         tableData.push(objectData)
