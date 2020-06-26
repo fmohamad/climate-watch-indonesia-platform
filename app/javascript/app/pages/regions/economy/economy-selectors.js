@@ -6,6 +6,7 @@ import isNil from 'lodash/isNil';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
 import upperFirst from 'lodash/upperFirst';
+import uniq from 'lodash/uniq';
 import sortBy from 'lodash/sortBy';
 import {
   ALL_SELECTED,
@@ -206,7 +207,11 @@ const filteredDataBySelectedOptions = (model, data, selectedOptions) => {
     const selectedDistricts = castArray(selectedOptions.district).map(o => o.value)
     const selectedSectors = castArray(selectedOptions.sector).map(o => o.value)
 
-    const filterByInd = filter(data, function(o) {
+    const filteredBySource = filter(data, function(o) {
+      return !isEmpty(o.source)
+    })
+
+    const filterByInd = filter(filteredBySource, function(o) {
       return o.indicator_code === selectedIndicator
     })
 
@@ -418,6 +423,16 @@ const getTableData = createSelector(
   }
 )
 
+const getSources = createSelector(
+  [getSelectedModel, getIndicatorData, getSelectedOptions],
+  (model, data, options) => {
+    if (isEmpty(data) || !model || !options) return []
+
+    const filteredData = filteredDataBySelectedOptions(model, data, options)
+
+    return uniq(filteredData.map(o => o.source))
+  }
+)
 
 const getChartLoading = ({ provinceMeta = {}, indicators = {} }) =>
   (provinceMeta && provinceMeta.loading) || (indicators && indicators.loading);
@@ -454,4 +469,5 @@ export const getEconomies = createStructuredSelector({
   t: getTranslate,
   selectedModel: getSelectedModel,
   metadataParams: getMetadataParams,
+  sources: getSources
 });

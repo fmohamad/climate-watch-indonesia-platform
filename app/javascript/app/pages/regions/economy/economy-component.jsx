@@ -162,13 +162,11 @@ class Economies extends PureComponent {
   }
 
   render() {
-    const { indicatorParams, metadataParams, t } = this.props;
+    const { indicatorParams, metadataParams, t, sources } = this.props;
     const icons = { line: lineIcon, area: areaIcon };
     const shareableLink = `${window.location.href}`
 
     const { isOpen } = this.state
-
-    const sources = ['PBdA2019m', 'PBdA2019k', 'PBdA2019l']
 
     const section = 'wp_economic'
     const downloadURI = `indicators.zip?section=${section}`
@@ -229,7 +227,8 @@ Economies.propTypes = {
   filterOptions: PropTypes.object,
   provinceISO: PropTypes.string.isRequired,
   onFilterChange: PropTypes.func.isRequired,
-  selectedModel: PropTypes.string
+  selectedModel: PropTypes.string,
+  sources: PropTypes.array,
 };
 
 Economies.defaultProps = {
@@ -240,7 +239,8 @@ Economies.defaultProps = {
   metadataParams: undefined,
   selectedOptions: undefined,
   filterOptions: undefined,
-  selectedModel: undefined
+  selectedModel: undefined,
+  sources: []
 };
 
 export default Economies;
