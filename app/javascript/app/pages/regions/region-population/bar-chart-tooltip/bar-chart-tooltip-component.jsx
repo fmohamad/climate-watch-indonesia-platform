@@ -20,7 +20,6 @@ class CustomTooltip extends PureComponent {
         .filter(k => k !== 'x')
         .sort((a, b) => payload[b] - payload[a]);
     
-        console.log(config.tooltip)
     return (
       <div className={styles.tooltip}>
         {
@@ -42,7 +41,7 @@ class CustomTooltip extends PureComponent {
                         {tooltipConfig[k].label}
                       </span>
                       <span className={styles.value}>
-                        {renderValue(tooltipConfig, payload[k])} jiwa
+                        {renderValue(tooltipConfig, payload[k])}
                       </span>
                     </div>
                     ))

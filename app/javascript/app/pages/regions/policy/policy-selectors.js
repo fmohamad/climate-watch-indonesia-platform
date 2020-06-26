@@ -184,13 +184,7 @@ const getTableData = createSelector(
       return o.policy_code === code
     })
 
-    // console.log('filter', filteredData)
-
     const years = filteredData[0].values.map(x => x.year)
-
-    // const mappedData = filteredData.values.map(o => (
-    //   {tahun: o.year, rencana: `${format(',.1f')(o.value)} %`, aktualisasi: '0 %', deskripsi: 'data belum tersedia'}
-    // ))
 
     const tableData = []
     years.forEach(x => {

@@ -5,6 +5,7 @@ import isNil from 'lodash/isNil'
 import filter from 'lodash/filter'
 import get from 'lodash/get'
 import find from 'lodash/find'
+import sortBy from 'lodash/sortBy'
 import {
   getAllSelectedOption,
   findOption,
@@ -25,16 +26,16 @@ const getChartType = () => ([
   { label: 'bar', value: 'bar' },
 ])
 
-const getModelOptions = () => [
+const getModelOptions = createSelector(getTranslate, t => [
   {
-    name: 'Education',
+    name: t('pages.regions.social.switch.education'),
     value: 'education',
   },
   {
-    name: 'Healthcare',
+    name: t('pages.regions.social.switch.healthcare'),
     value: 'healthcare',
   },
-]
+])
 
 const getDefaultIndicator = () => [
   {
@@ -120,7 +121,9 @@ const getDistrictOptions = createSelector(getMetadata, (metadata) => {
 
   const { locations } = metadata
 
-  return locations.map((val) => ({
+  const sortedLocations = sortBy(locations, ['name'])
+
+  return sortedLocations.map((val) => ({
     label: val.name,
     value: val.iso_code3,
     code: val.iso_code3,

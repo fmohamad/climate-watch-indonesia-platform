@@ -18,6 +18,7 @@ class Nav extends PureComponent {
       )
     })
 
+
     return (
       <nav className={theme.nav}>
         {filteredRoutes.map((route) => {

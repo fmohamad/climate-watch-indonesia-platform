@@ -174,7 +174,7 @@ class Policy extends PureComponent {
               <div className={styles.dropdown}>
                 <Dropdown
                   key="indicator"
-                  label="Indikator"
+                  label={t(`pages.regions.policy.section-two.labels.indicator`)}
                   placeholder="Filter by"
                   options={cardOptions}
                   onValueChange={value => this.handleDropdownChange('selectedCard', value)}

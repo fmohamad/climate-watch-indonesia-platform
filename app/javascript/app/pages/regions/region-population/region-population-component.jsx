@@ -20,8 +20,6 @@ import CustomTooltip from './bar-chart-tooltip';
 
 import styles from './region-population-styles'
 
-const { format } = require('d3-format')
-
 const cardTheme = {
   card: styles.card,
   contentContainer: styles.contentContainer,
@@ -147,26 +145,26 @@ class RegionPopulation extends PureComponent {
             </div>
           </div>
           <div className={styles.cardContainer}>
-            <Card theme={cardTheme} title='Total Populasi Penduduk (Kabupaten)'>
+            <Card theme={cardTheme} title={t('pages.regions.region-population.cards.card-1')}>
               <div className={styles.cardContent}>
                 <p>{popTotal !== null && popTotal.toLocaleString('id')}</p>
               </div>
             </Card>
-            <Card theme={cardTheme} title='Laju pertumbuhan penduduk per tahun'>
+            <Card theme={cardTheme} title={t('pages.regions.region-population.cards.card-2')}>
               <div className={styles.cardContent}>
                 <p>{popGrowth !== null && popGrowth.toLocaleString('id')}</p>
               </div>
             </Card>
-            <Card theme={cardTheme} title='Kepadatan penduduk'>
+            <Card theme={cardTheme} title={t('pages.regions.region-population.cards.card-3')}>
               <div className={styles.cardContent}>
                 <p>
-                  {popDensity !== null && popDensity.toLocaleString('id')} Jiwa/Km<sup>2</sup>
+                  {popDensity !== null && popDensity.toLocaleString('id')}
                 </p>
               </div>
             </Card>
             <Card
               theme={cardTheme}
-              title='Rasio Jenis Kelamin (Perempuan/ Laki-laki)'
+              title={t('pages.regions.region-population.cards.card-4')}
             >
               <div className={styles.cardContent}>
                 <p>{popSexRatio !== null && popSexRatio.toLocaleString('id')}</p>
@@ -176,10 +174,6 @@ class RegionPopulation extends PureComponent {
         </div>
       )
     }
-
-    const unit = t('common.dimension.thousand')
-    const getCustomYLabelFormat = (value) =>
-      `${format('.2s')(`${value/1000}`)} ${unit}`
 
     return (
       <div className={styles.container}>
@@ -193,11 +187,11 @@ class RegionPopulation extends PureComponent {
           config={chart.config}
           data={chartData}
           theme={{ legend: styles.legend }}
-          getCustomYLabelFormat={getCustomYLabelFormat}
+          getCustomYLabelFormat={chart.config.yLabelFormat}
           domain={chart.domain}
           dataOptions={chart.dataOptions}
           dataSelected={chart.dataSelected}
-          height={300}
+          height={400}
           barSize={30}
           customMessage={t('common.chart-no-data')}
           showUnit

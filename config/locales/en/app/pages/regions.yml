@@ -2,6 +2,7 @@ en:
   app:
     pages:
       regions:
+        title: Province Module
         regions-ghg-emissions:
           title: Emisi GRK dan Target
           legendTitle: GHG Emissions in
@@ -65,15 +66,29 @@ en:
             million-rp: Million Rp
             percent: '%'
             satuan: Jiwa
+          table:
+            indicator: indicator
+            unit: unit
         region-population:
           title: Populasi
           description: Penduduk Papua Barat berjumlah 963.000 jiwa pada 2019. Jumlah tersebut terdiri atas 457.200 jiwa penduduk perempuan dan 506.400 jiwa laki-laki.
           labels:
             year: Year
             district: District
+          switch:
+            population: Population
+            age-group-distribution: Age Group Distribution
+          cards:
+            card-1: Total population per district
+            card-2: Population growth per year
+            card-3: Population density per square kilometre
+            card-4: Gender ratio
         social:
           title: Sosial
           description: Papua Barat dalam angka partisipasi kasar, mulai dari tingkat SD, SMP hingga SMA. Hal itu terlihat misalnya dari nilai ujian nasional dan kapasitas guru.
+          switch:
+            education: education
+            healthcare: healthcare
           labels:
             indicator: Indicator 
             district: Regency

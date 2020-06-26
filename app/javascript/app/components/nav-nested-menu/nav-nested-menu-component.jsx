@@ -40,8 +40,9 @@ class NavNestedMenuComponent extends PureComponent {
   }
 
   renderChild() {
-    const { Child, title } = this.props;
+    const { Child, title, t } = this.props;
     const { open } = this.state;
+    console.log('button', title)
 
     return (
       <React.Fragment>
@@ -52,7 +53,7 @@ class NavNestedMenuComponent extends PureComponent {
           className={cx(rootStyles.link, navStyles.link, styles.button)}
           onClick={this.toggleOpen}
         >
-          {title && <div className={styles.title}>{title}</div>}
+          {title && <div className={styles.title}>{t('pages.regions.title')}</div>}
           <Icon
             icon={arrow}
             theme={{ icon: cx(styles.icon, { [styles.upIcon]: open }) }}
