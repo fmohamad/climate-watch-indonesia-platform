@@ -15,6 +15,7 @@
 
 class IndicatorCategory < ApplicationRecord
   include Translate
+  belongs_to :categorization, class_name: 'IndicatorCategorization', optional: true
 
   translates :name, i18n: :value_category
 
