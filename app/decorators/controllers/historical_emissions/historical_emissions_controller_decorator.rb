@@ -9,6 +9,8 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
     :metrics,
     :gases,
     :gwps,
+    :categories,
+    :sub_categories,
     :locations
   ) do
     alias_method :read_attribute_for_serialization, :send
@@ -42,6 +44,8 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
         ::HistoricalEmissions::Metric.all,
         ::HistoricalEmissions::Gas.all,
         ::HistoricalEmissions::Gwp.all,
+        ::HistoricalEmissions::Category.all,
+        ::HistoricalEmissions::SubCategory.all,
         Location.all
       ),
       serializer: ::HistoricalEmissions::MetadataSerializer
