@@ -135,9 +135,9 @@ class Inventory extends PureComponent {
     return (
       <div className={styles.page}>
         <SectionTitle
-          title={t('pages.national-context.historical-emissions.title')}
+          title={t('pages.emissions-portal.ghg-emission-inventory.title')}
           description={t(
-            'pages.national-context.historical-emissions.description'
+            'pages.emissions-portal.ghg-emission-inventory.description'
           )}
         />
         {this.renderSwitch()}

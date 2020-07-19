@@ -1,7 +1,16 @@
 HistoricalEmissions::MetadataSerializer.class_eval do
+  attribute :data_source
   attribute :metric
   attribute :category
   attribute :sub_category
+
+  def data_source
+    object.data_sources.map do |g|
+      g.
+        slice(:id, :name, :location_ids, :sector_ids, :gas_ids, :category_ids, :sub_category_ids).
+        merge(source: "ghg_emission_inventory_#{g[:name]}")
+    end
+  end
 
   def sector
     object.sectors.map do |s|

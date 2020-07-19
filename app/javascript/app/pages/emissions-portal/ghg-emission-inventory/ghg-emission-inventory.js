@@ -7,7 +7,7 @@ import Component from './ghg-emission-inventory-component';
 import * as actions from './ghg-emission-inventory-actions';
 import {
   getGHGEmissions
-} from './historical-emissions-selectors/ghg-emission-inventory-selectors';
+} from './ghg-emission-inventory-selectors/ghg-emission-inventory-selectors';
 
 class HistoricalContainer extends PureComponent {
   onFilterChange = filter => {
