@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_05_034018) do
+ActiveRecord::Schema.define(version: 2020_07_18_102944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,6 +128,13 @@ ActiveRecord::Schema.define(version: 2020_06_05_034018) do
     t.string "locale", default: "en", null: false
   end
 
+  create_table "historical_emissions_categories", force: :cascade do |t|
+    t.text "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_historical_emissions_categories_on_name", unique: true
+  end
+
   create_table "historical_emissions_data_sources", force: :cascade do |t|
     t.text "name"
     t.text "display_name"
@@ -139,6 +146,7 @@ ActiveRecord::Schema.define(version: 2020_06_05_034018) do
     t.text "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "unit"
   end
 
   create_table "historical_emissions_gwps", force: :cascade do |t|
@@ -149,8 +157,6 @@ ActiveRecord::Schema.define(version: 2020_06_05_034018) do
 
   create_table "historical_emissions_metrics", force: :cascade do |t|
     t.string "name", null: false
-    t.string "unit", null: false
-    t.index ["name", "unit"], name: "index_historical_emissions_metrics_on_name_and_unit", unique: true
   end
 
   create_table "historical_emissions_records", force: :cascade do |t|
@@ -163,12 +169,16 @@ ActiveRecord::Schema.define(version: 2020_06_05_034018) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "metric_id"
+    t.bigint "category_id"
+    t.bigint "sub_category_id"
+    t.index ["category_id"], name: "index_historical_emissions_records_on_category_id"
     t.index ["data_source_id"], name: "index_historical_emissions_records_on_data_source_id"
     t.index ["gas_id"], name: "index_historical_emissions_records_on_gas_id"
     t.index ["gwp_id"], name: "index_historical_emissions_records_on_gwp_id"
     t.index ["location_id"], name: "index_historical_emissions_records_on_location_id"
     t.index ["metric_id"], name: "index_historical_emissions_records_on_metric_id"
     t.index ["sector_id"], name: "index_historical_emissions_records_on_sector_id"
+    t.index ["sub_category_id"], name: "index_historical_emissions_records_on_sub_category_id"
   end
 
   create_table "historical_emissions_sectors", force: :cascade do |t|
@@ -180,6 +190,13 @@ ActiveRecord::Schema.define(version: 2020_06_05_034018) do
     t.datetime "updated_at", null: false
     t.index ["data_source_id"], name: "index_historical_emissions_sectors_on_data_source_id"
     t.index ["parent_id"], name: "index_historical_emissions_sectors_on_parent_id"
+  end
+
+  create_table "historical_emissions_sub_categories", force: :cascade do |t|
+    t.text "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_historical_emissions_sub_categories_on_name", unique: true
   end
 
   create_table "indicator_categories", force: :cascade do |t|
@@ -338,11 +355,13 @@ ActiveRecord::Schema.define(version: 2020_06_05_034018) do
   add_foreign_key "emission_target_values", "emission_target_labels", column: "label_id", on_delete: :cascade
   add_foreign_key "emission_target_values", "emission_target_sectors", column: "sector_id", on_delete: :cascade
   add_foreign_key "emission_target_values", "locations", on_delete: :cascade
+  add_foreign_key "historical_emissions_records", "historical_emissions_categories", column: "category_id", on_delete: :cascade
   add_foreign_key "historical_emissions_records", "historical_emissions_data_sources", column: "data_source_id", on_delete: :cascade
   add_foreign_key "historical_emissions_records", "historical_emissions_gases", column: "gas_id", on_delete: :cascade
   add_foreign_key "historical_emissions_records", "historical_emissions_gwps", column: "gwp_id", on_delete: :cascade
   add_foreign_key "historical_emissions_records", "historical_emissions_metrics", column: "metric_id", on_delete: :cascade
   add_foreign_key "historical_emissions_records", "historical_emissions_sectors", column: "sector_id", on_delete: :cascade
+  add_foreign_key "historical_emissions_records", "historical_emissions_sub_categories", column: "sub_category_id", on_delete: :cascade
   add_foreign_key "historical_emissions_records", "locations", on_delete: :cascade
   add_foreign_key "historical_emissions_sectors", "historical_emissions_data_sources", column: "data_source_id", on_delete: :cascade
   add_foreign_key "historical_emissions_sectors", "historical_emissions_sectors", column: "parent_id", on_delete: :cascade

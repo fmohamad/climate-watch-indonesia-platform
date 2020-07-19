@@ -1,21 +1,19 @@
 # == Schema Information
 #
-# Table name: historical_emissions_metrics
+# Table name: historical_emissions_sub_categories
 #
 #  id   :bigint(8)        not null, primary key
 #  name :string           not null
-#  unit :string           not null
 #
 # Indexes
 #
-#  index_historical_emissions_metrics_on_name_and_unit  (name,unit) UNIQUE
 #
 
 module HistoricalEmissions
-  class Metric < ApplicationRecord
+  class SubCategory < ApplicationRecord
     include Translate
 
-    translates :name, i18n: :metric
+    translates :name, i18n: :category
 
     validates_presence_of :name
 
