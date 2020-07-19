@@ -16,7 +16,6 @@ import {
 import {
   getEmissionsData,
   getMetadataData,
-  getTop10EmittersOptionLabel,
   getSelectedAPI
 } from './ghg-emission-inventory-get-selectors';
 
@@ -50,14 +49,14 @@ export const getNationalOption = createSelector(
     return {
       ...findOption(meta.location, COUNTRY_ISO, 'iso_code3'),
       code: COUNTRY_ISO,
-      label: t('pages.national-context.historical-emissions.region.national'),
+      label: t('pages.emissions-portal.ghg-emission-inventory.region.national'),
       override: true
     };
   }
 );
 
 const getBreakByOptions = createSelector([ getTranslate ], t => {
-  const options = t('pages.national-context.historical-emissions.break-by', {
+  const options = t('pages.emissions-portal.ghg-emission-inventory.break-by', {
     default: {}
   });
   return Object
@@ -70,11 +69,10 @@ const getFieldOptions = field =>
     [
       getMetadataData,
       getSelectedAPI,
-      getTop10EmittersOption,
       getNationalOption,
       getFieldQuery('breakBy')
     ],
-    (metadata, api, top10EmmmitersOption, nationalOption, queryBreakBy) => {
+    (metadata, api, nationalOption, queryBreakBy) => {
       if (!metadata || !metadata[field]) return null;
 
       const breakBySelected = queryBreakBy || DEFAULTS.breakBy;
@@ -100,7 +98,6 @@ const getFieldOptions = field =>
           options = options.filter(o => o.iso_code3 !== COUNTRY_ISO);
           options = [
             nationalOption,
-            api === API.indo ? top10EmmmitersOption : null,
             ...options
           ];
           break;
@@ -111,65 +108,6 @@ const getFieldOptions = field =>
       return options.filter(o => o).map(transformToOption);
     }
   );
-
-const getTop10EmittersIsoCodes = emissionData => {
-  const groupedByISO = groupBy(emissionData, 'iso_code3');
-  const recentYear = Math.max(...emissionData[0].emissions.map(e => e.year));
-
-  const totalEmissionByProvince = Object
-    .keys(groupedByISO)
-    .filter(iso => iso !== COUNTRY_ISO)
-    .map(iso => {
-      const emissionObject = groupedByISO[iso].find(
-        p => p.metric === METRIC.absolute && p.sector === SECTOR_TOTAL
-      );
-
-      const totalEmissionValue = emissionObject && emissionObject.emissions
-          .filter(e => e.year === recentYear)
-          .map(e => e.value)[0] || 0;
-
-      return { iso, value: totalEmissionValue };
-    });
-
-  const sorted = sortBy(totalEmissionByProvince, 'value').reverse();
-
-  return take(sorted, 10).map(p => p.iso);
-};
-
-export const getTop10EmittersOption = createSelector(
-  [ getEmissionsData, getMetadataData, getTop10EmittersOptionLabel ],
-  (data, meta, top10Label) => {
-    if (!data || isEmpty(data) || !meta || !meta.location) return null;
-
-    const top10ISOs = getTop10EmittersIsoCodes(data);
-    if (top10ISOs.length !== 10) return null;
-
-    const getLocationValuesforISOs = isos =>
-      isos
-        .map(iso => (findOption(meta.location, iso, 'iso_code3') || {}).value)
-        .join();
-
-    return {
-      label: top10Label,
-      value: getLocationValuesforISOs(top10ISOs),
-      override: true
-    };
-  }
-);
-
-export const getTop10EmittersOptionExpanded = createSelector(
-  [ getMetadataData, getTop10EmittersOption ],
-  (meta, top10EmittersOption) => {
-    if (!top10EmittersOption) return null;
-
-    return top10EmittersOption.value.split(',').map(value => {
-      const location = meta.location.find(
-        l => String(l.value) === String(value)
-      );
-      return { label: location.label, value, code: location.iso_code3 };
-    });
-  }
-);
 
 // SELECTED
 const getFieldSelected = field =>

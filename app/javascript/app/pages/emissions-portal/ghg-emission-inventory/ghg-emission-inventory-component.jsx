@@ -131,6 +131,8 @@ class Inventory extends PureComponent {
       t
     } = this.props;
 
+    console.log(this.props.filterOptions)
+
     const icons = { line: lineIcon, area: areaIcon };
     return (
       <div className={styles.page}>
