@@ -11,3 +11,11 @@ en:
             national: National
           break-by:
             region-absolute: Region - Absolute
+          labels:
+            break-by: Break by
+            region: Region
+            sector: Sector
+            category: Category
+            sub-category: Sub Category
+            gas: Gas
+            chart-type: Chart Type

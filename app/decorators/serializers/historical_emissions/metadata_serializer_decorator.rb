@@ -26,13 +26,13 @@ HistoricalEmissions::MetadataSerializer.class_eval do
 
   def category
     object.categories.map do |m|
-      m.slice(:id, :name, :code)
+      m.slice(:id, :name, :code, :sector_id)
     end
   end
 
   def sub_category
     object.sub_categories.map do |m|
-      m.slice(:id, :name, :code)
+      m.slice(:id, :name, :code, :category_id)
     end
   end
 

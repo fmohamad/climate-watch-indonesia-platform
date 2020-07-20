@@ -18,7 +18,6 @@ class HistoricalContainer extends PureComponent {
     }
 
     updateFiltersSelected({
-      section: 'emissions-portal',
       query: updateQueryParams(query, filter)
     });
   };

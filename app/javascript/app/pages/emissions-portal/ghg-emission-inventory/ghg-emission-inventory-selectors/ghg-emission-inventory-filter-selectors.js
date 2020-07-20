@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import take from 'lodash/take';
+import get from 'lodash/get';
 import { ALL_SELECTED, API, METRIC, SECTOR_TOTAL } from 'constants';
 
 import { getTranslate } from 'selectors/translation-selectors';
@@ -68,11 +69,10 @@ const getFieldOptions = field =>
   createSelector(
     [
       getMetadataData,
-      getSelectedAPI,
       getNationalOption,
       getFieldQuery('breakBy')
     ],
-    (metadata, api, nationalOption, queryBreakBy) => {
+    (metadata, nationalOption, queryBreakBy) => {
       if (!metadata || !metadata[field]) return null;
 
       const breakBySelected = queryBreakBy || DEFAULTS.breakBy;
@@ -97,8 +97,7 @@ const getFieldOptions = field =>
         case 'location': {
           options = options.filter(o => o.iso_code3 !== COUNTRY_ISO);
           options = [
-            nationalOption,
-            ...options
+            nationalOption
           ];
           break;
         }
@@ -133,6 +132,8 @@ export const getFilterOptions = createStructuredSelector({
   breakBy: getBreakByOptions,
   region: getFieldOptions('location'),
   sector: withAllSelected(getFieldOptions('sector')),
+  category: getFieldOptions('category'),
+  subCategory: getFieldOptions('subCategory'),
   gas: getFieldOptions('gas'),
   chartType: () => CHART_TYPE_OPTIONS
 });
@@ -144,6 +145,8 @@ const getDefaults = createSelector([ getFilterOptions ], options => ({
   breakBy: findOption(options.breakBy, DEFAULTS.breakBy),
   region: findOption(options.region, DEFAULTS.region),
   sector: findOption(options.sector, DEFAULTS.sector),
+  category: get(options, 'category[0]'),
+  subCategory: get(options, 'subCategory[0]'),
   gas: findOption(options.gas, DEFAULTS.gas)
 }));
 
@@ -168,6 +171,8 @@ export const getSelectedOptions = createStructuredSelector({
   breakBy: getFieldSelected('breakBy'),
   region: getFieldSelected('region'),
   sector: filterSectorSelectedByMetrics,
+  category: getFieldSelected('category'),
+  subCategory: getFieldSelected('subCategory'),
   gas: getFieldSelected('gas')
 });
 

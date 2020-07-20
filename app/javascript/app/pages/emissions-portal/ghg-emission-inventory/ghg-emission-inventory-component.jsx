@@ -60,7 +60,7 @@ class Inventory extends PureComponent {
     if (!isChartReady) return null;
 
     const label = t(
-      `pages.national-context.historical-emissions.labels.${kebabCase(field)}`
+      `pages.emissions-portal.ghg-emission-inventory.labels.${kebabCase(field)}`
     );
 
     if (multi) {
@@ -131,7 +131,7 @@ class Inventory extends PureComponent {
       t
     } = this.props;
 
-    console.log(this.props.filterOptions)
+    console.log(this.props.selectedOptions)
 
     const icons = { line: lineIcon, area: areaIcon };
     return (
@@ -147,8 +147,10 @@ class Inventory extends PureComponent {
           <div className={styles.filters}>
             {this.renderDropdown('breakBy')}
             {this.renderDropdown('region', true)}
-            {this.renderDropdown('sector', true)}
-            {this.renderDropdown('gas', true)}
+            {this.renderDropdown('sector', false)}
+            {this.renderDropdown('category', false)}
+            {this.renderDropdown('subCategory', false)}
+            {this.renderDropdown('gas', false)}
             {this.renderDropdown('chartType', false, icons)}
           </div>
           <InfoDownloadToolbox
