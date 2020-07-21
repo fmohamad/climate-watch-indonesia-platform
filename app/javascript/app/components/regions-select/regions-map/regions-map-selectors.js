@@ -43,7 +43,7 @@ const PBStyles = {
   ...countryStyles,
   default: {
     ...countryStyles.default,
-    fill: '#0a1941',
+    fill: '#009900',
     fillOpacity: 1
   }
 };

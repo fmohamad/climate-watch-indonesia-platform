@@ -113,6 +113,7 @@ const getSectors = createSelector(
 const getYears = createSelector(
   [ getEmissionActivities ],
   emissionActivities => {
+    console.log('emissionActivities', emissionActivities);
     if (!emissionActivities) return null;
     return emissionActivities &&
       emissionActivities[0] &&
@@ -123,6 +124,7 @@ const getYears = createSelector(
 const getIndicatorsOptions = createSelector(
   [ getSectors, getAdaptationIndicator, getTranslate ],
   (sectors, adaptationIndicator, t) => {
+    console.log('adaptationIndicator', adaptationIndicator);
     if (!sectors || !adaptationIndicator) return null;
 
     const apiIndicators = sectors.map(s => ({ label: s.name, value: s.code }));
