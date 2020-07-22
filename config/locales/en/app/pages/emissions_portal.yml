@@ -6,3 +6,5 @@ en:
         description: "This section provides context for Indonesias’s climate change response, including information on provincial development priorities, population, economy, energy, and climate risks from natural disasters."
         ghg-emission-inventory:
           title: Ghg Emission Inventory
+        emission-map:
+          title: Map
