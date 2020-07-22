@@ -8,6 +8,7 @@ import { LANGUAGES_AVAILABLE } from 'constants/languages';
 import { Icon, Button } from 'cw-components';
 
 import downloadIcon from 'assets/icons/download';
+import cwiLogo from 'assets/cwi_logo';
 
 import navStyles from 'components/nav/nav-styles';
 import styles from './header-styles.scss';
@@ -35,13 +36,10 @@ class Header extends PureComponent {
             onTouchStart={undefined}
             onMouseDown={undefined}
           >
-            <div className={styles.country}>
-              INDONESIA
-            </div>
-            <div className={styles.climateExplorer}>
-              <span className={styles.bold}>CLIMATE</span>
-              WATCH
-            </div>
+            <img
+              className={styles.image}
+              src={cwiLogo}
+            />
           </NavLink>
           <div className={styles.tabs}>
             <div className={styles.leftTabs}>

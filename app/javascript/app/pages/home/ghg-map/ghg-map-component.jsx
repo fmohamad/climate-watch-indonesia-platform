@@ -7,8 +7,8 @@ import MapChoroplethLegend from 'components/map-choropleth-legend';
 import styles from './ghg-map-styles.scss';
 
 const MAP_ZOOM_STEP = 2;
-const MAP_ZOOM_DEFAULT = 12;
-const MAP_ZOOM_MIN = 6;
+const MAP_ZOOM_DEFAULT = 5.5;
+const MAP_ZOOM_MIN = 5;
 
 const MapTooltip = ({ properties }) => (
   <div>
@@ -67,7 +67,7 @@ class GHGMap extends PureComponent {
           handleZoomOut={this.handleZoomOut}
           onGeographyClick={this.handleProvinceClick}
           tooltip={MapTooltip}
-          zoomEnable
+          zoomEnable={false}
           forceUpdate
         />
         <MapChoroplethLegend

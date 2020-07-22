@@ -13,17 +13,17 @@ import MetadataProvider from 'providers/metadata-provider';
 import dropdownStyles from 'styles/dropdown.scss';
 import MapTooltip from './map-tooltip';
 
-import styles from './sectoral-activity-styles.scss';
+import styles from './emission-map-styles.scss';
 
 const MAP_CENTER = [ 120, -4 ];
 
-class SectoralActivity extends Component {
+class EmissionMap extends Component {
   constructor() {
     super();
     this.state = { disablePlay: false };
   }
 
-  handleFilterChange = (filter, selected) => {
+  /*handleFilterChange = (filter, selected) => {
     const { onFilterChange } = this.props;
     const isIndicatorFilter = filter === 'indicator';
     const clear = isIndicatorFilter;
@@ -111,94 +111,60 @@ class SectoralActivity extends Component {
         />
       </div>
     );
-  };
+  };*/
 
   render() {
     const {
-      map,
-      adaptationParams,
+      // map,
+      // adaptationParams,
       emissionParams,
-      selectedOptions,
-      adaptationCode,
-      sources,
+      // selectedOptions,
+      // adaptationCode,
+      // sources,
       t
     } = this.props;
-    console.log('map', map)
     console.log('emissionParams', emissionParams);
 
-    const yearsSelectable = selectedOptions.indicator &&
-      selectedOptions.indicator.value !== adaptationCode;
+    // const yearsSelectable = selectedOptions.indicator && selectedOptions.indicator.value !== adaptationCode;
 
     return (
       <div>
         <div className={styles.page}>
           <SectionTitle
-            title={t('pages.national-context.sectoral-activity.title')}
-            description={t(
-              'pages.national-context.sectoral-activity.description'
-            )}
+            title={t('pages.emissions-portal.emission-map.title')}
           />
           <div className={styles.filtersGroup}>
-            <div className={styles.filters}>
-              {this.renderDropdown('indicator')}
-              {this.renderDropdown('activity')}
-              {yearsSelectable && this.renderDropdown('year')}
-            </div>
             <InfoDownloadToolbox
               className={{ buttonWrapper: styles.buttonWrapper }}
-              slugs={sources}
+              // slugs={sources}
               downloadUri="emission_activities.zip"
             />
           </div>
-          <EmissionActivitiesProvider />
           <MetadataProvider meta="ghgindo" />
-          {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
-          {adaptationParams && <AdaptationProvider params={adaptationParams} />}
-        </div>
-        <div className={styles.mapSection}>
-          <div className={styles.mapContainer}>
-            {
-              map && (
-              <React.Fragment>
-                <Map
-                  zoom={5}
-                  paths={map.paths}
-                  forceUpdate
-                  center={MAP_CENTER}
-                  className={styles.map}
-                  tooltip={MapTooltip}
-                />
-                <div className={styles.legend}>
-                  <DotLegend legend={map.legend} />
-                </div>
-                {yearsSelectable && this.renderTimeline()}
-              </React.Fragment>
-                )
-            }
-          </div>
+          {emissionParams && <GHGEmissionsProvider params={'emissionParams'} />}
         </div>
       </div>
     );
   }
 }
 
-SectoralActivity.propTypes = {
+EmissionMap.propTypes = {
   t: PropTypes.func.isRequired,
-  map: PropTypes.shape({ paths: PropTypes.array, legend: PropTypes.array }),
-  years: PropTypes.array,
-  options: PropTypes.object,
-  selectedOptions: PropTypes.object,
-  onFilterChange: PropTypes.func.isRequired,
-  adaptationParams: PropTypes.object.isRequired,
-  adaptationCode: PropTypes.string.isRequired,
-  emissionParams: PropTypes.object,
-  activitySelectable: PropTypes.bool.isRequired,
-  activityOptions: PropTypes.array,
-  selectedActivity: PropTypes.object,
-  sources: PropTypes.array
+  // map: PropTypes.shape({ paths: PropTypes.array, legend: PropTypes.array }),
+  // years: PropTypes.array,
+  // options: PropTypes.object,
+  // selectedOptions: PropTypes.object,
+  // onFilterChange: PropTypes.func.isRequired,
+  // adaptationParams: PropTypes.object.isRequired,
+  // adaptationCode: PropTypes.string.isRequired,
+  // emissionParams: PropTypes.object,
+  // activitySelectable: PropTypes.bool.isRequired,
+  // activityOptions: PropTypes.array,
+  // selectedActivity: PropTypes.object,
+  // sources: PropTypes.array
 };
 
-SectoralActivity.defaultProps = {
+EmissionMap.defaultProps = {
   map: {},
   options: {},
   years: [],
@@ -209,4 +175,4 @@ SectoralActivity.defaultProps = {
   emissionParams: null
 };
 
-export default SectoralActivity;
+export default EmissionMap;

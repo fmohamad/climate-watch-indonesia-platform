@@ -6,11 +6,11 @@ export default [
     default: true
   },
   {
-    slug: 'emission-projection',
-    path: '/emission-projection'
+    slug: 'emission-map',
+    path: '/emissions-portal/emission-map',
   },
   {
-    slug: 'emission-map',
-    path: '/emission-map'
+    slug: 'emission-projection',
+    path: '/emission-projection'
   }
 ];
