@@ -102,6 +102,7 @@ class Inventory extends PureComponent {
 
   renderSwitch() {
     const { filterOptions, selectedOptions } = this.props;
+    console.log('filter', filterOptions)
     return selectedOptions.source && (
     <div className={styles.switch}>
       <div className="switch-container">
@@ -131,9 +132,10 @@ class Inventory extends PureComponent {
       t
     } = this.props;
 
-    console.log(this.props.selectedOptions)
+    console.log('params', emissionParams)
 
     const icons = { line: lineIcon, area: areaIcon };
+
     return (
       <div className={styles.page}>
         <SectionTitle
@@ -147,17 +149,12 @@ class Inventory extends PureComponent {
           <div className={styles.filters}>
             {this.renderDropdown('breakBy')}
             {this.renderDropdown('region', true)}
-            {this.renderDropdown('sector', false)}
-            {this.renderDropdown('category', false)}
-            {this.renderDropdown('subCategory', false)}
+            {this.renderDropdown('sector', true)}
+            {this.renderDropdown('category', true)}
+            {this.renderDropdown('subCategory', true)}
             {this.renderDropdown('gas', false)}
             {this.renderDropdown('chartType', false, icons)}
           </div>
-          <InfoDownloadToolbox
-            className={{ buttonWrapper: styles.buttonWrapper }}
-            slugs={metadataSources}
-            downloadUri={downloadURI}
-          />
         </div>
         <div className={styles.chartContainer}>
           {

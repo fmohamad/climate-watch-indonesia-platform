@@ -147,7 +147,7 @@ const getDefaults = createSelector([ getFilterOptions ], options => ({
   sector: findOption(options.sector, DEFAULTS.sector),
   category: get(options, 'category[0]'),
   subCategory: get(options, 'subCategory[0]'),
-  gas: findOption(options.gas, DEFAULTS.gas)
+  gas: get(options, 'gas[0]')
 }));
 
 const filterSectorSelectedByMetrics = createSelector(
