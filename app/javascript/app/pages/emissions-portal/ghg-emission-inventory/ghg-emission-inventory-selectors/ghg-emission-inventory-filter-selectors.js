@@ -17,7 +17,8 @@ import {
 import {
   getEmissionsData,
   getMetadataData,
-  getSelectedAPI
+  getSelectedAPI,
+  getMetadata
 } from './ghg-emission-inventory-get-selectors';
 
 const { COUNTRY_ISO } = process.env;
@@ -131,7 +132,7 @@ export const getFilterOptions = createStructuredSelector({
   source: () => SOURCE_OPTIONS,
   breakBy: getBreakByOptions,
   region: getFieldOptions('location'),
-  sector: withAllSelected(getFieldOptions('sector')),
+  sector: getFieldOptions('sector'),
   category: getFieldOptions('category'),
   subCategory: getFieldOptions('subCategory'),
   gas: getFieldOptions('gas'),
@@ -139,12 +140,12 @@ export const getFilterOptions = createStructuredSelector({
 });
 
 // DEFAULTS
-const getDefaults = createSelector([ getFilterOptions ], options => ({
+const getDefaults = createSelector([ getFilterOptions, getMetadataData], (options, metadata) => ({
   source: findOption(SOURCE_OPTIONS, DEFAULTS.source),
   chartType: findOption(CHART_TYPE_OPTIONS, DEFAULTS.chartType),
   breakBy: findOption(options.breakBy, DEFAULTS.breakBy),
   region: findOption(options.region, DEFAULTS.region),
-  sector: findOption(options.sector, DEFAULTS.sector),
+  sector: get(options, 'sector[0]'),
   category: get(options, 'category[0]'),
   subCategory: get(options, 'subCategory[0]'),
   gas: get(options, 'gas[0]')

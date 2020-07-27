@@ -39,7 +39,7 @@ import {
 const { COUNTRY_ISO } = process.env;
 const { CW_API_URL } = process.env;
 
-const FRONTEND_FILTERED_FIELDS = [ 'region', 'sector', 'category', 'subCategory', 'gas']
+const FRONTEND_FILTERED_FIELDS = ['region', 'category', 'subCategory', 'gas']
 
 const getUnit = createSelector([ getMetadataData, getMetricSelected ], (
   meta,
@@ -70,8 +70,8 @@ const outAllSelectedOption = o => o.value !== ALL_SELECTED;
 const getLegendDataOptions = createSelector(
   [ getModelSelected, getFilterOptions ],
   (modelSelected, options) => {
-    if (!options || !modelSelected || !options[modelSelected]) return null;
-    return options[modelSelected].filter(outAllSelectedOption);
+    if (!options || !options.gas) return null;
+    return options.gas.filter(outAllSelectedOption);
   }
 );
 
@@ -86,9 +86,9 @@ const getLegendDataSelected = createSelector(
     )
       return null;
 
-    const dataSelected = castArray(selectedOptions[modelSelected]);
+    const dataSelected = castArray(selectedOptions.gas);
     if (isOptionSelected(dataSelected, ALL_SELECTED)) {
-      return options[modelSelected].filter(outAllSelectedOption);
+      return options.gas.filter(outAllSelectedOption);
     }
     return dataSelected;
   }
@@ -102,7 +102,7 @@ const getYColumnOptions = createSelector(
       columns &&
         columns.map(d => ({
           label: d && d.label,
-          value: d && getYColumnValue(`${modelSelected}${d.value}`),
+          value: d && getYColumnValue(`${d.value}`),
           code: d && (d.code || d.label)
         }));
     return uniqBy(getYOption(legendDataSelected), 'value');
@@ -133,7 +133,7 @@ const calculateValue = (currentValue, value, scale, metricData) => {
 };
 
 const getDFilterValue = (d, modelSelected) =>
-  modelSelected === 'region' ? d.iso_code3 : d[modelSelected];
+  modelSelected === 'region' ? d.iso_code3 :  d[modelSelected];
 
 const isOptionSelected = (selectedOptions, valueOrCode) =>
   castArray(selectedOptions)
@@ -148,7 +148,6 @@ const filterBySelectedOptions = (
 ) =>
   {
     const fieldPassesFilter = (selectedFilterOption, options, fieldValue) =>
-      isOptionSelected(selectedFilterOption, ALL_SELECTED) &&
         isOptionSelected(options, fieldValue) ||
         isOptionSelected(selectedFilterOption, fieldValue);
     const absoluteMetric = METRIC.absolute;
@@ -244,8 +243,9 @@ const parseChartData = createSelector(
 
         filteredData.forEach(d => {
           const columnObject = yColumnOptions.find(
-            c => c.code === getDFilterValue(d, modelSelected)
+            c => c.code === getDFilterValue(d, 'gas')
           );
+          console.log(columnObject)
           const yKey = columnObject && columnObject.value;
 
           if (yKey) {

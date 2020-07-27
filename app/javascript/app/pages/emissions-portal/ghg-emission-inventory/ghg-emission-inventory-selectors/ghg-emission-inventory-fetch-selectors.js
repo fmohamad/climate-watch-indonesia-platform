@@ -31,3 +31,23 @@ export const getEmissionParams = createSelector(
     };
   }
 );
+
+export const getMetaParams = createSelector(
+  [ getSelectedOptions, getMetadataData ],
+  (options, metadata) => {
+    if (!options || !options.category || !options.sector || !metadata) {
+      return {
+        meta: "ghgindo",
+        inventory: true
+      }
+    }
+
+    const { sector, category } = options;
+    return {
+      meta: "ghgindo",
+      inventory: true,
+      ...getParam('sector', sector),
+      ...getParam('category', category),
+    };
+  }
+);

@@ -37,19 +37,35 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
   end
 
   def meta
-    render(
-      json: HistoricalEmissionsMetadata.new(
-        fetch_meta_data_sources,
-        fetch_meta_sectors,
-        ::HistoricalEmissions::Metric.all,
-        ::HistoricalEmissions::Gas.all,
-        ::HistoricalEmissions::Gwp.all,
-        ::HistoricalEmissions::Category.all,
-        ::HistoricalEmissions::SubCategory.all,
-        Location.all
-      ),
-      serializer: ::HistoricalEmissions::MetadataSerializer
-    )
+    if inventory?
+      render(
+        json: HistoricalEmissionsMetadata.new(
+          fetch_meta_data_sources,
+          fetch_meta_sectors,
+          ::HistoricalEmissions::Metric.all,
+          ::HistoricalEmissions::Gas.all,
+          ::HistoricalEmissions::Gwp.all,
+          fetch_meta_categories,
+          fetch_meta_sub_categories,
+          Location.all
+        ),
+        serializer: ::HistoricalEmissions::MetadataSerializer
+      )
+    else
+      render(
+        json: HistoricalEmissionsMetadata.new(
+          fetch_meta_data_sources,
+          fetch_meta_sectors,
+          ::HistoricalEmissions::Metric.all,
+          ::HistoricalEmissions::Gas.all,
+          ::HistoricalEmissions::Gwp.all,
+          ::HistoricalEmissions::Category.all,
+          ::HistoricalEmissions::SubCategory.all,
+          Location.all
+        ),
+        serializer: ::HistoricalEmissions::MetadataSerializer
+      )
+    end
   end
 
   def data_sources_hash
@@ -80,6 +96,22 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
     params[:location]&.split(',')
   end
 
+  def sectors
+    params[:sector]&.split(',') || HistoricalEmissions::Sector.take(1).pluck(:id)
+  end
+
+  def categories
+    params[:category]&.split(',') || HistoricalEmissions::Category.take(1).pluck(:id)
+  end
+
+  def sub_categories
+    params[:sub_category]&.split(',')
+  end
+
+  def inventory?
+    params[:inventory]
+  end
+
   def include_sub_locations
     return unless params[:location].present?
 
@@ -90,5 +122,13 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
       pluck('locations_location_members.iso_code3')
 
     params[:location] = (locations + sub_locations).join(',')
+  end
+
+  def fetch_meta_categories
+    ::HistoricalEmissions::Category.includes(:sector).where(sector: sectors)
+  end
+
+  def fetch_meta_sub_categories
+    ::HistoricalEmissions::SubCategory.includes(:category).where(category: categories)
   end
 end
