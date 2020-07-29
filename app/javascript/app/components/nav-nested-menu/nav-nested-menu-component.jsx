@@ -17,7 +17,6 @@ class NavNestedMenuComponent extends PureComponent {
     this.buttonLabel = React.createRef();
   }
 
-
   toggleOpen = () => this.setState(prevState => ({ open: !prevState.open }));
 
   renderButton() {
@@ -53,7 +52,10 @@ class NavNestedMenuComponent extends PureComponent {
           className={cx(rootStyles.link, navStyles.link, styles.button)}
           onClick={this.toggleOpen}
         >
-          {title && <div className={styles.title}>{t('pages.regions.title')}</div>}
+          {
+            title &&
+              <div className={styles.title}>{t('pages.regions.title')}</div>
+          }
           <Icon
             icon={arrow}
             theme={{ icon: cx(styles.icon, { [styles.upIcon]: open }) }}
@@ -80,8 +82,8 @@ class NavNestedMenuComponent extends PureComponent {
     };
 
     return open && (
-        <ul key="options" className={cx(styles.links, { [styles.open]: open })}>
-          {options.map(
+    <ul key="options" className={cx(styles.links, { [styles.open]: open })}>
+      {options.map(
             option /* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */ => (
               <li
                 key={option.label}
@@ -93,7 +95,7 @@ class NavNestedMenuComponent extends PureComponent {
               </li>
             )
           )}
-        </ul>
+    </ul>
       );
   }
 
@@ -139,7 +141,8 @@ NavNestedMenuComponent.defaultProps = {
   buttonClassName: '',
   positionRight: true,
   Child: null,
-  t: () => {}
+  t: () => {
+  }
 };
 
 export default NavNestedMenuComponent;

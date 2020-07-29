@@ -131,7 +131,7 @@ class Inventory extends PureComponent {
       t
     } = this.props;
 
-    console.log(this.props.selectedOptions)
+    console.log(this.props.selectedOptions);
 
     const icons = { line: lineIcon, area: areaIcon };
     return (

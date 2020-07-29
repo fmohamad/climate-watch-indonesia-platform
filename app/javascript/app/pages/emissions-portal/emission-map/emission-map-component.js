@@ -23,7 +23,7 @@ class EmissionMap extends Component {
     this.state = { disablePlay: false };
   }
 
-  /*handleFilterChange = (filter, selected) => {
+  /* handleFilterChange = (filter, selected) => {
     const { onFilterChange } = this.props;
     const isIndicatorFilter = filter === 'indicator';
     const clear = isIndicatorFilter;
@@ -111,8 +111,7 @@ class EmissionMap extends Component {
         />
       </div>
     );
-  };*/
-
+  }; */
   render() {
     const {
       // map,
@@ -126,7 +125,6 @@ class EmissionMap extends Component {
     console.log('emissionParams', emissionParams);
 
     // const yearsSelectable = selectedOptions.indicator && selectedOptions.indicator.value !== adaptationCode;
-
     return (
       <div>
         <div className={styles.page}>
@@ -136,12 +134,12 @@ class EmissionMap extends Component {
           <div className={styles.filtersGroup}>
             <InfoDownloadToolbox
               className={{ buttonWrapper: styles.buttonWrapper }}
-              // slugs={sources}
+              /* slugs={sources} */
               downloadUri="emission_activities.zip"
             />
           </div>
           <MetadataProvider meta="ghgindo" />
-          {emissionParams && <GHGEmissionsProvider params={'emissionParams'} />}
+          {emissionParams && <GHGEmissionsProvider params="emissionParams" />}
         </div>
       </div>
     );
@@ -149,7 +147,6 @@ class EmissionMap extends Component {
 }
 
 EmissionMap.propTypes = {
-  t: PropTypes.func.isRequired,
   // map: PropTypes.shape({ paths: PropTypes.array, legend: PropTypes.array }),
   // years: PropTypes.array,
   // options: PropTypes.object,
@@ -162,6 +159,7 @@ EmissionMap.propTypes = {
   // activityOptions: PropTypes.array,
   // selectedActivity: PropTypes.object,
   // sources: PropTypes.array
+  t: PropTypes.func.isRequired
 };
 
 EmissionMap.defaultProps = {

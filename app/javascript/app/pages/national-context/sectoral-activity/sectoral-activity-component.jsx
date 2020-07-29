@@ -123,7 +123,7 @@ class SectoralActivity extends Component {
       sources,
       t
     } = this.props;
-    console.log('map', map)
+    console.log('map', map);
     console.log('emissionParams', emissionParams);
 
     const yearsSelectable = selectedOptions.indicator &&

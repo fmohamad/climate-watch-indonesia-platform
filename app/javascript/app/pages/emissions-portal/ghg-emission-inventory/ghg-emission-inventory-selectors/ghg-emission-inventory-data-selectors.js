@@ -39,7 +39,7 @@ import {
 const { COUNTRY_ISO } = process.env;
 const { CW_API_URL } = process.env;
 
-const FRONTEND_FILTERED_FIELDS = [ 'region', 'sector', 'category']
+const FRONTEND_FILTERED_FIELDS = [ 'region', 'sector', 'category' ];
 
 const getUnit = createSelector([ getMetadataData, getMetricSelected ], (
   meta,
@@ -222,7 +222,7 @@ const parseChartData = createSelector(
         filterOptions
       );
 
-      console.log(filteredData)
+      console.log(filteredData);
 
       const metricField = ({
         per_capita: 'population',
@@ -252,9 +252,9 @@ const parseChartData = createSelector(
 
           if (yKey) {
             const yData = d.emissions.find(e => e.year === x);
-            console.log('yData', yData)
+            console.log('yData', yData);
             if (yData && yData.value) {
-              yItems[yKey] = yData.value
+              yItems[yKey] = yData.value;
             }
           }
         });

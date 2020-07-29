@@ -12,10 +12,7 @@ class EmissionMapContainer extends PureComponent {
     const { updateFiltersSelected, query } = this.props;
 
     if (clear) {
-      updateFiltersSelected({
-        section: 'emission-map',
-        query: { ...filter }
-      });
+      updateFiltersSelected({ section: 'emission-map', query: { ...filter } });
     } else {
       updateFiltersSelected({
         section: 'emission-map',

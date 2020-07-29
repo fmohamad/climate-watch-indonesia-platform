@@ -93,16 +93,12 @@ const getSectors = createSelector([ getMetadataData ], meta => {
 //   );
 //   return provinceProperties ? provinceProperties.wri_standard_name : name;
 // };
-
 // const getAdaptationParams = () => ({ code: ADAPTATION_CODE });
-
 // const getAdaptationIndicator = createSelector([ getAdaptation ], adaptation => {
 //   if (!adaptation) return null;
-
 //   return adaptation.indicators &&
 //     adaptation.indicators.find(i => i.code === ADAPTATION_CODE);
 // });
-
 // const getYears = createSelector(
 //   [ getEmissionActivities ],
 //   emissionActivities => {
@@ -113,13 +109,11 @@ const getSectors = createSelector([ getMetadataData ], meta => {
 //       emissionActivities[0].emissions.map(e => e.year);
 //   }
 // );
-
 // const getIndicatorsOptions = createSelector(
 //   [ getSectors, getAdaptationIndicator, getTranslate ],
 //   (sectors, adaptationIndicator, t) => {
 //     console.log('adaptationIndicator', adaptationIndicator);
 //     if (!sectors || !adaptationIndicator) return null;
-
 //     const apiIndicators = sectors.map(s => ({ label: s.name, value: s.code }));
 //     const adaptationIndicatorOption = {
 //       label: adaptationIndicator.name,
@@ -131,25 +125,19 @@ const getSectors = createSelector([ getMetadataData ], meta => {
 //       ),
 //       value: PRIMARY_SOURCE_OF_EMISSION_INDICATOR
 //     };
-
 //     apiIndicators.push(primarySourceIndicatorOption);
 //     apiIndicators.push(adaptationIndicatorOption);
-
 //     return sortBy(apiIndicators, 'label');
 //   }
 // );
-
 // const getYearsOptions = createSelector([ getYears ], years => {
 //   if (!years) return null;
-
 //   return years.map(y => ({ label: y.toString(), value: y.toString() }));
 // });
-
 // const getFilterOptions = createStructuredSelector({
 //   indicator: getIndicatorsOptions,
 //   year: getYearsOptions
 // });
-
 // const getDefaults = createSelector(getFilterOptions, options => ({
 //   indicator: options &&
 //     options.indicator &&
@@ -158,53 +146,43 @@ const getSectors = createSelector([ getMetadataData ], meta => {
 //     ),
 //   year: options && options.year && options.year[0]
 // }));
-
 // const getFieldSelected = field => state => {
 //   const { query } = state.location;
 //   if (!query || !query[field]) return getDefaults(state)[field];
 //   const queryValue = query[field];
 //   const options = getFilterOptions(state)[field];
-
 //   return options && options.find(o => o.value === queryValue);
 // };
-
 // const getSelectedOptions = createStructuredSelector({
 //   indicator: getFieldSelected('indicator'),
 //   year: getFieldSelected('year')
 // });
-
 // const getSelectedYear = createSelector(
 //   [ getSelectedOptions ],
 //   selectedOptions => selectedOptions ? selectedOptions.year : null
 // );
-
 // const getSelectedIndicator = createSelector(
 //   [ getSelectedOptions ],
 //   selectedOptions => selectedOptions ? selectedOptions.indicator : null
 // );
-
 // const getActivityOptions = createSelector(
 //   [ getEmissionActivities, getSelectedIndicator ],
 //   (emissionActivities, selectedIndicator) => {
 //     if (isEmpty(emissionActivities) || !selectedIndicator) return [];
-
 //     const sectorCode = selectedIndicator.value;
 //     const emissionsBySector = emissionActivities &&
 //       emissionActivities.filter(e => e.sector_code === sectorCode);
-
 //     const activities = emissionsBySector.length &&
 //       emissionsBySector.map(e => e.activity) ||
 //       [];
 //     const uniqueActivities = activities.length && [ ...new Set(activities) ] ||
 //       [];
-
 //     return uniqueActivities.map(activity => ({
 //       label: capitalize(toLower(startCase(activity))),
 //       value: activity
 //     }));
 //   }
 // );
-
 // const getSelectedActivity = createSelector([ getQuery, getActivityOptions ], (
 //   query,
 //   activityOptions
@@ -213,10 +191,8 @@ const getSectors = createSelector([ getMetadataData ], meta => {
 //     if (!activityOptions) return null;
 //     if (!query || !query.activity) return activityOptions[0];
 //     const queryValue = query.activity;
-
 //     return activityOptions && activityOptions.find(o => o.value === queryValue);
 //   });
-
 const getEmissionData = createSelector(
   [ getGHGEmissionData ],
   ghgEmissionData => {
@@ -248,11 +224,8 @@ const getEmissionData = createSelector(
 //       !ghgEmissionData || !emissionActivities || !selectedOptions || !adaptation
 //     )
 //       return null;
-
 //     const selectedIndicator = selectedOptions.indicator;
-
 //     let filteredData = [];
-
 //     if (isPrimarySourceOfEmissionSelected(selectedIndicator)) {
 //       filteredData = ghgEmissionData;
 //     } else if (isAdaptationSelected(selectedIndicator)) {
@@ -265,48 +238,38 @@ const getEmissionData = createSelector(
 //           emissionData => emissionData.sector_code === selectedIndicator.value
 //         );
 //     }
-
 //     return { data: filteredData };
 //   }
 // );
-
 // const getParsedDataForAdaptation = createSelector(
 //   [ getAdaptation, getSelectedOptions ],
 //   (adaptationData, selectedOptions) => {
 //     if (!adaptationData || !selectedOptions) return null;
-
 //     const provincesData = adaptationData.values &&
 //       adaptationData.values.filter(o => o.indicator_code === ADAPTATION_CODE);
-
 //     const groupedByProvince = provincesData &&
 //       groupBy(provincesData, LOCATION_ISO_CODE);
-
 //     const map = {};
 //     if (groupedByProvince) {
 //       Object.keys(groupedByProvince).forEach(province => {
 //         map[province] = get(groupedByProvince[province], '[0].values[0].value');
 //       });
 //     }
-
 //     return map;
 //   }
 // );
-
 // const getPathsWithStylesForAdaptationSelector = createSelector(
 //   [ getParsedDataForAdaptation, getTranslate, getLocations ],
 //   (parsedDataForAdaptation, t, provincesDetails) => {
 //     if (!parsedDataForAdaptation) return null;
-
 //     const paths = [];
 //     let legend = [];
-
 //     indonesiaPaths.forEach(path => {
 //       const iso = path.properties && path.properties.code_hasc;
 //       const province = parsedDataForAdaptation[iso];
 //       if (province) {
 //         const value = parsedDataForAdaptation[iso];
 //         const color = YES_NO_COLORS[toLower(value)];
-
 //         // Fill the legend
 //         if (!legend.find(i => i.name === value)) {
 //           legend.push({ name: value, color });
@@ -333,34 +296,27 @@ const getEmissionData = createSelector(
 //         });
 //       }
 //     });
-
 //     legend = sortBy(legend, 'name');
 //     legend.push({
 //       name: t('pages.national-context.sectoral-activity.legend-no-data'),
 //       color: SECTION_COLORS[NO_DATA]
 //     });
-
 //     return { paths, legend };
 //   }
 // );
-
 // const getIsActivitySelectable = createSelector(
 //   [ getSelectedIndicator ],
 //   selectedIndicator => {
 //     if (!selectedIndicator) return false;
-
 //     return isActivitySelectable(selectedIndicator);
 //   }
 // );
-
 // const getGroupedData = createSelector(
 //   [ getProvincesData, getSelectedOptions, getSectors ],
 //   (provincesData, selectedOptions, sectors) => {
 //     if (!provincesData || !selectedOptions || !sectors) return null;
-
 //     const groupedByProvince = provincesData &&
 //       groupBy(provincesData.data, LOCATION_ISO_CODE);
-
 //     const provinceKeys = Object
 //       .keys(groupedByProvince)
 //       .filter(province => !ISOS_NOT_ALLOWED.includes(province));
@@ -370,11 +326,9 @@ const getEmissionData = createSelector(
 //         provinces[key] = groupBy(groupedByProvince[key], 'sector_code');
 //       });
 //     }
-
 //     return provinces;
 //   }
 // );
-
 // const getParsedDataForActivities = (
 //   groupedData,
 //   selectedYear,
@@ -385,15 +339,12 @@ const getEmissionData = createSelector(
 //     const chosenSector = selectedIndicator.value;
 //     const bySelectedYear = e => e.year === parseInt(selectedYear.value, 10);
 //     const provinces = Object.keys(groupedData);
-
 //     const emissions = {};
-
 //     provinces.forEach(province => {
 //       const emissionsByActivities = groupBy(
 //         groupedData[province][chosenSector],
 //         'activity'
 //       );
-
 //       const emissionsBySelectedActivity = selectedActivity &&
 //         get(emissionsByActivities[selectedActivity.value], '[0].emissions');
 //       const emissionsByYear = emissionsBySelectedActivity &&
@@ -402,12 +353,10 @@ const getEmissionData = createSelector(
 //     });
 //     return emissions;
 //   };
-
 // const getParsedDataForSectors = (groupedData, selectedYear) => {
 //   const bySelectedYear = e => e.year === parseInt(selectedYear.value, 10);
 //   const provinces = Object.keys(groupedData);
 //   const emissions = {};
-
 //   // total emissions for province and sector
 //   provinces.forEach(province => {
 //     const sectors = Object.keys(groupedData[province]);
@@ -415,16 +364,13 @@ const getEmissionData = createSelector(
 //       .reduce((acc, o) => acc.concat(o.emissions), [])
 //       .filter(bySelectedYear)
 //       .reduce((sum, emission) => sum + emission.value, 0);
-
 //     emissions[province] = sectors.reduce(
 //       (acc, sector) => ({ ...acc, [sector]: totalEmissionForSector(sector) }),
 //       {}
 //     );
 //   });
-
 //   return emissions;
 // };
-
 // const getEmissions = createSelector(
 //   [
 //     getGroupedData,
@@ -435,7 +381,6 @@ const getEmissionData = createSelector(
 //   (groupedData, selectedYear, selectedIndicator, selectedActivity) => {
 //     if (!groupedData || !selectedYear || !selectedIndicator) return null;
 //     if (isAdaptationSelected(selectedIndicator)) return {};
-
 //     if (isActivitySelectable(selectedIndicator)) {
 //       return getParsedDataForActivities(
 //         groupedData,
@@ -444,11 +389,9 @@ const getEmissionData = createSelector(
 //         selectedActivity
 //       );
 //     }
-
 //     return getParsedDataForSectors(groupedData, selectedYear);
 //   }
 // );
-
 // const getPathsForActivitiesStyles = createSelector(
 //   [
 //     getEmissions,
@@ -459,14 +402,11 @@ const getEmissionData = createSelector(
 //   ],
 //   (emissions, activity, t, selectedYear, provincesDetails) => {
 //     if (!emissions || !selectedYear) return null;
-
 //     const paths = [];
 //     let legend = [];
-
 //     indonesiaPaths.forEach(path => {
 //       const iso = path.properties && path.properties.code_hasc;
 //       const value = emissions[iso];
-
 //       if (value) {
 //         const activityName = get(activity, 'label');
 //         const { properties } = path;
@@ -481,12 +421,10 @@ const getEmissionData = createSelector(
 //             name: getLocalizedProvinceName(properties, provincesDetails)
 //           }
 //         };
-
 //         const thresholds = [ 10, 100, 500, 1000 ];
 //         const bucketColorScale = createBucketColorScale(thresholds);
 //         legend = composeBuckets(bucketColorScale.domain());
 //         const color = bucketColorScale(value);
-
 //         paths.push({ ...enhancedPaths, style: getMapStyles(color) });
 //       } else {
 //         const { properties } = path;
@@ -500,16 +438,13 @@ const getEmissionData = createSelector(
 //         });
 //       }
 //     });
-
 //     legend.push({
 //       name: t('pages.national-context.sectoral-activity.legend-no-data'),
 //       color: SECTION_COLORS[NO_DATA]
 //     });
-
 //     return { paths, legend };
 //   }
 // );
-
 // const getPathsWithStylesSelector = createSelector(
 //   [
 //     getEmissions,
@@ -522,26 +457,21 @@ const getEmissionData = createSelector(
 //   (emissions, selectedIndicator, selectedYear, sectors, t, provincesDetails) =>
 //     {
 //       if (!emissions || !selectedIndicator || !selectedYear) return null;
-
 //       const getSectorName = sectorCode => {
 //         const sec = sectors.find(s => s.code === sectorCode);
 //         return get(sec, 'name', sectorCode);
 //       };
-
 //       const paths = [];
 //       const legend = [];
-
 //       indonesiaPaths.forEach(path => {
 //         const iso = path.properties && path.properties.code_hasc;
 //         const emissionsPerSector = emissions[iso] || {};
-
 //         const provinceSectors = Object.keys(emissionsPerSector);
 //         const highestEmissionsSector = provinceSectors.length &&
 //           provinceSectors.reduce(
 //             (a, b) => emissionsPerSector[a] > emissionsPerSector[b] ? a : b
 //           );
 //         const highestEmissionsValue = emissionsPerSector[highestEmissionsSector];
-
 //         if (highestEmissionsValue) {
 //           const sectorName = capitalize(
 //             toLower(startCase(getSectorName(highestEmissionsSector)))
@@ -558,13 +488,10 @@ const getEmissionData = createSelector(
 //               name: getLocalizedProvinceName(properties, provincesDetails)
 //             }
 //           };
-
 //           const color = SECTION_COLORS[highestEmissionsSector];
-
 //           if (!legend.find(i => i.name === sectorName)) {
 //             legend.push({ name: sectorName, color });
 //           }
-
 //           paths.push({ ...enhancedPaths, style: getMapStyles(color) });
 //         } else {
 //           const { properties } = path;
@@ -578,16 +505,13 @@ const getEmissionData = createSelector(
 //           });
 //         }
 //       });
-
 //       legend.push({
 //         name: t('pages.national-context.sectoral-activity.legend-no-data'),
 //         color: SECTION_COLORS[NO_DATA]
 //       });
-
 //       return { paths, legend };
 //     }
 // );
-
 // const getPaths = createSelector(
 //   [
 //     getSelectedIndicator,
@@ -604,15 +528,12 @@ const getEmissionData = createSelector(
 //     {
 //       if (!selectedIndicator || !pathsForAdaptation || !pathsForEmissions)
 //         return { paths: [], legend: [] };
-
 //       if (isPrimarySourceOfEmissionSelected(selectedIndicator))
 //         return pathsForEmissions;
 //       if (isAdaptationSelected(selectedIndicator)) return pathsForAdaptation;
-
 //       return pathsForActivites;
 //     }
 // );
-
 // const getSources = createSelector([ getAdaptation, getEmissionActivities ], (
 //   adaptation,
 //   emissions
@@ -620,9 +541,7 @@ const getEmissionData = createSelector(
 //   {
 //     if (!adaptation || !adaptation.values || !emissions || !emissions.length)
 //       return [];
-
 //     const sources = uniq(emissions.map(e => e.source));
-
 //     return sources.concat(
 //       uniq(
 //         adaptation.values
@@ -631,7 +550,6 @@ const getEmissionData = createSelector(
 //       )
 //     );
 //   });
-
 export const getEmissionParams = createSelector(
   [ getEmissionDataSource ],
   source => {
@@ -652,8 +570,8 @@ export const getEmissionMap = createStructuredSelector({
   // map: getPaths,
   // adaptationParams: getAdaptationParams,
   emissionParams: getEmissionParams,
-  sectors: getSectors,
   // sources: getSources,
   // activitySelectable: getIsActivitySelectable,
   // adaptationCode: () => ADAPTATION_CODE
+  sectors: getSectors
 });

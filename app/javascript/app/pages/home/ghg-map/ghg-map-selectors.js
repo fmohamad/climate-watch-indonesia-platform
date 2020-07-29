@@ -31,8 +31,8 @@ const countryStyles = {
     stroke: '#ffffff',
     strokeWidth: 0.1,
     outline: 'none'
-  },
-  /*hover: {
+  }
+  /* hover: {
     fill: '#ffd771',
     stroke: '#ffffff',
     strokeWidth: 0.1,
@@ -43,12 +43,12 @@ const countryStyles = {
     stroke: '#ffffff',
     strokeWidth: 0.2,
     outline: 'none'
-  }*/
+  } */
 };
 
 const getSelectedYear = (state, { selectedYear }) => selectedYear;
 
-const getHoverRegion = (state, props) => props.hoverRegion
+const getHoverRegion = (state, props) => props.hoverRegion;
 
 const getMapStyles = color => ({
   default: {
@@ -101,7 +101,7 @@ const createBucketColorScale = emissions => {
     .range(MAP_BUCKET_COLORS);
 };
 
-/*export const getMap = createSelector(
+/* export const getMap = createSelector(
   [
     getEmissionsData,
     getUnit,
@@ -184,28 +184,23 @@ const createBucketColorScale = emissions => {
 
       return { paths, buckets, unit: correctedUnit, mapCenter, mapLegendTitle };
     }
-);*/
-
+); */
 export const getMap = createSelector(
   [ getProvince, getTranslate, getLocations, getHoverRegion ],
   (provinceISO, t, provincesDetails, hoverRegion) => {
-    const region = hoverRegion
+    const region = hoverRegion;
     const paths = [];
     const byProvinceISO = path =>
       (path.properties && path.properties.code_hasc) === provinceISO;
     const provincePath = indonesiaPaths.find(byProvinceISO);
     const mapCenter = DEFAULT_MAP_CENTER;
 
-
     indonesiaPaths.forEach(path => {
       const iso = path.properties && path.properties.code_hasc;
 
-      const isHover = iso === region
+      const isHover = iso === region;
       if (isHover) {
-        return paths.push({
-          ...path,
-          style: hoverRegionStyles
-        });
+        return paths.push({ ...path, style: hoverRegionStyles });
       }
 
       const { geometry, properties, type } = path;
