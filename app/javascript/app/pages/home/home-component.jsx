@@ -6,6 +6,8 @@ import Province from 'components/province';
 import CwDisclaimer from 'components/cw-disclaimer';
 import HighlightedStories from 'components/stories';
 import SectionsSlideshow from './sections-slideshow';
+import GHGMap from './ghg-map'
+import { TabletLandscape } from 'components/responsive'
 
 import styles from './home-styles.scss';
 
@@ -38,6 +40,9 @@ class Home extends PureComponent {
           </div>
         </Section>
         <SectionsSlideshow />
+        <TabletLandscape>
+          <GHGMap selectedYear={null} query={null} />
+        </TabletLandscape>
         <Province
           title={t('pages.homepage.province.title')}
           description={t('pages.homepage.province.description')}

@@ -43,6 +43,15 @@ const PBStyles = {
   ...countryStyles,
   default: {
     ...countryStyles.default,
+    fill: '#009900',
+    fillOpacity: 1
+  }
+};
+
+const activeStyles = {
+  ...countryStyles,
+  default: {
+    ...countryStyles.default,
     fill: '#ffc735',
     fillOpacity: 1
   }
@@ -124,10 +133,18 @@ export const getMap = createSelector(
     indonesiaPaths.forEach(path => {
       const iso = path.properties && path.properties.code_hasc;
       const isEqual = iso === 'ID.PB'
+      const isActive = iso === provinceISO
       if (isEqual) {
         return paths.push({
           ...path,
           style: PBStyles
+        });
+      }
+
+      if (isActive) {
+        return paths.push({
+          ...path,
+          style: activeStyles
         });
       }
 

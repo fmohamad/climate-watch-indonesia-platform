@@ -12,6 +12,8 @@ import nationalSmImage from 'assets/carousel_national_context@1x';
 import nationalBgImage from 'assets/carousel_national_context@2x';
 import anualSmImage from 'assets/carousel_annual_emissions@1x';
 import anualBgImage from 'assets/carousel_annual_emissions@2x';
+import emissionPortalSmImage from 'assets/carousel_emission_portal@1x';
+import emissionPortalBgImage from 'assets/carousel_emission_portal@2x';
 
 import styles from './sections-slideshow-styles.scss';
 
@@ -76,6 +78,7 @@ class SectionsSlideshowComponent extends Component {
     const slideOne = t('pages.homepage.slide-one') || {};
     const slideTwo = t('pages.homepage.slide-two') || {};
     const slideThree = t('pages.homepage.slide-three') || {};
+    const slideFour = t('pages.homepage.slide-four') || {};
     const regionsPayload = {
       locale,
       region: 'ID.AC',
@@ -111,6 +114,16 @@ class SectionsSlideshowComponent extends Component {
         smImage: anualSmImage,
         bgImage: anualBgImage,
         altText: 'GHG chart',
+        routerAction: { type: REGIONS, payload: regionsPayload }
+      },
+      {
+        pagingTitle: slideFour.paging,
+        title: slideFour.title,
+        text: slideFour.description,
+        buttonText: slideFour.button,
+        smImage: emissionPortalSmImage,
+        bgImage: emissionPortalBgImage,
+        altText: 'Emission Portal',
         routerAction: { type: REGIONS, payload: regionsPayload }
       }
     ];

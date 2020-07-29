@@ -84,13 +84,7 @@ class ImportIndicators
 
   def import_indicator_values(csv, filename)
     import_each_with_logging(csv, filename) do |row|
-      categorization = IndicatorCategorization.find_or_create_by!(name: row[:categorization]) if row[:categorization]
-      category = IndicatorCategory.where(categorization: categorization).first_or_initialize
-      indicator_category.update_attributes!(
-        name: row[:category],
-        categorization: categorization
-      )
-      # category = IndicatorCategory.find_or_create_by!(name: row[:category]) if row[:category]
+      category = IndicatorCategory.find_or_create_by!(name: row[:category]) if row[:category]
       location = Location.find_by(iso_code3: row[:geoid])
       indicator = Indicator.find_by(code: row[:ind_code])
       source = row[:source]

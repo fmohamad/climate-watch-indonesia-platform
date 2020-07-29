@@ -17,6 +17,7 @@ class NavNestedMenuComponent extends PureComponent {
     this.buttonLabel = React.createRef();
   }
 
+
   toggleOpen = () => this.setState(prevState => ({ open: !prevState.open }));
 
   renderButton() {
@@ -42,7 +43,6 @@ class NavNestedMenuComponent extends PureComponent {
   renderChild() {
     const { Child, title, t } = this.props;
     const { open } = this.state;
-    console.log('button', title)
 
     return (
       <React.Fragment>
@@ -127,7 +127,8 @@ NavNestedMenuComponent.propTypes = {
   options: PropTypes.array,
   buttonClassName: PropTypes.string,
   positionRight: PropTypes.bool,
-  Child: PropTypes.oneOfType([ PropTypes.element, PropTypes.func ])
+  Child: PropTypes.oneOfType([ PropTypes.element, PropTypes.func ]),
+  t: PropTypes.func
 };
 
 NavNestedMenuComponent.defaultProps = {
@@ -137,7 +138,8 @@ NavNestedMenuComponent.defaultProps = {
   options: [],
   buttonClassName: '',
   positionRight: true,
-  Child: null
+  Child: null,
+  t: () => {}
 };
 
 export default NavNestedMenuComponent;

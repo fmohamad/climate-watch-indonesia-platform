@@ -1,0 +1,30 @@
+import { createStructuredSelector } from 'reselect';
+import { getTranslate } from 'selectors/translation-selectors';
+import { getQuery } from 'selectors/filters-selectors';
+import {
+  getSelectedOptions,
+  getFilterOptions,
+  getModelSelected,
+  getMetricSelected
+} from './ghg-emission-inventory-filter-selectors';
+import { getEmissionParams } from './ghg-emission-inventory-fetch-selectors';
+import {
+  getChartData,
+  getMetadataSources,
+  getDownloadURI
+} from './ghg-emission-inventory-data-selectors';
+import { getSelectedAPI } from './ghg-emission-inventory-get-selectors';
+
+export const getGHGEmissions = createStructuredSelector({
+  selectedOptions: getSelectedOptions,
+  fieldToBreakBy: getModelSelected,
+  metricSelected: getMetricSelected,
+  apiSelected: getSelectedAPI,
+  metadataSources: getMetadataSources,
+  downloadURI: getDownloadURI,
+  filterOptions: getFilterOptions,
+  query: getQuery,
+  emissionParams: getEmissionParams,
+  chartData: getChartData,
+  t: getTranslate
+});

@@ -6,20 +6,10 @@ module Api
       attribute :location
       attribute :location_iso_code3
       attribute :location_id
-      attribute :categorization
-      attribute :categorization_id
       attribute :category
       attribute :category_id
       attribute :values
       attribute :source
-
-      def categorization
-        object.category&.categorization&.name
-      end
-
-      def categorization_id
-        object.category&.categorization&.id
-      end
 
       def category
         object.category&.name
