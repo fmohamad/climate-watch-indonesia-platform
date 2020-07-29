@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import MetadataProvider from 'providers/metadata-provider';
+import MetadataProvider from 'providers/ghg-inventory-metadata-provider';
 import GHGEmissionsProvider from 'providers/ghg-emissions-provider';
 import GHGTargetEmissionsProvider from 'providers/ghg-target-emissions-provider';
 import WorldBankProvider from 'providers/world-bank-provider';
@@ -21,6 +21,18 @@ import areaIcon from 'assets/icons/area_chart.svg';
 import styles from './ghg-emission-inventory-styles.scss';
 
 class Inventory extends PureComponent {
+
+  handleLegendChange = (selected) => {
+    const { selectedModel } = this.props
+    const KABUPATEN = 'kabupaten'
+
+    if (selectedModel === KABUPATEN) {
+      this.handleFilterChange('district', selected)
+    } else {
+      this.handleFilterChange('sector', selected)
+    }
+  }
+
   handleFilterChange = (field, selected) => {
     const { onFilterChange, selectedOptions } = this.props;
 
@@ -125,15 +137,15 @@ class Inventory extends PureComponent {
       downloadURI,
       metadataSources,
       emissionParams,
+      metaParams,
       selectedOptions,
       chartData,
       fieldToBreakBy,
       t
     } = this.props;
 
-    console.log(this.props.selectedOptions);
-
     const icons = { line: lineIcon, area: areaIcon };
+
     return (
       <div className={styles.page}>
         <SectionTitle
@@ -146,18 +158,13 @@ class Inventory extends PureComponent {
         <div className={styles.filtersGroup}>
           <div className={styles.filters}>
             {this.renderDropdown('breakBy')}
-            {this.renderDropdown('region', true)}
+            {this.renderDropdown('region', false)}
             {this.renderDropdown('sector', false)}
             {this.renderDropdown('category', false)}
             {this.renderDropdown('subCategory', false)}
-            {this.renderDropdown('gas', false)}
+            {this.renderDropdown('gas', true)}
             {this.renderDropdown('chartType', false, icons)}
           </div>
-          <InfoDownloadToolbox
-            className={{ buttonWrapper: styles.buttonWrapper }}
-            slugs={metadataSources}
-            downloadUri={downloadURI}
-          />
         </div>
         <div className={styles.chartContainer}>
           {
@@ -182,15 +189,14 @@ class Inventory extends PureComponent {
                   height={500}
                   loading={chartData.loading}
                   onLegendChange={v =>
-                    this.handleFilterChange(fieldToBreakBy, v)}
+                    this.handleFilterChange('gas', v)}
                   getCustomYLabelFormat={value => format('.3s')(value)}
                   showUnit
                 />
               )
           }
         </div>
-        <MetadataProvider meta="ghgindo" />
-        <MetadataProvider meta="ghgcw" />
+        <MetadataProvider params={metaParams}  />
         <WorldBankProvider />
         {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
         {emissionParams && <GHGTargetEmissionsProvider />}

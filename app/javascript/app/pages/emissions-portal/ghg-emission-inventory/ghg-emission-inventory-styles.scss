@@ -59,7 +59,7 @@
 
 @media #{$tablet-landscape} {
   .filters {
-    @include columns($columns: (2, 2, 2, 2, 2, 2, 2, 2, 2));
+    @include columns($columns: (3));
   }
 
   .switch {

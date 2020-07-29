@@ -20,12 +20,34 @@ export const getEmissionParams = createSelector(
   [ getSelectedOptions, getMetadataData ],
   (options, metadata) => {
     if (!options || !options.source || !metadata) return null;
-    const { source: selectedSource, gas } = options;
+    const { source: selectedSource, gas, category, subCategory } = options;
     return {
       api: selectedSource.api,
       location: COUNTRY_ISO,
       ...getParam('gas', gas),
-      source: findOption(metadata.dataSource, selectedSource.value).value
+      source: findOption(metadata.dataSource, selectedSource.value).value,
+      ...getParam('category', category),
+      ...getParam('subCategory', subCategory)
+    };
+  }
+);
+
+export const getMetaParams = createSelector(
+  [ getSelectedOptions, getMetadataData ],
+  (options, metadata) => {
+    if (!options || !options.category || !options.sector || !metadata) {
+      return {
+        meta: "ghgindo",
+        inventory: true
+      }
+    }
+
+    const { sector, category } = options;
+    return {
+      meta: "ghgindo",
+      inventory: true,
+      ...getParam('sector', sector),
+      ...getParam('category', category),
     };
   }
 );

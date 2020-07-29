@@ -2,7 +2,7 @@ HistoricalEmissions::MetadataSerializer.class_eval do
   attribute :data_source
   attribute :metric
   attribute :category
-  attribute :sub_category
+  attribute :subCategory
 
   def data_source
     object.data_sources.map do |g|
@@ -30,7 +30,7 @@ HistoricalEmissions::MetadataSerializer.class_eval do
     end
   end
 
-  def sub_category
+  def subCategory
     object.sub_categories.map do |m|
       m.slice(:id, :name, :code, :category_id)
     end

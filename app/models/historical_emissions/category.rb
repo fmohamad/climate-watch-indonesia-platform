@@ -16,7 +16,7 @@ module HistoricalEmissions
     belongs_to :sector, class_name: 'HistoricalEmissions::Sector',
                         foreign_key: 'sector_id',
                         required: false
-    has_many :sub_cateories, class_name: 'HistoricalEmissions::SubCategory'
+    has_many :sub_categories, class_name: 'HistoricalEmissions::SubCategory'
 
     translates :name, i18n: :category
 

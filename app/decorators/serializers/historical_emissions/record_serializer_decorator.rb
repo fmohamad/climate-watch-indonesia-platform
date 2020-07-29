@@ -1,7 +1,7 @@
 HistoricalEmissions::RecordSerializer.class_eval do
   belongs_to :metric
   belongs_to :category
-  belongs_to :sub_category
+  attribute :subCategory
 
   def metric
     object.metric.code
@@ -11,7 +11,7 @@ HistoricalEmissions::RecordSerializer.class_eval do
     object.category.code
   end
 
-  def sub_category
+  def subCategory
     object.sub_category.code
   end
 

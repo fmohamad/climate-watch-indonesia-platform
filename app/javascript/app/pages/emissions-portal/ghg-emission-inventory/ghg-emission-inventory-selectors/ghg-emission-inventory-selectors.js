@@ -7,7 +7,7 @@ import {
   getModelSelected,
   getMetricSelected
 } from './ghg-emission-inventory-filter-selectors';
-import { getEmissionParams } from './ghg-emission-inventory-fetch-selectors';
+import { getEmissionParams, getMetaParams } from './ghg-emission-inventory-fetch-selectors';
 import {
   getChartData,
   getMetadataSources,
@@ -25,6 +25,7 @@ export const getGHGEmissions = createStructuredSelector({
   filterOptions: getFilterOptions,
   query: getQuery,
   emissionParams: getEmissionParams,
+  metaParams: getMetaParams,
   chartData: getChartData,
   t: getTranslate
 });
