@@ -39,7 +39,7 @@ import {
 const { COUNTRY_ISO } = process.env;
 const { CW_API_URL } = process.env;
 
-const FRONTEND_FILTERED_FIELDS = ['region', 'category', 'subCategory', 'gas']
+const FRONTEND_FILTERED_FIELDS = [ 'region', 'category', 'subCategory', 'gas' ];
 
 const getUnit = createSelector([ getMetadataData, getMetricSelected ], (
   meta,
@@ -133,7 +133,7 @@ const calculateValue = (currentValue, value, scale, metricData) => {
 };
 
 const getDFilterValue = (d, modelSelected) =>
-  modelSelected === 'region' ? d.iso_code3 :  d[modelSelected];
+  modelSelected === 'region' ? d.iso_code3 : d[modelSelected];
 
 const isOptionSelected = (selectedOptions, valueOrCode) =>
   castArray(selectedOptions)
@@ -148,7 +148,7 @@ const filterBySelectedOptions = (
 ) =>
   {
     const fieldPassesFilter = (selectedFilterOption, options, fieldValue) =>
-        isOptionSelected(options, fieldValue) ||
+      isOptionSelected(options, fieldValue) ||
         isOptionSelected(selectedFilterOption, fieldValue);
     const absoluteMetric = METRIC.absolute;
 
@@ -245,7 +245,7 @@ const parseChartData = createSelector(
           const columnObject = yColumnOptions.find(
             c => c.code === getDFilterValue(d, 'gas')
           );
-          console.log(columnObject)
+          console.log(columnObject);
           const yKey = columnObject && columnObject.value;
 
           if (yKey) {

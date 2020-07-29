@@ -7,7 +7,10 @@ import {
   getModelSelected,
   getMetricSelected
 } from './ghg-emission-inventory-filter-selectors';
-import { getEmissionParams, getMetaParams } from './ghg-emission-inventory-fetch-selectors';
+import {
+  getEmissionParams,
+  getMetaParams
+} from './ghg-emission-inventory-fetch-selectors';
 import {
   getChartData,
   getMetadataSources,

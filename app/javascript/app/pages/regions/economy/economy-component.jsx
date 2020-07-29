@@ -6,12 +6,19 @@ import kebabCase from 'lodash/kebabCase';
 import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
 
-import { Chart, Dropdown, Multiselect, Table, Button, Icon } from 'cw-components';
+import {
+  Chart,
+  Dropdown,
+  Multiselect,
+  Table,
+  Button,
+  Icon
+} from 'cw-components';
 
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import SectionTitle from 'components/section-title';
-import ProvinceMetaProvider from 'providers/province-meta-provider'
-import IndicatorProvider from 'providers/indicators-provider'
+import ProvinceMetaProvider from 'providers/province-meta-provider';
+import IndicatorProvider from 'providers/indicators-provider';
 import dropdownStyles from 'styles/dropdown.scss';
 import lineIcon from 'assets/icons/line_chart.svg';
 import areaIcon from 'assets/icons/area_chart.svg';
@@ -25,21 +32,19 @@ class Economies extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      isOpen: false
-    };
+    this.state = { isOpen: false };
   }
 
-  handleLegendChange = (selected) => {
-    const { selectedModel } = this.props
-    const KABUPATEN = 'kabupaten'
+  handleLegendChange = selected => {
+    const { selectedModel } = this.props;
+    const KABUPATEN = 'kabupaten';
 
     if (selectedModel === KABUPATEN) {
-      this.handleFilterChange('district', selected)
+      this.handleFilterChange('district', selected);
     } else {
-      this.handleFilterChange('sector', selected)
+      this.handleFilterChange('sector', selected);
     }
-  }
+  };
 
   handleFilterChange = (field, selected) => {
     const { onFilterChange, selectedOptions } = this.props;
@@ -66,18 +71,16 @@ class Economies extends PureComponent {
   };
 
   renderDropdown(field, multi, icons) {
-    const { selectedModel } = this.props
+    const { selectedModel } = this.props;
 
     const { selectedOptions, filterOptions, t } = this.props;
     const value = selectedOptions && selectedOptions[field];
     const options = filterOptions[field] || [];
     const iconsProp = icons ? { icons } : {};
-    const disabled = (field === 'sector' && selectedModel === 'kabupaten') ||
-      (field === 'district' && selectedModel === 'sektor')
+    const disabled = field === 'sector' && selectedModel === 'kabupaten' ||
+      field === 'district' && selectedModel === 'sektor';
 
-    const label = t(
-      `pages.regions.economy.labels.${kebabCase(field)}`
-    );
+    const label = t(`pages.regions.economy.labels.${kebabCase(field)}`);
     if (multi) {
       const values = castArray(value).filter(v => v);
       return (
@@ -107,7 +110,6 @@ class Economies extends PureComponent {
     );
   }
 
-
   renderChart() {
     const { chartData, selectedOptions } = this.props;
     if (!chartData || !chartData.data) return null;
@@ -117,8 +119,8 @@ class Economies extends PureComponent {
         theme={chartData.config.theme}
         type={
           selectedOptions &&
-          selectedOptions.chartType &&
-          selectedOptions.chartType.value
+            selectedOptions.chartType &&
+            selectedOptions.chartType.value
         }
         config={chartData.config}
         data={chartData.data}
@@ -128,22 +130,20 @@ class Economies extends PureComponent {
         loading={chartData.loading}
         getCustomYLabelFormat={chartData.config.yLabelFormat}
         customTooltip={<CustomTooltip />}
-        onLegendChange={v =>
-
-          this.handleLegendChange(v)}
+        onLegendChange={v => this.handleLegendChange(v)}
         showUnit
       />
     );
   }
 
   renderTable() {
-    const { tableData, tableConfig } = this.props
-    if (!tableData) return null
+    const { tableData, tableConfig } = this.props;
+    if (!tableData) return null;
 
     const setColumnWidth = column => {
-      if (tableConfig.narrowColumns.includes(column)) return 100
-      return 230
-    }
+      if (tableConfig.narrowColumns.includes(column)) return 100;
+      return 230;
+    };
 
     return (
       <Table
@@ -152,25 +152,25 @@ class Economies extends PureComponent {
         parseMarkdown
         firstColumnHeaders={tableConfig.firstColumnHeaders}
         narrowColumns={tableConfig.narrowColumns}
-        emptyValueLabel='Data belum tersedia'
+        emptyValueLabel="Data belum tersedia"
         defaultColumns={tableConfig.defaultColumns}
         horizontalScroll
         dinamicRowsHeight
         shouldOverflow
         setColumnWidth={setColumnWidth}
       />
-    )
+    );
   }
 
   render() {
     const { indicatorParams, metadataParams, t, sources } = this.props;
     const icons = { line: lineIcon, area: areaIcon };
-    const shareableLink = `${window.location.href}`
+    const shareableLink = `${window.location.href}`;
 
-    const { isOpen } = this.state
+    const { isOpen } = this.state;
 
-    const section = 'wp_economic'
-    const downloadURI = `indicators.zip?section=${section}`
+    const section = 'wp_economic';
+    const downloadURI = `indicators.zip?section=${section}`;
 
     return (
       <div className={styles.page}>
@@ -178,7 +178,6 @@ class Economies extends PureComponent {
           title={t('pages.regions.economy.title')}
           description={t('pages.regions.economy.description')}
         />
-
         <div>
           <div className={styles.chartMapContainer}>
             <div className={styles.filtersChartContainer}>
@@ -209,7 +208,11 @@ class Economies extends PureComponent {
             </div>
           </div>
         </div>
-        <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
+        <ModalShare
+          isOpen={isOpen}
+          closeModal={() => this.setState({ isOpen: false })}
+          sharePath={shareableLink}
+        />
         {metadataParams && <ProvinceMetaProvider metaParams={metadataParams} />}
         {indicatorParams && <IndicatorProvider params={indicatorParams} />}
       </div>
@@ -229,7 +232,7 @@ Economies.propTypes = {
   provinceISO: PropTypes.string.isRequired,
   onFilterChange: PropTypes.func.isRequired,
   selectedModel: PropTypes.string,
-  sources: PropTypes.array,
+  sources: PropTypes.array
 };
 
 Economies.defaultProps = {

@@ -134,7 +134,10 @@ export const getFilterOptions = createStructuredSelector({
 });
 
 // DEFAULTS
-const getDefaults = createSelector([ getFilterOptions, getMetadataData], (options, metadata) => ({
+const getDefaults = createSelector([ getFilterOptions, getMetadataData ], (
+  options,
+  metadata
+) => ({
   source: findOption(SOURCE_OPTIONS, DEFAULTS.source),
   chartType: findOption(CHART_TYPE_OPTIONS, DEFAULTS.chartType),
   breakBy: findOption(options.breakBy, DEFAULTS.breakBy),
