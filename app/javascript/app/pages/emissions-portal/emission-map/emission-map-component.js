@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SectionTitle from 'components/section-title';
 import kebabCase from 'lodash/kebabCase';
-import { Dropdown, PlayTimeline } from 'cw-components';
+import { Dropdown, PlayTimeline, Icon } from 'cw-components';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import Map from 'components/map';
 import DotLegend from 'components/dot-legend';
@@ -12,6 +12,16 @@ import GHGEmissionsProvider from 'providers/ghg-emissions-provider';
 import MetadataProvider from 'providers/metadata-provider';
 import dropdownStyles from 'styles/dropdown.scss';
 import MapTooltip from './map-tooltip';
+import agriculture_color from 'assets/icons/agriculture_color';
+import agriculture_white from 'assets/icons/agriculture_white';
+import energy_color from 'assets/icons/energy_color';
+import energy_white from 'assets/icons/energy_white';
+import forestry_color from 'assets/icons/forestry_color';
+import forestry_white from 'assets/icons/forestry_white';
+import industry_color from 'assets/icons/industry_color';
+import industry_white from 'assets/icons/industry_white';
+import waste_color from 'assets/icons/waste_color';
+import waste_white from 'assets/icons/waste_white';
 
 import styles from './emission-map-styles.scss';
 
@@ -20,7 +30,10 @@ const MAP_CENTER = [ 120, -4 ];
 class EmissionMap extends Component {
   constructor() {
     super();
-    this.state = { disablePlay: false };
+    this.state = { 
+      disablePlay: false,
+      active: false
+    };
   }
 
   /*handleFilterChange = (filter, selected) => {
@@ -113,17 +126,108 @@ class EmissionMap extends Component {
     );
   };*/
 
+  renderSectorSelector = () => {
+    const { active } = this.state
+
+    return(
+      <div className={styles.mapButtonWrapper} style={{zIndex: 2}}>
+        <div className={styles.mapButton} onClick={() => this.setState({active: !active})}>
+          <div className={styles.sectorWrapper}>
+            <p className={styles.buttonText}>
+              Forestry
+            </p>
+          </div>
+          <div className={styles.buttonIconWrapper}>
+            <p className={styles.buttonText}>
+              1
+            </p>
+            <Icon icon={forestry_color} style={{height: 35, width: 35}} />
+          </div>
+        </div>
+        <div className={styles.mapButton} onClick={() => console.log('asd')}>
+          <div className={styles.sectorWrapper}>
+            <p className={styles.buttonText}>
+              Energy
+            </p>
+          </div>
+          <div className={styles.buttonIconWrapper}>
+            <p className={styles.buttonText}>
+              2
+            </p>
+            <Icon icon={energy_color} style={{height: 35, width: 35}} />
+          </div>
+        </div>
+        <div className={styles.mapButton} onClick={() => console.log('asd')}>
+          <div className={styles.sectorWrapper}>
+            <p className={styles.buttonText}>
+              IPPU
+            </p>
+          </div>
+          <div className={styles.buttonIconWrapper}>
+            <p className={styles.buttonText}>
+              3
+            </p>
+            <Icon icon={industry_color} style={{height: 35, width: 35}} />
+          </div>
+        </div>
+        <div className={styles.mapButton} onClick={() => console.log('asd')}>
+          <div className={styles.sectorWrapper}>
+            <p className={styles.buttonText}>
+              Agriculture
+            </p>
+          </div>
+          <div className={styles.buttonIconWrapper}>
+            <p className={styles.buttonText}>
+              4
+            </p>
+            <Icon icon={agriculture_color} style={{height: 35, width: 35}} />
+          </div>
+        </div>
+        <div className={styles.mapButton} onClick={() => console.log('asd')}>
+          <div className={styles.sectorWrapper}>
+            <p className={styles.buttonText}>
+              Waste
+            </p>
+          </div>
+          <div className={styles.buttonIconWrapper}>
+            <p className={styles.buttonText}>
+              5
+            </p>
+            <Icon icon={waste_color} style={{height: 35, width: 35}} />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  renderSectorDescription = () => {
+    const { active } = this.state
+
+    return(
+      <div className={active ? styles.sectorDescriptionContainerActive : styles.sectorDescriptionContainer}>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '50px', padding: '0 10px', borderBottom: '3px solid #000000'}}>
+          <p>
+            1 Forestry
+          </p>
+          <p onClick={() => this.setState({active: !active})}>
+            x
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   render() {
     const {
-      // map,
-      // adaptationParams,
+      map,
+      adaptationParams,
       emissionParams,
       // selectedOptions,
       // adaptationCode,
       // sources,
       t
     } = this.props;
-    console.log('emissionParams', emissionParams);
+    console.log('map', map);
 
     // const yearsSelectable = selectedOptions.indicator && selectedOptions.indicator.value !== adaptationCode;
 
@@ -134,14 +238,38 @@ class EmissionMap extends Component {
             title={t('pages.emissions-portal.emission-map.title')}
           />
           <div className={styles.filtersGroup}>
-            <InfoDownloadToolbox
+            {/*<InfoDownloadToolbox
               className={{ buttonWrapper: styles.buttonWrapper }}
               // slugs={sources}
               downloadUri="emission_activities.zip"
-            />
+            />*/}
           </div>
           <MetadataProvider meta="ghgindo" />
-          {emissionParams && <GHGEmissionsProvider params={'emissionParams'} />}
+          {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
+          {adaptationParams && <AdaptationProvider params={adaptationParams} />}
+        </div>
+        <div className={styles.mapSection}>
+          {this.renderSectorDescription()}
+          {this.renderSectorSelector()}
+          <div className={styles.mapContainer}>
+            {
+              map && (
+              <React.Fragment>
+                <Map
+                  zoom={5}
+                  paths={map.paths}
+                  forceUpdate
+                  center={MAP_CENTER}
+                  className={styles.map}
+                  tooltip={MapTooltip}
+                />
+                <div className={styles.legend}>
+                  <DotLegend legend={map.legend} />
+                </div>
+              </React.Fragment>
+                )
+            }
+          </div>
         </div>
       </div>
     );

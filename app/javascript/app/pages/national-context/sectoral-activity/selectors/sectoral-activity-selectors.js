@@ -113,7 +113,6 @@ const getSectors = createSelector(
 const getYears = createSelector(
   [ getEmissionActivities ],
   emissionActivities => {
-    console.log('emissionActivities', emissionActivities);
     if (!emissionActivities) return null;
     return emissionActivities &&
       emissionActivities[0] &&
@@ -124,6 +123,7 @@ const getYears = createSelector(
 const getIndicatorsOptions = createSelector(
   [ getSectors, getAdaptationIndicator, getTranslate ],
   (sectors, adaptationIndicator, t) => {
+    console.log('sectors', sectors);
     console.log('adaptationIndicator', adaptationIndicator);
     if (!sectors || !adaptationIndicator) return null;
 
@@ -464,6 +464,7 @@ const getPathsForActivitiesStyles = createSelector(
     getLocations
   ],
   (emissions, activity, t, selectedYear, provincesDetails) => {
+    console.log('emissions', emissions);
     if (!emissions || !selectedYear) return null;
 
     const paths = [];

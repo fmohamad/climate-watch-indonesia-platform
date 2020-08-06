@@ -52,6 +52,24 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
     )
   end
 
+  def data_sources_hash
+    @data_sources_hash ||= ::HistoricalEmissions::Record.
+      select(
+        <<-SQL
+          data_source_id,
+          ARRAY_AGG(DISTINCT sector_id) AS sector_ids,
+          ARRAY_AGG(DISTINCT gas_id) AS gas_ids,
+          ARRAY_AGG(DISTINCT location_id) AS location_ids,
+          ARRAY_AGG(DISTINCT category_id) AS category_ids,
+          ARRAY_AGG(DISTINCT sub_category_id) AS sub_category_ids
+        SQL
+      ).
+      group('data_source_id').
+      as_json.
+      map {|h| [h['data_source_id'], h.symbolize_keys.except(:id)]}.
+      to_h
+  end
+
   private
 
   def sources

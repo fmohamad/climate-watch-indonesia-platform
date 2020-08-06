@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import groupBy from 'lodash/groupBy';
 import sortBy from 'lodash/sortBy';
 import take from 'lodash/take';
+import get from 'lodash/get';
 import { ALL_SELECTED, API, METRIC, SECTOR_TOTAL } from 'constants';
 
 import { getTranslate } from 'selectors/translation-selectors';
@@ -16,7 +17,6 @@ import {
 import {
   getEmissionsData,
   getMetadataData,
-  getTop10EmittersOptionLabel,
   getSelectedAPI
 } from './ghg-emission-inventory-get-selectors';
 
@@ -50,14 +50,14 @@ export const getNationalOption = createSelector(
     return {
       ...findOption(meta.location, COUNTRY_ISO, 'iso_code3'),
       code: COUNTRY_ISO,
-      label: t('pages.national-context.historical-emissions.region.national'),
+      label: t('pages.emissions-portal.ghg-emission-inventory.region.national'),
       override: true
     };
   }
 );
 
 const getBreakByOptions = createSelector([ getTranslate ], t => {
-  const options = t('pages.national-context.historical-emissions.break-by', {
+  const options = t('pages.emissions-portal.ghg-emission-inventory.break-by', {
     default: {}
   });
   return Object
@@ -69,12 +69,10 @@ const getFieldOptions = field =>
   createSelector(
     [
       getMetadataData,
-      getSelectedAPI,
-      getTop10EmittersOption,
       getNationalOption,
       getFieldQuery('breakBy')
     ],
-    (metadata, api, top10EmmmitersOption, nationalOption, queryBreakBy) => {
+    (metadata, nationalOption, queryBreakBy) => {
       if (!metadata || !metadata[field]) return null;
 
       const breakBySelected = queryBreakBy || DEFAULTS.breakBy;
@@ -99,9 +97,7 @@ const getFieldOptions = field =>
         case 'location': {
           options = options.filter(o => o.iso_code3 !== COUNTRY_ISO);
           options = [
-            nationalOption,
-            api === API.indo ? top10EmmmitersOption : null,
-            ...options
+            nationalOption
           ];
           break;
         }
@@ -111,65 +107,6 @@ const getFieldOptions = field =>
       return options.filter(o => o).map(transformToOption);
     }
   );
-
-const getTop10EmittersIsoCodes = emissionData => {
-  const groupedByISO = groupBy(emissionData, 'iso_code3');
-  const recentYear = Math.max(...emissionData[0].emissions.map(e => e.year));
-
-  const totalEmissionByProvince = Object
-    .keys(groupedByISO)
-    .filter(iso => iso !== COUNTRY_ISO)
-    .map(iso => {
-      const emissionObject = groupedByISO[iso].find(
-        p => p.metric === METRIC.absolute && p.sector === SECTOR_TOTAL
-      );
-
-      const totalEmissionValue = emissionObject && emissionObject.emissions
-          .filter(e => e.year === recentYear)
-          .map(e => e.value)[0] || 0;
-
-      return { iso, value: totalEmissionValue };
-    });
-
-  const sorted = sortBy(totalEmissionByProvince, 'value').reverse();
-
-  return take(sorted, 10).map(p => p.iso);
-};
-
-export const getTop10EmittersOption = createSelector(
-  [ getEmissionsData, getMetadataData, getTop10EmittersOptionLabel ],
-  (data, meta, top10Label) => {
-    if (!data || isEmpty(data) || !meta || !meta.location) return null;
-
-    const top10ISOs = getTop10EmittersIsoCodes(data);
-    if (top10ISOs.length !== 10) return null;
-
-    const getLocationValuesforISOs = isos =>
-      isos
-        .map(iso => (findOption(meta.location, iso, 'iso_code3') || {}).value)
-        .join();
-
-    return {
-      label: top10Label,
-      value: getLocationValuesforISOs(top10ISOs),
-      override: true
-    };
-  }
-);
-
-export const getTop10EmittersOptionExpanded = createSelector(
-  [ getMetadataData, getTop10EmittersOption ],
-  (meta, top10EmittersOption) => {
-    if (!top10EmittersOption) return null;
-
-    return top10EmittersOption.value.split(',').map(value => {
-      const location = meta.location.find(
-        l => String(l.value) === String(value)
-      );
-      return { label: location.label, value, code: location.iso_code3 };
-    });
-  }
-);
 
 // SELECTED
 const getFieldSelected = field =>
@@ -195,6 +132,8 @@ export const getFilterOptions = createStructuredSelector({
   breakBy: getBreakByOptions,
   region: getFieldOptions('location'),
   sector: withAllSelected(getFieldOptions('sector')),
+  category: getFieldOptions('category'),
+  subCategory: getFieldOptions('subCategory'),
   gas: getFieldOptions('gas'),
   chartType: () => CHART_TYPE_OPTIONS
 });
@@ -206,6 +145,8 @@ const getDefaults = createSelector([ getFilterOptions ], options => ({
   breakBy: findOption(options.breakBy, DEFAULTS.breakBy),
   region: findOption(options.region, DEFAULTS.region),
   sector: findOption(options.sector, DEFAULTS.sector),
+  category: get(options, 'category[0]'),
+  subCategory: get(options, 'subCategory[0]'),
   gas: findOption(options.gas, DEFAULTS.gas)
 }));
 
@@ -230,6 +171,8 @@ export const getSelectedOptions = createStructuredSelector({
   breakBy: getFieldSelected('breakBy'),
   region: getFieldSelected('region'),
   sector: filterSectorSelectedByMetrics,
+  category: getFieldSelected('category'),
+  subCategory: getFieldSelected('subCategory'),
   gas: getFieldSelected('gas')
 });
 

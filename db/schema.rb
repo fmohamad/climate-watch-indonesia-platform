@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_18_102944) do
+ActiveRecord::Schema.define(version: 2020_07_20_021841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -132,7 +132,9 @@ ActiveRecord::Schema.define(version: 2020_07_18_102944) do
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "sector_id"
     t.index ["name"], name: "index_historical_emissions_categories_on_name", unique: true
+    t.index ["sector_id"], name: "index_historical_emissions_categories_on_sector_id"
   end
 
   create_table "historical_emissions_data_sources", force: :cascade do |t|
@@ -157,6 +159,7 @@ ActiveRecord::Schema.define(version: 2020_07_18_102944) do
 
   create_table "historical_emissions_metrics", force: :cascade do |t|
     t.string "name", null: false
+    t.text "unit"
   end
 
   create_table "historical_emissions_records", force: :cascade do |t|
@@ -196,6 +199,8 @@ ActiveRecord::Schema.define(version: 2020_07_18_102944) do
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_historical_emissions_sub_categories_on_category_id"
     t.index ["name"], name: "index_historical_emissions_sub_categories_on_name", unique: true
   end
 
@@ -355,6 +360,7 @@ ActiveRecord::Schema.define(version: 2020_07_18_102944) do
   add_foreign_key "emission_target_values", "emission_target_labels", column: "label_id", on_delete: :cascade
   add_foreign_key "emission_target_values", "emission_target_sectors", column: "sector_id", on_delete: :cascade
   add_foreign_key "emission_target_values", "locations", on_delete: :cascade
+  add_foreign_key "historical_emissions_categories", "historical_emissions_sectors", column: "sector_id"
   add_foreign_key "historical_emissions_records", "historical_emissions_categories", column: "category_id", on_delete: :cascade
   add_foreign_key "historical_emissions_records", "historical_emissions_data_sources", column: "data_source_id", on_delete: :cascade
   add_foreign_key "historical_emissions_records", "historical_emissions_gases", column: "gas_id", on_delete: :cascade
@@ -365,6 +371,7 @@ ActiveRecord::Schema.define(version: 2020_07_18_102944) do
   add_foreign_key "historical_emissions_records", "locations", on_delete: :cascade
   add_foreign_key "historical_emissions_sectors", "historical_emissions_data_sources", column: "data_source_id", on_delete: :cascade
   add_foreign_key "historical_emissions_sectors", "historical_emissions_sectors", column: "parent_id", on_delete: :cascade
+  add_foreign_key "historical_emissions_sub_categories", "historical_emissions_categories", column: "category_id"
   add_foreign_key "indicator_values", "indicator_categories", column: "category_id", on_delete: :cascade
   add_foreign_key "indicator_values", "indicators", on_delete: :cascade
   add_foreign_key "indicator_values", "locations", on_delete: :cascade

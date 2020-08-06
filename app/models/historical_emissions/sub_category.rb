@@ -13,6 +13,10 @@ module HistoricalEmissions
   class SubCategory < ApplicationRecord
     include Translate
 
+    belongs_to :category, class_name: 'HistoricalEmissions::Category',
+                        foreign_key: 'category_id',
+                        required: false
+
     translates :name, i18n: :category
 
     validates_presence_of :name
