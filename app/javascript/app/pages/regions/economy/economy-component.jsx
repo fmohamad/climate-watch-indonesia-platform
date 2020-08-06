@@ -129,6 +129,7 @@ class Economies extends PureComponent {
         getCustomYLabelFormat={chartData.config.yLabelFormat}
         customTooltip={<CustomTooltip />}
         onLegendChange={v =>
+
           this.handleLegendChange(v)}
         showUnit
       />
