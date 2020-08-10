@@ -28,6 +28,11 @@ platforms:
         importer: ImportEmissionActivities
         datasets:
           - emission_activities
+      - name: emission_projections
+        menu: Indonesia Platform
+        importer: ImportEmissionProjections
+        datasets:
+          - emission_projections
       - name: commitment_timeline
         menu: Indonesia Platform
         importer: ImportCommitmentTimelineEntries
