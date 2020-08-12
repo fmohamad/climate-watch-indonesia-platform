@@ -57,12 +57,13 @@ class Inventory extends PureComponent {
     onFilterChange({ [field]: values });
   };
 
-  renderDropdown(field, multi, icons) {
+  renderDropdown(field, icons) {
     const {
       apiSelected,
       selectedOptions,
       filterOptions,
       metricSelected,
+      fieldToBreakBy,
       t
     } = this.props;
     const value = selectedOptions && selectedOptions[field];
@@ -74,6 +75,8 @@ class Inventory extends PureComponent {
     const label = t(
       `pages.emissions-portal.ghg-emission-inventory.labels.${kebabCase(field)}`
     );
+
+    const multi = fieldToBreakBy === field ? true : false
 
     if (multi) {
       const absoluteMetric = metricSelected === METRIC_OPTIONS.ABSOLUTE_VALUE;
@@ -158,12 +161,12 @@ class Inventory extends PureComponent {
         <div className={styles.filtersGroup}>
           <div className={styles.filters}>
             {this.renderDropdown('breakBy')}
-            {this.renderDropdown('region', false)}
-            {this.renderDropdown('sector', false)}
-            {this.renderDropdown('category', false)}
-            {this.renderDropdown('subCategory', false)}
-            {this.renderDropdown('gas', true)}
-            {this.renderDropdown('chartType', false, icons)}
+            {this.renderDropdown('region')}
+            {this.renderDropdown('sector')}
+            {this.renderDropdown('category')}
+            {this.renderDropdown('subCategory')}
+            {this.renderDropdown('gas')}
+            {this.renderDropdown('chartType', icons)}
           </div>
         </div>
         <div className={styles.chartContainer}>
