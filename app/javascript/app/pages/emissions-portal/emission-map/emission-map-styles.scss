@@ -3,6 +3,7 @@
 
 .mapSection {
   background-color: $link-water;
+  position: relative;
 }
 
 .page {
@@ -79,3 +80,125 @@
     align-self: flex-end;
   }
 }
+
+.mapButtonWrapper {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 25px;
+  top: 10%;
+  bottom: 0;
+  width: 100px;
+  height: 80%;
+  background-color: #ffffff;
+  -webkit-box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
+  -moz-box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
+  box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
+  margin: 0;
+}
+
+.mapButton {
+  display: flex;
+  padding: 15px 5px;
+  flex-direction: column;
+  flex: 1;
+  cursor: pointer;
+  border-top: 1px solid $link-water;
+  border-right: 2px solid $link-water;
+  border-bottom: 1px solid $link-water;
+  border-left: 2px solid $link-water;
+}
+
+.mapButtonActive {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #EDEDED;
+}
+
+.buttonText {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.sectorWrapper {
+  display: flex;
+  flex : 1;
+}
+
+.buttonIconWrapper {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.sectorDescriptionContainer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 20%;
+  height: 100%;
+  background-color: #ffffff;
+  -webkit-box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
+  -moz-box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
+  box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
+  margin: 0;
+  z-index: 10;
+  -webkit-animation: slide-back 0.5s forwards;
+  -webkit-animation-delay: 0s;
+  animation: slide-back 0.5s forwards;
+  animation-delay: 0s;
+}
+
+@-webkit-keyframes slide-back {
+  100% { left: -20%; }
+}
+
+@keyframes slide-back {
+  100% { left: -20%; }
+}
+
+.sectorDescriptionContainerActive {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: -20%;
+  top: 0;
+  bottom: 0;
+  width: 20%;
+  height: 100%;
+  background-color: #ffffff;
+  -webkit-box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
+  -moz-box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
+  box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
+  margin: 0;
+  z-index: 10;
+  -webkit-animation: slide 0.5s forwards;
+  -webkit-animation-delay: 0s;
+  animation: slide 0.5s forwards;
+  animation-delay: 0s;
+}
+
+@-webkit-keyframes slide {
+  100% { left: 0; }
+}
+
+@keyframes slide {
+  100% { left: 0; }
+}
+
+
+
+
+
+
+
+
+
