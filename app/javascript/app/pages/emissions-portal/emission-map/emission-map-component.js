@@ -30,10 +30,7 @@ const MAP_CENTER = [ 120, -4 ];
 class EmissionMap extends Component {
   constructor() {
     super();
-    this.state = { 
-      disablePlay: false,
-      active: false
-    };
+    this.state = { disablePlay: false, active: false };
   }
 
   handleFilterChange = (filter, selected) => {
@@ -68,7 +65,6 @@ class EmissionMap extends Component {
       500
     );
   };
-
   /*renderDropdown = field => {
     const {
       options,
@@ -122,36 +118,7 @@ class EmissionMap extends Component {
         />
       </div>
     );
-  };*/
-
-  renderSectorSelector = () => {
-    const { active } = this.state
-    const { sectors } = this.props
-
-    return(
-      <div className={styles.mapButtonWrapper} style={{zIndex: 2}}>
-        {sectors.map((sector, index) => {
-          return(
-            <div className={styles.mapButton} onClick={() => this.handleFilterChange('sector', sector.value)} key={index}>
-              <div className={styles.sectorWrapper}>
-                <p className={styles.buttonText}>
-                  {sector.label}
-                </p>
-              </div>
-              <div className={styles.buttonIconWrapper}>
-                <p className={styles.buttonText}>
-                  {index + 1}
-                </p>
-                {sector.id === 83 && <Icon icon={energy_color} style={{height: 35, width: 35}} />}
-                {sector.id === 84 && <Icon icon={industry_color} style={{height: 35, width: 35}} />}
-                {sector.id === 85 && <Icon icon={forestry_color} style={{height: 35, width: 35}} />}
-                {sector.id === 86 && <Icon icon={waste_color} style={{height: 35, width: 35}} />}
-                {sector.id === 87 && <Icon icon={agriculture_color} style={{height: 35, width: 35}} />}
-              </div>
-            </div>
-          )
-        })}
-        {/*<div className={styles.mapButton} onClick={() => console.log('asd')}>
+  };*/ /*<div className={styles.mapButton} onClick={() => console.log('asd')}>
           <div className={styles.sectorWrapper}>
             <p className={styles.buttonText}>
               Energy
@@ -202,28 +169,114 @@ class EmissionMap extends Component {
             </p>
             <Icon icon={waste_color} style={{height: 35, width: 35}} />
           </div>
-        </div>*/}
+        </div>*/
+
+  renderSectorSelector = () => {
+    const { active } = this.state;
+    const { sectors } = this.props;
+
+    return (
+      <div className={styles.mapButtonWrapper} style={{ zIndex: 2 }}>
+        {sectors.map((sector, index) => {
+          return (
+            <div
+              className={styles.mapButton}
+              onClick={() => this.handleFilterChange('sector', sector.value)}
+              key={index}
+            >
+              <div className={styles.sectorWrapper}>
+                <p className={styles.buttonText}>
+                  {sector.label}
+                </p>
+              </div>
+              <div className={styles.buttonIconWrapper}>
+                <p className={styles.buttonText}>
+                  {index + 1}
+                </p>
+                {
+                  sector.id === 83 &&
+                    (
+                      <Icon
+                        icon={energy_color}
+                        style={{ height: 35, width: 35 }}
+                      />
+                    )
+                }
+                {
+                  sector.id === 84 &&
+                    (
+                      <Icon
+                        icon={industry_color}
+                        style={{ height: 35, width: 35 }}
+                      />
+                    )
+                }
+                {
+                  sector.id === 85 &&
+                    (
+                      <Icon
+                        icon={forestry_color}
+                        style={{ height: 35, width: 35 }}
+                      />
+                    )
+                }
+                {
+                  sector.id === 86 &&
+                    (
+                      <Icon
+                        icon={waste_color}
+                        style={{ height: 35, width: 35 }}
+                      />
+                    )
+                }
+                {
+                  sector.id === 87 &&
+                    (
+                      <Icon
+                        icon={agriculture_color}
+                        style={{ height: 35, width: 35 }}
+                      />
+                    )
+                }
+              </div>
+            </div>
+          );
+        })}
+        {}
       </div>
-    )
-  }
-
+    );
+  };
   renderSectorDescription = () => {
-    const { active } = this.state
+    const { active } = this.state;
 
-    return(
-      <div className={active ? styles.sectorDescriptionContainerActive : styles.sectorDescriptionContainer}>
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '50px', padding: '0 10px', borderBottom: '3px solid #000000'}}>
+    return (
+      <div
+        className={
+          active
+            ? styles.sectorDescriptionContainerActive
+            : styles.sectorDescriptionContainer
+        }
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '50px',
+            padding: '0 10px',
+            borderBottom: '3px solid #000000'
+          }}
+        >
           <p>
             1 Forestry
           </p>
-          <p onClick={() => this.setState({active: !active})}>
+          <p onClick={() => this.setState({ active: !active })}>
             x
           </p>
         </div>
       </div>
-    )
-  }
-
+    );
+  };
   renderTimeline = () => {
     const { years, selectedOptions } = this.props;
     const { disablePlay } = this.state;
@@ -258,7 +311,6 @@ class EmissionMap extends Component {
     console.log('years', years);
 
     // const yearsSelectable = selectedOptions.indicator && selectedOptions.indicator.value !== adaptationCode;
-
     return (
       <div>
         <div className={styles.page}>
@@ -266,11 +318,7 @@ class EmissionMap extends Component {
             title={t('pages.emissions-portal.emission-map.title')}
           />
           <div className={styles.filtersGroup}>
-            {/*<InfoDownloadToolbox
-              className={{ buttonWrapper: styles.buttonWrapper }}
-              // slugs={sources}
-              downloadUri="emission_activities.zip"
-            />*/}
+            {}
           </div>
           <MetadataProvider meta="ghgindo" />
           {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
@@ -282,21 +330,21 @@ class EmissionMap extends Component {
           <div className={styles.mapContainer}>
             {
               map && (
-                <React.Fragment>
-                  <Map
-                    zoom={5}
-                    paths={map.paths}
-                    forceUpdate
-                    center={MAP_CENTER}
-                    className={styles.map}
-                    tooltip={MapTooltip}
-                  />
-                  <div className={styles.legend}>
-                    <DotLegend legend={map.legend} />
-                  </div>
-                  {this.renderTimeline()}
-                </React.Fragment>
-              )
+                  <React.Fragment>
+                    <Map
+                      zoom={5}
+                      paths={map.paths}
+                      forceUpdate
+                      center={MAP_CENTER}
+                      className={styles.map}
+                      tooltip={MapTooltip}
+                    />
+                    <div className={styles.legend}>
+                      <DotLegend legend={map.legend} />
+                    </div>
+                    {this.renderTimeline()}
+                  </React.Fragment>
+                )
             }
           </div>
         </div>
@@ -306,7 +354,6 @@ class EmissionMap extends Component {
 }
 
 EmissionMap.propTypes = {
-  t: PropTypes.func.isRequired,
   // map: PropTypes.shape({ paths: PropTypes.array, legend: PropTypes.array }),
   // years: PropTypes.array,
   // options: PropTypes.object,
@@ -319,6 +366,7 @@ EmissionMap.propTypes = {
   // activityOptions: PropTypes.array,
   // selectedActivity: PropTypes.object,
   // sources: PropTypes.array
+  t: PropTypes.func.isRequired
 };
 
 EmissionMap.defaultProps = {

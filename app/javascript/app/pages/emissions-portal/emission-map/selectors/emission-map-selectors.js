@@ -76,27 +76,25 @@ const composeBuckets = bucketValues => {
 };
 
 const getLocalizedProvinceName = ({ code_hasc, name }, provincesDetails) => {
-  const provinceProperties = !isEmpty(provincesDetails) && provincesDetails.find(
-    p => p.iso_code3 === code_hasc
-  );
+  const provinceProperties = !isEmpty(provincesDetails) &&
+    provincesDetails.find(p => p.iso_code3 === code_hasc);
   return provinceProperties ? provinceProperties.wri_standard_name : name;
 };
 
 const getFieldSelected = field => state => {
   const { query } = state.location;
   if (!query || !query[field]) {
-    if(field === 'sector') {
-      return 83
+    if (field === 'sector') {
+      return 83;
     }
 
-    if(field === 'year') {
-      return 2000
+    if (field === 'year') {
+      return 2000;
     }
   }
   const queryValue = query[field];
   return queryValue;
   // const options = getFilterOptions(state)[field];
-
   // return options && options.find(o => o.value === queryValue);
 };
 
@@ -112,73 +110,60 @@ const getSelectedYear = createSelector(
 
 const getSelectedSector = createSelector(
   [ getSelectedOptions ],
-  (selectedOptions) => {
-    return selectedOptions ? selectedOptions.sector : null
+  selectedOptions => {
+    return selectedOptions ? selectedOptions.sector : null;
   }
 );
 
-const getSectors = createSelector(
-  [ getMetadataData ],
-  (meta) => {
-    if (!meta || !meta.sector) return [];
-    return meta.sector;
-  }
-);
+const getSectors = createSelector([ getMetadataData ], meta => {
+  if (!meta || !meta.sector) return [];
+  return meta.sector;
+});
 
-const getYears = createSelector(
-  [ getGHGEmissionData ],
-  (emissionData) => {
-    if (!emissionData) return null;
-    return emissionData &&
-      emissionData[0] &&
-      emissionData[0].emissions.map(e => e.year);
-  }
-);
+const getYears = createSelector([ getGHGEmissionData ], emissionData => {
+  if (!emissionData) return null;
+  return emissionData &&
+    emissionData[0] &&
+    emissionData[0].emissions.map(e => e.year);
+});
 
-const getEmissionDataSource = createSelector(
-  [getMetadataData],
-  (meta) => {
-    if (!meta || !meta.dataSource) return null;
-    const selected = meta.dataSource.find(
-      source => source.label === SOURCE.SIGN_SMART
-    );
-    return selected && selected.value;
-  }
-);
+const getEmissionDataSource = createSelector([ getMetadataData ], meta => {
+  if (!meta || !meta.dataSource) return null;
+  const selected = meta.dataSource.find(
+    source => source.label === SOURCE.SIGN_SMART
+  );
+  return selected && selected.value;
+});
 
-const getEmissions = createSelector(
-  [getGHGEmissionData, getSelectedSector],
-  (emissionData, selectedSector) => {
+const getEmissions = createSelector([ getGHGEmissionData, getSelectedSector ], (
+  emissionData,
+  selectedSector
+) =>
+  {
     let sector;
-    switch(selectedSector) {
+    switch (selectedSector) {
       case 83:
-        sector = 'ENERGY'
+        sector = 'ENERGY';
         break;
       case 84:
-        sector = 'IPPU'
+        sector = 'IPPU';
         break;
       case 85:
-        sector = 'FORESTRY'
+        sector = 'FORESTRY';
         break;
       case 86:
-        sector = 'WASTE'
+        sector = 'WASTE';
         break;
       default:
-        sector = 'AGRICULTURE'
+        sector = 'AGRICULTURE';
     }
-    const filteredEmissionData = filter(emissionData, { 'sector': sector })
+    const filteredEmissionData = filter(emissionData, { sector: sector });
     if (!filteredEmissionData) return null;
-    return filteredEmissionData
-  }
-);
+    return filteredEmissionData;
+  });
 
 const getPathsForEmissionStyles = createSelector(
-  [
-    getEmissions,
-    getTranslate,
-    getLocations,
-    getSelectedYear
-  ],
+  [ getEmissions, getTranslate, getLocations, getSelectedYear ],
   (emissions, t, provincesDetails, selectedYear) => {
     console.log('selectedYear', selectedYear);
     if (!emissions) return null;
@@ -190,15 +175,15 @@ const getPathsForEmissionStyles = createSelector(
       const iso = path.properties && path.properties.code_hasc;
       let value = null;
       !isEmpty(emissions) && emissions.map(emission => {
-        if(emission.iso_code3 === iso){
-          if(emission.gas === 'CO2') {
-            value = emission.emissions[0].value
+          if (emission.iso_code3 === iso) {
+            if (emission.gas === 'CO2') {
+              value = emission.emissions[0].value;
+            }
           }
-        }
-      })
+        });
 
       if (value) {
-        const sectorName = !isEmpty(emissions) && emissions[0].sector
+        const sectorName = !isEmpty(emissions) && emissions[0].sector;
         const { properties } = path;
         const enhancedPaths = {
           ...path,
