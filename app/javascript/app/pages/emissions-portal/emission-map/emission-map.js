@@ -8,20 +8,14 @@ import { getEmissionMap } from './selectors/emission-map-selectors';
 const mapStateToProps = getEmissionMap;
 
 class EmissionMapContainer extends PureComponent {
-  onFilterChange = (filter, clear = false) => {
+  onFilterChange = filter => {
     const { updateFiltersSelected, query } = this.props;
 
-    if (clear) {
-      updateFiltersSelected({
-        section: 'emission-map',
-        query: { ...filter }
-      });
-    } else {
-      updateFiltersSelected({
-        section: 'emission-map',
-        query: { ...query, ...filter }
-      });
-    }
+    updateFiltersSelected({
+      section: 'emission-map',
+      query: { ...query, ...filter }
+    });
+    console.log('query', query);
   };
 
   render() {

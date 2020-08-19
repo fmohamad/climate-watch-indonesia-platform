@@ -1,4 +1,4 @@
 import { createAction } from 'redux-tools';
-import { NATIONAL_CONTEXT } from 'router';
+import { EMISSIONS_PORTAL } from 'router';
 
-export const updateFiltersSelected = createAction(NATIONAL_CONTEXT);
+export const updateFiltersSelected = createAction(EMISSIONS_PORTAL);

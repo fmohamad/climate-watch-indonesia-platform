@@ -10,6 +10,7 @@ import toLower from 'lodash/toLower';
 import startCase from 'lodash/startCase';
 import capitalize from 'lodash/capitalize';
 import isEmpty from 'lodash/isEmpty';
+import filter from 'lodash/filter';
 import { scaleThreshold } from 'd3-scale';
 
 import { getLocale, getTranslate } from 'selectors/translation-selectors';
@@ -81,6 +82,41 @@ const getLocalizedProvinceName = ({ code_hasc, name }, provincesDetails) => {
   return provinceProperties ? provinceProperties.wri_standard_name : name;
 };
 
+const getFieldSelected = field => state => {
+  const { query } = state.location;
+  if (!query || !query[field]) {
+    if(field === 'sector') {
+      return 83
+    }
+
+    if(field === 'year') {
+      return 2000
+    }
+  }
+  const queryValue = query[field];
+  return queryValue;
+  // const options = getFilterOptions(state)[field];
+
+  // return options && options.find(o => o.value === queryValue);
+};
+
+const getSelectedOptions = createStructuredSelector({
+  sector: getFieldSelected('sector'),
+  year: getFieldSelected('year')
+});
+
+const getSelectedYear = createSelector(
+  [ getSelectedOptions ],
+  selectedOptions => selectedOptions ? selectedOptions.year : null
+);
+
+const getSelectedSector = createSelector(
+  [ getSelectedOptions ],
+  (selectedOptions) => {
+    return selectedOptions ? selectedOptions.sector : null
+  }
+);
+
 const getSectors = createSelector(
   [ getMetadataData ],
   (meta) => {
@@ -89,8 +125,18 @@ const getSectors = createSelector(
   }
 );
 
-const getEmissionDataSource = createSelector([
-  getMetadataData],
+const getYears = createSelector(
+  [ getGHGEmissionData ],
+  (emissionData) => {
+    if (!emissionData) return null;
+    return emissionData &&
+      emissionData[0] &&
+      emissionData[0].emissions.map(e => e.year);
+  }
+);
+
+const getEmissionDataSource = createSelector(
+  [getMetadataData],
   (meta) => {
     if (!meta || !meta.dataSource) return null;
     const selected = meta.dataSource.find(
@@ -101,11 +147,28 @@ const getEmissionDataSource = createSelector([
 );
 
 const getEmissions = createSelector(
-  [getGHGEmissionData],
-  (emissionData) => {
-    console.log('emissionData', emissionData)
-    if (!emissionData) return null;
-    return emissionData
+  [getGHGEmissionData, getSelectedSector],
+  (emissionData, selectedSector) => {
+    let sector;
+    switch(selectedSector) {
+      case 83:
+        sector = 'ENERGY'
+        break;
+      case 84:
+        sector = 'IPPU'
+        break;
+      case 85:
+        sector = 'FORESTRY'
+        break;
+      case 86:
+        sector = 'WASTE'
+        break;
+      default:
+        sector = 'AGRICULTURE'
+    }
+    const filteredEmissionData = filter(emissionData, { 'sector': sector })
+    if (!filteredEmissionData) return null;
+    return filteredEmissionData
   }
 );
 
@@ -113,11 +176,11 @@ const getPathsForEmissionStyles = createSelector(
   [
     getEmissions,
     getTranslate,
-    getLocations
+    getLocations,
+    getSelectedYear
   ],
-  (emissions, t, provincesDetails) => {
-    console.log('provincesDetails', provincesDetails);
-    console.log('emissions 2', emissions);
+  (emissions, t, provincesDetails, selectedYear) => {
+    console.log('selectedYear', selectedYear);
     if (!emissions) return null;
 
     const paths = [];
@@ -125,7 +188,14 @@ const getPathsForEmissionStyles = createSelector(
 
     indonesiaPaths.forEach((path, index) => {
       const iso = path.properties && path.properties.code_hasc;
-      const value = !isEmpty(emissions) && emissions[0].emissions[0].value;
+      let value = null;
+      !isEmpty(emissions) && emissions.map(emission => {
+        if(emission.iso_code3 === iso){
+          if(emission.gas === 'CO2') {
+            value = emission.emissions[0].value
+          }
+        }
+      })
 
       if (value) {
         const sectorName = !isEmpty(emissions) && emissions[0].sector
@@ -134,7 +204,7 @@ const getPathsForEmissionStyles = createSelector(
           ...path,
           properties: {
             ...properties,
-            selectedYear: !isEmpty(emissions) && emissions[0].emissions[0].year,
+            selectedYear: selectedYear && selectedYear,
             sector: sectorName,
             tooltipValue: value,
             tooltipUnit: EMISSIONS_UNIT,
@@ -142,11 +212,10 @@ const getPathsForEmissionStyles = createSelector(
           }
         };
 
-        const thresholds = [ 10, 100, 500, 1000 ];
+        const thresholds = [ 0, 0.5, 1, 5 ];
         const bucketColorScale = createBucketColorScale(thresholds);
         legend = composeBuckets(bucketColorScale.domain());
         const color = bucketColorScale(value);
-        console.log('color', color);
 
         paths.push({ ...enhancedPaths, style: getMapStyles(color) });
       } else {
@@ -168,6 +237,7 @@ const getPathsForEmissionStyles = createSelector(
     });
 
     return { paths, legend };
+    console.log('paths', paths);
   }
 );
 
@@ -177,7 +247,8 @@ export const getEmissionParams = createSelector(
     console.log('source', source);
     console.log('sectors', sectors);
     if (!source) return null;
-    return { location: COUNTRY_ISO, source, sector: sectors[0].id };
+    // return { location: COUNTRY_ISO, source, sector: sectors[1].id };
+    return { location: COUNTRY_ISO, source };
   }
 );
 
@@ -186,5 +257,7 @@ export const getEmissionMap = createStructuredSelector({
   emissionParams: getEmissionParams,
   sectors: getSectors,
   emission: getEmissions,
-  map: getPathsForEmissionStyles
+  map: getPathsForEmissionStyles,
+  selectedOptions: getSelectedOptions,
+  years: getYears
 });

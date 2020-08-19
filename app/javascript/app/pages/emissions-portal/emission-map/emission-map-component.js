@@ -36,11 +36,9 @@ class EmissionMap extends Component {
     };
   }
 
-  /*handleFilterChange = (filter, selected) => {
+  handleFilterChange = (filter, selected) => {
     const { onFilterChange } = this.props;
-    const isIndicatorFilter = filter === 'indicator';
-    const clear = isIndicatorFilter;
-    onFilterChange({ [filter]: selected.value }, clear);
+    onFilterChange({ [filter]: selected });
   };
 
   handlePlay = () => {
@@ -62,7 +60,7 @@ class EmissionMap extends Component {
               onFilterChange({ year: String(initialYear) });
               this.setState({ disablePlay: false });
             },
-            1000
+            2000
           );
         }
         currentYearIndex += 1;
@@ -71,7 +69,7 @@ class EmissionMap extends Component {
     );
   };
 
-  renderDropdown = field => {
+  /*renderDropdown = field => {
     const {
       options,
       activityOptions,
@@ -128,23 +126,32 @@ class EmissionMap extends Component {
 
   renderSectorSelector = () => {
     const { active } = this.state
+    const { sectors } = this.props
 
     return(
       <div className={styles.mapButtonWrapper} style={{zIndex: 2}}>
-        <div className={styles.mapButton} onClick={() => this.setState({active: !active})}>
-          <div className={styles.sectorWrapper}>
-            <p className={styles.buttonText}>
-              Forestry
-            </p>
-          </div>
-          <div className={styles.buttonIconWrapper}>
-            <p className={styles.buttonText}>
-              1
-            </p>
-            <Icon icon={forestry_color} style={{height: 35, width: 35}} />
-          </div>
-        </div>
-        <div className={styles.mapButton} onClick={() => console.log('asd')}>
+        {sectors.map((sector, index) => {
+          return(
+            <div className={styles.mapButton} onClick={() => this.handleFilterChange('sector', sector.value)} key={index}>
+              <div className={styles.sectorWrapper}>
+                <p className={styles.buttonText}>
+                  {sector.label}
+                </p>
+              </div>
+              <div className={styles.buttonIconWrapper}>
+                <p className={styles.buttonText}>
+                  {index + 1}
+                </p>
+                {sector.id === 83 && <Icon icon={energy_color} style={{height: 35, width: 35}} />}
+                {sector.id === 84 && <Icon icon={industry_color} style={{height: 35, width: 35}} />}
+                {sector.id === 85 && <Icon icon={forestry_color} style={{height: 35, width: 35}} />}
+                {sector.id === 86 && <Icon icon={waste_color} style={{height: 35, width: 35}} />}
+                {sector.id === 87 && <Icon icon={agriculture_color} style={{height: 35, width: 35}} />}
+              </div>
+            </div>
+          )
+        })}
+        {/*<div className={styles.mapButton} onClick={() => console.log('asd')}>
           <div className={styles.sectorWrapper}>
             <p className={styles.buttonText}>
               Energy
@@ -195,7 +202,7 @@ class EmissionMap extends Component {
             </p>
             <Icon icon={waste_color} style={{height: 35, width: 35}} />
           </div>
-        </div>
+        </div>*/}
       </div>
     )
   }
@@ -217,17 +224,38 @@ class EmissionMap extends Component {
     )
   }
 
+  renderTimeline = () => {
+    const { years, selectedOptions } = this.props;
+    const { disablePlay } = this.state;
+    const selectedYear = selectedOptions && selectedOptions.year;
+    console.log('selectedYear2', selectedYear);
+
+    const yearsAsStrings = years.map(y => String(y));
+
+    return (
+      <div className={styles.timelineWrapper}>
+        <PlayTimeline
+          onPlay={this.handlePlay}
+          years={yearsAsStrings}
+          selectedYear={selectedYear && selectedYear}
+          disablePlay={disablePlay}
+        />
+      </div>
+    );
+  };
+
   render() {
     const {
       map,
       adaptationParams,
       emissionParams,
+      years,
       // selectedOptions,
       // adaptationCode,
       // sources,
       t
     } = this.props;
-    console.log('map', map);
+    console.log('years', years);
 
     // const yearsSelectable = selectedOptions.indicator && selectedOptions.indicator.value !== adaptationCode;
 
@@ -254,20 +282,21 @@ class EmissionMap extends Component {
           <div className={styles.mapContainer}>
             {
               map && (
-              <React.Fragment>
-                <Map
-                  zoom={5}
-                  paths={map.paths}
-                  forceUpdate
-                  center={MAP_CENTER}
-                  className={styles.map}
-                  tooltip={MapTooltip}
-                />
-                <div className={styles.legend}>
-                  <DotLegend legend={map.legend} />
-                </div>
-              </React.Fragment>
-                )
+                <React.Fragment>
+                  <Map
+                    zoom={5}
+                    paths={map.paths}
+                    forceUpdate
+                    center={MAP_CENTER}
+                    className={styles.map}
+                    tooltip={MapTooltip}
+                  />
+                  <div className={styles.legend}>
+                    <DotLegend legend={map.legend} />
+                  </div>
+                  {this.renderTimeline()}
+                </React.Fragment>
+              )
             }
           </div>
         </div>
