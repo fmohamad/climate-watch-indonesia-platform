@@ -131,7 +131,7 @@ class RegionPopulation extends PureComponent {
 
   renderChart() {
     const { chart, chartData, selectedOptions, dataOptions, dataSelected, t } = this.props
-
+    
     return (
       <Chart
         type={

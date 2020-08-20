@@ -26,7 +26,7 @@ import waste_white from 'assets/icons/waste_white';
 
 import styles from './emission-map-styles.scss';
 
-const MAP_CENTER = [ 119, -4 ];
+const MAP_CENTER = [ 115, -4 ];
 
 class EmissionMap extends Component {
   constructor() {

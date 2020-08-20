@@ -43,3 +43,5 @@ en:
             sub-category: Sub Category
             gas: Gas
             chart-type: Chart Type
+          unit:
+            year: Year

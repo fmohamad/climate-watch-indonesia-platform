@@ -55,27 +55,13 @@ class EmissionProjection extends PureComponent {
     onFilterChange({ [field]: selected.value })
   }
 
-  renderDropdown(field, multi) {
+  renderDropdown(field) {
     const { selectedOptions, filterOptions, t } = this.props
     const options = filterOptions[field] || []
     const value = selectedOptions && selectedOptions[field]
     const label = t(
       `pages.emissions-portal.emission-projection.labels.${kebabCase(field)}`
     )
-    if (multi) {
-      const values = castArray(value).filter((v) => v)
-      return (
-        <Multiselect
-          key={field}
-          label={label}
-          options={options}
-          onValueChange={(selected) => this.handleFilterChange(field, selected)}
-          values={values || {}}
-          theme={{ wrapper: dropdownStyles.select }}
-          hideResetButton
-        />
-      )
-    }
     return (
       <Dropdown
         key={field}
@@ -90,29 +76,20 @@ class EmissionProjection extends PureComponent {
   }
 
   renderChart() {
-    const { chartData, onYearChange } = this.props
-    if (!chartData || !chartData.data || !chartData.config) return null
-      
+    const { chartData, chart, chartLoading, dataOptions, dataSelected } = this.props
+    if (!chartData || !chart.config) return null
+
     return (
       <Chart
-        theme={{
-          legend: styles.legend,
-          projectedLegend: styles.projectedLegend,
-        }}
+        theme={{legend: styles.legend}}
         type='line'
-        config={chartData.config}
-        data={chartData.data}
-        projectedData={chartData.projectedData || []}
-        domain={chartData.domain}
-        dataOptions={chartData.dataOptions}
-        dataSelected={chartData.dataSelected}
+        config={chart.config}
+        data={chartData}
         height={500}
-        loading={chartData.loading}
-        showUnit
-        onLegendChange={(v) => this.handleFilterChange('sector', v)}
-        getCustomYLabelFormat={chartData.config.yLabelFormat}
-        onMouseMove={onYearChange}
-        margin={{ top: 45, right: 0, left: 0, bottom: 0 }}
+        loading={chartLoading}
+        dataOptions={dataOptions}
+        dataSelected={dataSelected}
+        onLegendChange={v => this.handleFilterChange('model', v)}
       />
     )
   }
@@ -120,12 +97,7 @@ class EmissionProjection extends PureComponent {
   render() {
     const shareableLink = `${window.location.origin}${window.location.pathname}`
     const { isOpen } = this.state
-    const { emissionParams, selectedYear, provinceISO, t, query } = this.props
-
-    const sources = ['RADGRK', 'SIGNSa']
-    const downloadURI = `emissions/download?source=${sources.join(
-      ','
-    )}&location=${provinceISO}`
+    const { t, query, chart } = this.props
 
     return (
       <div className={styles.page}>
@@ -137,14 +109,14 @@ class EmissionProjection extends PureComponent {
           <div className={styles.chartMapContainer}>
             <div className={styles.filtersChartContainer}>
               <div className={styles.dropdowns}>
-                {this.renderDropdown('sector', false)}
-                {this.renderDropdown('developed', false)}
-                {this.renderDropdown('scenario', false)}
-                {this.renderDropdown('model', false)}
+                {this.renderDropdown('sector')}
+                {this.renderDropdown('developed')}
+                {this.renderDropdown('scenario')}
+                {this.renderDropdown('model')}
                 <InfoDownloadToolbox
                   className={{ buttonWrapper: styles.buttonWrapper }}
-                  slugs={sources}
-                  downloadUri={downloadURI}
+                  slugs={"sources"}
+                  downloadUri={"downloadURI"}
                 />
                 <Button
                   theme={{ button: cx(styles.shareButton) }}
@@ -154,7 +126,9 @@ class EmissionProjection extends PureComponent {
                   <span className={styles.shareText}>Share</span>
                 </Button>
               </div>
-              <div className={styles.chartContainer}>{this.renderChart()}</div>
+              <div className={styles.chartContainer}>
+                {this.renderChart()}
+              </div>
             </div>
           </div>
         </div>

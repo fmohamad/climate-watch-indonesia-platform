@@ -1,7 +1,11 @@
 import { createStructuredSelector, createSelector } from 'reselect';
 import castArray from 'lodash/castArray';
 import get from 'lodash/get';
+import isNil from 'lodash/isNil';
+import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
+import find from 'lodash/find';
+import sortBy from 'lodash/sortBy';
 import { format } from 'd3-format';
 import {
   ALL_SELECTED,
@@ -11,7 +15,6 @@ import {
   SECTOR_TOTAL,
   SOURCE
 } from 'constants/constants';
-
 import {
   getAllSelectedOption,
   findOption,
@@ -19,7 +22,6 @@ import {
   getFieldQuery
 } from 'selectors/filters-selectors';
 import { getTranslate } from 'selectors/translation-selectors';
-
 import {
   DEFAULT_AXES_CONFIG,
   getThemeConfig,
@@ -75,6 +77,9 @@ const getQuery = ({ location }) => location && (location.query || null);
 
 const getEmissionProjectionData = ({ EmissionProjection }) => EmissionProjection && EmissionProjection.data;
 
+const getChartLoading = ({ EmissionProjection = {} }) =>
+  (EmissionProjection && EmissionProjection.loading);
+
 const getFilterOptions = createStructuredSelector({
   sector: () => SECTOR_OPTIONS,
   developed: () => DEVELOPED_OPTIONS,
@@ -114,12 +119,115 @@ const getSelectedOptions = createStructuredSelector({
   scenario: getFieldSelected('scenario')
 });
 
+const getLegendDataOptions = createSelector(
+  [getFilterOptions],
+  (options) => {
+    if (isEmpty(options)) return null
+
+    return options.model
+  }
+)
+
+const getLegendDataSelected = createSelector(
+  [getSelectedOptions],
+  (options) => {
+    if (isEmpty(options)) return null
+    
+    return castArray(options.model)
+  }
+)
+
+const getYColumnOptions = createSelector(
+  [getLegendDataSelected],
+  legendDataSelected => {
+    if (!legendDataSelected) return null;
+    return legendDataSelected.map(d => ({
+      ...d, 
+      value: getYColumnValue(d.value)
+    }));
+  }
+);
+
+const getChartData = createSelector(
+  [getEmissionProjectionData, getSelectedOptions, getYColumnOptions],
+  (emissionData, options, yColumnOptions) => {
+    if (isEmpty(emissionData)) return null
+    if (!options) return null
+
+    const filteredData = filter(emissionData, {sector: options.sector.value, model: options.model.value})
+    
+    const xAxis = emissionData[0].values.map((val) => val.year)
+    const data = []
+    xAxis.forEach((x) => {
+      filteredData.forEach((dataFilter) => {
+        const object = {}
+        object.x = x
+        yColumnOptions.forEach(yColumn => {
+          object[yColumn.value] = find(dataFilter.values, ['year', x]).value
+        })
+        data.push(object)
+      })
+    })
+
+    return data
+  }
+)
+
+let colorCache = {};
+
+const getChartConfig = createSelector(
+  [
+    getChartData,
+    getYColumnOptions,
+    getSelectedOptions,
+    getTranslate
+  ],
+  (data, yColumnOptions, options, t) => {
+    if (!yColumnOptions || !data) return null
+    if (isNil(options)) return null
+
+    const tooltip = getTooltipConfig(yColumnOptions);
+    const theme = getThemeConfig(yColumnOptions);
+    colorCache = { ...theme, ...colorCache };
+
+    const year = t(
+      `pages.emissions-portal.emission-projection.unit.year}`
+    );
+
+    const axes = {
+      xBottom: { name: year, unit: year, format: 'YYYY' },
+      yLeft: {
+        name: 'Value',
+        format: 'string',
+      },
+    }
+    const columns = { x: [ { label: 'year', value: 'x' } ], y: yColumnOptions }
+
+    return {
+      axes,
+      theme: colorCache,
+      animation: false,
+      tooltip,
+      columns
+    }
+  }
+);
+
+const getChart = createStructuredSelector({
+  config: getChartConfig
+})
+
 export const getEmissionProjection = createStructuredSelector({
   query: getQuery,
   allSelectedOption: getAllSelectedOption,
   t: getTranslate,
-  data: getEmissionProjectionData,
+  emissionProjectionData: getEmissionProjectionData,
   filterOptions: getFilterOptions,
-  selectedOptions: getSelectedOptions
+  selectedOptions: getSelectedOptions,
+  dataOptions: getLegendDataOptions,
+  dataSelected: getLegendDataSelected,
+  chart: getChart,
+  chartData: getChartData,
+  chartLoading: getChartLoading
 });
 

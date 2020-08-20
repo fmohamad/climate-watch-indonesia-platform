@@ -123,8 +123,6 @@ const getYears = createSelector(
 const getIndicatorsOptions = createSelector(
   [ getSectors, getAdaptationIndicator, getTranslate ],
   (sectors, adaptationIndicator, t) => {
-    console.log('sectors', sectors);
-    console.log('adaptationIndicator', adaptationIndicator);
     if (!sectors || !adaptationIndicator) return null;
 
     const apiIndicators = sectors.map(s => ({ label: s.name, value: s.code }));
