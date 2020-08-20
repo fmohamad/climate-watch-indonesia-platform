@@ -21,17 +21,16 @@ import areaIcon from 'assets/icons/area_chart.svg';
 import styles from './ghg-emission-inventory-styles.scss';
 
 class Inventory extends PureComponent {
-
-  handleLegendChange = (selected) => {
-    const { selectedModel } = this.props
-    const KABUPATEN = 'kabupaten'
+  handleLegendChange = selected => {
+    const { selectedModel } = this.props;
+    const KABUPATEN = 'kabupaten';
 
     if (selectedModel === KABUPATEN) {
-      this.handleFilterChange('district', selected)
+      this.handleFilterChange('district', selected);
     } else {
-      this.handleFilterChange('sector', selected)
+      this.handleFilterChange('sector', selected);
     }
-  }
+  };
 
   handleFilterChange = (field, selected) => {
     const { onFilterChange, selectedOptions } = this.props;
@@ -191,15 +190,14 @@ class Inventory extends PureComponent {
                   dataSelected={chartData.dataSelected}
                   height={500}
                   loading={chartData.loading}
-                  onLegendChange={v =>
-                    this.handleFilterChange('gas', v)}
+                  onLegendChange={v => this.handleFilterChange('gas', v)}
                   getCustomYLabelFormat={value => format('.3s')(value)}
                   showUnit
                 />
               )
           }
         </div>
-        <MetadataProvider params={metaParams}  />
+        <MetadataProvider params={metaParams} />
         <WorldBankProvider />
         {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
         {emissionParams && <GHGTargetEmissionsProvider />}

@@ -19,7 +19,8 @@ class Header extends PureComponent {
     onChangeLanguage(language.value);
   };
 
-  handleDownloadClick = () => window.open(
+  handleDownloadClick = () =>
+    window.open(
       'https://wri-sites.s3.amazonaws.com/climatewatch.org/staging.climatewatch.org/indonesia/download/ClimateWatch-Indonesia_Data.zip',
       '_blank'
     );
@@ -36,10 +37,7 @@ class Header extends PureComponent {
             onTouchStart={undefined}
             onMouseDown={undefined}
           >
-            <img
-              className={styles.image}
-              src={cwiLogo}
-            />
+            <img className={styles.image} src={cwiLogo} />
           </NavLink>
           <div className={styles.tabs}>
             <div className={styles.leftTabs}>

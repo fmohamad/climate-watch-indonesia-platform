@@ -133,7 +133,7 @@ const calculateValue = (currentValue, value, scale, metricData) => {
 };
 
 const getDFilterValue = (d, modelSelected) =>
-  modelSelected === 'region' ? d.iso_code3 :  d[modelSelected];
+  modelSelected === 'region' ? d.iso_code3 : d[modelSelected];
 
 const isOptionSelected = (selectedOptions, valueOrCode) =>
   castArray(selectedOptions)
@@ -148,7 +148,11 @@ const filterBySelectedOptions = (
 ) =>
   {
     const fieldPassesFilter = (selectedFilterOption, options, fieldValue) =>
+<<<<<<< HEAD
         isOptionSelected(options, fieldValue) &&
+=======
+      isOptionSelected(options, fieldValue) ||
+>>>>>>> fd6442ab0a7559c2df71241a8cfb055ab647a400
         isOptionSelected(selectedFilterOption, fieldValue);
 
     return emissionsData
@@ -236,12 +240,16 @@ const parseChartData = createSelector(
           const columnObject = yColumnOptions.find(
             c => c.code === getDFilterValue(d, modelSelected)
           );
+<<<<<<< HEAD
+=======
+          console.log(columnObject);
+>>>>>>> fd6442ab0a7559c2df71241a8cfb055ab647a400
           const yKey = columnObject && columnObject.value;
 
           if (yKey) {
             const yData = d.emissions.find(e => e.year === x);
             if (yData && yData.value) {
-              yItems[yKey] = yData.value
+              yItems[yKey] = yData.value;
             }
           }
         });

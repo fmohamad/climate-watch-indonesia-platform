@@ -17,9 +17,7 @@ class HistoricalContainer extends PureComponent {
       Object.assign(filter, { gas: null, region: null, sector: null });
     }
 
-    updateFiltersSelected({
-      query: updateQueryParams(query, filter)
-    });
+    updateFiltersSelected({ query: updateQueryParams(query, filter) });
   };
 
   render() {
