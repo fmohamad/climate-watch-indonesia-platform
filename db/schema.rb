@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_10_012244) do
+ActiveRecord::Schema.define(version: 2020_08_10_004617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -209,8 +209,7 @@ ActiveRecord::Schema.define(version: 2020_08_10_012244) do
 
   create_table "historical_emissions_metrics", force: :cascade do |t|
     t.string "name", null: false
-    t.string "unit", null: false
-    t.index ["name", "unit"], name: "index_historical_emissions_metrics_on_name_and_unit", unique: true
+    t.text "unit"
   end
 
   create_table "historical_emissions_records", force: :cascade do |t|

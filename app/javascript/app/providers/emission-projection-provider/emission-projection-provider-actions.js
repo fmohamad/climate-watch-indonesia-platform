@@ -17,7 +17,7 @@ export const fetchEmissionProjection = createThunkAction(
     const { api, ...paramsWithoutAPI } = params;
     const cwAPI = api === API.cw;
     (cwAPI ? CWAPI : INDOAPI)
-      .get('emissions', paramsWithoutAPI)
+      .get('emission_projections', paramsWithoutAPI)
       .then((data = {}) => {
         dispatch(
           fetchEmissionProjectionReady({

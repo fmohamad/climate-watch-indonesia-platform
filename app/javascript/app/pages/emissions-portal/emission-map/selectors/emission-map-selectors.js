@@ -151,9 +151,6 @@ const getPathsForEmissionStyles = createSelector(
     const yearIndex = years && years.indexOf(parseInt(selectedYear))
     const paths = [];
     let legend = [];
-    console.log('years', years);
-    console.log('selectedYear', selectedYear);
-    console.log('yearIndex', yearIndex)
 
     indonesiaPaths.forEach((path, index) => {
       const iso = path.properties && path.properties.code_hasc;
