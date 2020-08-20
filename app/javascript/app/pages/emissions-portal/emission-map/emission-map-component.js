@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SectionTitle from 'components/section-title';
 import kebabCase from 'lodash/kebabCase';
-import { Dropdown, PlayTimeline, Icon } from 'cw-components';
+import { Dropdown, Icon } from 'cw-components';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
+import PlayTimeline from 'components/play-timeline';
 import Map from 'components/map';
 import DotLegend from 'components/dot-legend';
 import AdaptationProvider from 'providers/adaptation-provider';
@@ -25,7 +26,7 @@ import waste_white from 'assets/icons/waste_white';
 
 import styles from './emission-map-styles.scss';
 
-const MAP_CENTER = [ 120, -4 ];
+const MAP_CENTER = [ 119, -4 ];
 
 class EmissionMap extends Component {
   constructor() {
@@ -206,17 +207,12 @@ class EmissionMap extends Component {
       </div>
     );
   };
+
   renderSectorDescription = () => {
     const { active } = this.state;
 
     return (
-      <div
-        className={
-          active
-            ? styles.sectorDescriptionContainerActive
-            : styles.sectorDescriptionContainer
-        }
-      >
+      <div className={active ? styles.sectorDescriptionContainerActive: styles.sectorDescriptionContainer}>
         <div
           style={{
             display: 'flex',

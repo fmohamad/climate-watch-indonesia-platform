@@ -1,4 +1,4 @@
 import { createAction } from 'redux-tools';
-import { REGIONS } from 'router';
+import { EMISSIONS_PORTAL } from 'router';
 
-export const updateFiltersSelected = createAction(REGIONS);
+export const updateFiltersSelected = createAction(EMISSIONS_PORTAL);

@@ -21,7 +21,7 @@ export const fetchEmissionProjection = createThunkAction(
       .then((data = {}) => {
         dispatch(
           fetchEmissionProjectionReady({
-            data: cwAPI ? normalizeCWAPIData(data) : data,
+            data: data,
             timestamp
           })
         );

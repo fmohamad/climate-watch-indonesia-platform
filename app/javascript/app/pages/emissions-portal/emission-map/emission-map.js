@@ -15,7 +15,6 @@ class EmissionMapContainer extends PureComponent {
       section: 'emission-map',
       query: { ...query, ...filter }
     });
-    console.log('query', query);
   };
 
   render() {

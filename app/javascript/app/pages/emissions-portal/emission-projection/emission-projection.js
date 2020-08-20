@@ -3,11 +3,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import Component from './emission-projection-component';
-import { getGHGEmissions } from './emission-projection-selectors';
+import { getEmissionProjection } from './emission-projection-selectors';
 
 import * as actions from './emission-projection-actions';
 
-const mapStateToProps = getGHGEmissions;
+const mapStateToProps = getEmissionProjection;
 
 class EmissionProjectionContainer extends PureComponent {
   constructor() {
@@ -24,11 +24,10 @@ class EmissionProjectionContainer extends PureComponent {
   };
 
   onFilterChange = filter => {
-    const { updateFiltersSelected, query, provinceISO } = this.props;
+    const { updateFiltersSelected, query } = this.props;
 
     updateFiltersSelected({
-      section: 'regions-ghg-emissions',
-      region: provinceISO,
+      section: 'emission-projection',
       query: { ...query, ...filter }
     });
   };
@@ -50,9 +49,8 @@ class EmissionProjectionContainer extends PureComponent {
 EmissionProjectionContainer.propTypes = {
   updateFiltersSelected: PropTypes.func.isRequired,
   query: PropTypes.object,
-  provinceISO: PropTypes.string
 };
 
-EmissionProjectionContainer.defaultProps = { query: {}, provinceISO: '' };
+EmissionProjectionContainer.defaultProps = { query: {} };
 
 export default connect(mapStateToProps, actions)(EmissionProjectionContainer);

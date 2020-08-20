@@ -15,8 +15,7 @@ import { TabletLandscape } from 'components/responsive'
 import InfoDownloadToolbox from 'components/info-download-toolbox'
 import SectionTitle from 'components/section-title'
 import MetadataProvider from 'providers/metadata-provider'
-import GHGEmissionsProvider from 'providers/ghg-emissions-provider'
-import GHGTargetEmissionsProvider from 'providers/ghg-target-emissions-provider'
+import EmissionProjectionProvider from 'providers/emission-projection-provider'
 import dropdownStyles from 'styles/dropdown.scss'
 import shareIcon from 'assets/icons/share';
 import styles from './emission-projection-styles.scss'
@@ -31,9 +30,9 @@ class EmissionProjection extends PureComponent {
   }
 
   handleFilterChange = (field, selected) => {
-    const { onFilterChange, selectedOptions } = this.props
+    const { onFilterChange } = this.props
 
-    const prevSelectedOptionValues = castArray(selectedOptions[field]).map(
+    /*const prevSelectedOptionValues = castArray(selectedOptions[field]).map(
       (o) => o.value
     )
     const selectedArray = castArray(selected)
@@ -51,16 +50,15 @@ class EmissionProjection extends PureComponent {
         : uniq(
             flatMap(removedAnyPreviousOverride, (v) =>
               String(v.value).split(','))
-          ).join(',')
+          ).join(',')*/
 
-    onFilterChange({ [field]: values })
+    onFilterChange({ [field]: selected.value })
   }
 
   renderDropdown(field, multi) {
     const { selectedOptions, filterOptions, t } = this.props
-    const value = selectedOptions && selectedOptions[field]
     const options = filterOptions[field] || []
-
+    const value = selectedOptions && selectedOptions[field]
     const label = t(
       `pages.emissions-portal.emission-projection.labels.${kebabCase(field)}`
     )
@@ -72,7 +70,7 @@ class EmissionProjection extends PureComponent {
           label={label}
           options={options}
           onValueChange={(selected) => this.handleFilterChange(field, selected)}
-          values={values}
+          values={values || {}}
           theme={{ wrapper: dropdownStyles.select }}
           hideResetButton
         />
@@ -139,10 +137,10 @@ class EmissionProjection extends PureComponent {
           <div className={styles.chartMapContainer}>
             <div className={styles.filtersChartContainer}>
               <div className={styles.dropdowns}>
-                {this.renderDropdown('sector', true)}
+                {this.renderDropdown('sector', false)}
                 {this.renderDropdown('developed', false)}
-                {this.renderDropdown('scenario', true)}
-                {this.renderDropdown('model', true)}
+                {this.renderDropdown('scenario', false)}
+                {this.renderDropdown('model', false)}
                 <InfoDownloadToolbox
                   className={{ buttonWrapper: styles.buttonWrapper }}
                   slugs={sources}
@@ -161,8 +159,7 @@ class EmissionProjection extends PureComponent {
           </div>
         </div>
         <MetadataProvider meta='ghgindo' />
-        {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
-        {emissionParams && <GHGTargetEmissionsProvider />}
+        {<EmissionProjectionProvider />}
         <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
       </div>
     )
