@@ -85,7 +85,7 @@ const getFieldSelected = field => state => {
   const { query } = state.location;
   if (!query || !query[field]) {
     if (field === 'sector') {
-      return 83;
+      return 'ENERGY';
     }
 
     if (field === 'year') {
@@ -135,41 +135,25 @@ const getEmissionDataSource = createSelector([ getMetadataData ], meta => {
   return selected && selected.value;
 });
 
-const getEmissions = createSelector([ getGHGEmissionData, getSelectedSector ], (
-  emissionData,
-  selectedSector
-) =>
-  {
-    let sector;
-    switch (selectedSector) {
-      case 83:
-        sector = 'ENERGY';
-        break;
-      case 84:
-        sector = 'IPPU';
-        break;
-      case 85:
-        sector = 'FORESTRY';
-        break;
-      case 86:
-        sector = 'WASTE';
-        break;
-      default:
-        sector = 'AGRICULTURE';
-    }
-    const filteredEmissionData = filter(emissionData, { sector: sector });
+const getEmissions = createSelector([ getGHGEmissionData, getSelectedSector, getSelectedYear ], 
+  (emissionData, selectedSector, selectedYear) => {
+    const filteredEmissionData = filter(emissionData, { sector: selectedSector, gas: 'CO2' });
+
     if (!filteredEmissionData) return null;
     return filteredEmissionData;
-  });
+  }
+);
 
 const getPathsForEmissionStyles = createSelector(
-  [ getEmissions, getTranslate, getLocations, getSelectedYear ],
-  (emissions, t, provincesDetails, selectedYear) => {
-    console.log('selectedYear', selectedYear);
+  [ getEmissions, getTranslate, getLocations, getSelectedYear, getYears ],
+  (emissions, t, provincesDetails, selectedYear, years) => {
     if (!emissions) return null;
-
+    const yearIndex = years && years.indexOf(parseInt(selectedYear))
     const paths = [];
     let legend = [];
+    console.log('years', years);
+    console.log('selectedYear', selectedYear);
+    console.log('yearIndex', yearIndex)
 
     indonesiaPaths.forEach((path, index) => {
       const iso = path.properties && path.properties.code_hasc;
@@ -177,7 +161,7 @@ const getPathsForEmissionStyles = createSelector(
       !isEmpty(emissions) && emissions.map(emission => {
           if (emission.iso_code3 === iso) {
             if (emission.gas === 'CO2') {
-              value = emission.emissions[0].value;
+              value = yearIndex && emission.emissions[yearIndex].value;
             }
           }
         });
@@ -197,7 +181,7 @@ const getPathsForEmissionStyles = createSelector(
           }
         };
 
-        const thresholds = [ 0, 0.5, 1, 5 ];
+        const thresholds = [ 10, 100, 500, 1000 ];
         const bucketColorScale = createBucketColorScale(thresholds);
         legend = composeBuckets(bucketColorScale.domain());
         const color = bucketColorScale(value);
@@ -222,15 +206,12 @@ const getPathsForEmissionStyles = createSelector(
     });
 
     return { paths, legend };
-    console.log('paths', paths);
   }
 );
 
 export const getEmissionParams = createSelector(
   [ getEmissionDataSource, getSectors ],
   (source, sectors) => {
-    console.log('source', source);
-    console.log('sectors', sectors);
     if (!source) return null;
     // return { location: COUNTRY_ISO, source, sector: sectors[1].id };
     return { location: COUNTRY_ISO, source };

@@ -41,20 +41,20 @@ class EmissionMap extends Component {
   handlePlay = () => {
     const { selectedOptions, onFilterChange, years } = this.props;
     const selectedYear = selectedOptions && selectedOptions.year;
-    const initialYear = selectedYear && selectedYear.value;
+    const initialYear = selectedYear && selectedYear;
     let currentYearIndex = 0;
     this.setState({ disablePlay: true });
 
     const playAtStart = setInterval(
       () => {
         if (years[currentYearIndex]) {
-          onFilterChange({ year: String(years[currentYearIndex]) });
+          onFilterChange({ sector: selectedOptions.sector, year: String(years[currentYearIndex]) });
         }
         if (currentYearIndex > years.length - 1) {
           clearInterval(playAtStart);
           setTimeout(
             () => {
-              onFilterChange({ year: String(initialYear) });
+              onFilterChange({ sector: selectedOptions.sector, year: String(initialYear) });
               this.setState({ disablePlay: false });
             },
             2000
@@ -181,7 +181,7 @@ class EmissionMap extends Component {
           return (
             <div
               className={styles.mapButton}
-              onClick={() => this.handleFilterChange('sector', sector.value)}
+              onClick={() => this.handleFilterChange('sector', sector.code)}
               key={index}
             >
               <div className={styles.sectorWrapper}>
@@ -193,51 +193,11 @@ class EmissionMap extends Component {
                 <p className={styles.buttonText}>
                   {index + 1}
                 </p>
-                {
-                  sector.id === 83 &&
-                    (
-                      <Icon
-                        icon={energy_color}
-                        style={{ height: 35, width: 35 }}
-                      />
-                    )
-                }
-                {
-                  sector.id === 84 &&
-                    (
-                      <Icon
-                        icon={industry_color}
-                        style={{ height: 35, width: 35 }}
-                      />
-                    )
-                }
-                {
-                  sector.id === 85 &&
-                    (
-                      <Icon
-                        icon={forestry_color}
-                        style={{ height: 35, width: 35 }}
-                      />
-                    )
-                }
-                {
-                  sector.id === 86 &&
-                    (
-                      <Icon
-                        icon={waste_color}
-                        style={{ height: 35, width: 35 }}
-                      />
-                    )
-                }
-                {
-                  sector.id === 87 &&
-                    (
-                      <Icon
-                        icon={agriculture_color}
-                        style={{ height: 35, width: 35 }}
-                      />
-                    )
-                }
+                {sector.code === 'ENERGY' && (<Icon icon={energy_color} style={{ height: 35, width: 35 }} />)}
+                {sector.code === 'IPPU' && (<Icon icon={industry_color} style={{ height: 35, width: 35 }} />)}
+                {sector.code === 'FORESTRY' && (<Icon icon={forestry_color} style={{ height: 35, width: 35 }} />)}
+                {sector.code === 'WASTE' && (<Icon icon={waste_color} style={{ height: 35, width: 35 }} />)}
+                {sector.code === 'AGRICULTURE' && (<Icon icon={agriculture_color} style={{ height: 35, width: 35 }} />)}
               </div>
             </div>
           );
@@ -281,7 +241,6 @@ class EmissionMap extends Component {
     const { years, selectedOptions } = this.props;
     const { disablePlay } = this.state;
     const selectedYear = selectedOptions && selectedOptions.year;
-    console.log('selectedYear2', selectedYear);
 
     const yearsAsStrings = years.map(y => String(y));
 
@@ -308,7 +267,6 @@ class EmissionMap extends Component {
       // sources,
       t
     } = this.props;
-    console.log('years', years);
 
     // const yearsSelectable = selectedOptions.indicator && selectedOptions.indicator.value !== adaptationCode;
     return (
@@ -321,8 +279,6 @@ class EmissionMap extends Component {
             {}
           </div>
           <MetadataProvider meta="ghgindo" />
-          {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
-          {adaptationParams && <AdaptationProvider params={adaptationParams} />}
         </div>
         <div className={styles.mapSection}>
           {this.renderSectorDescription()}
@@ -348,6 +304,8 @@ class EmissionMap extends Component {
             }
           </div>
         </div>
+        {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
+        {adaptationParams && <AdaptationProvider params={adaptationParams} />}
       </div>
     );
   }
