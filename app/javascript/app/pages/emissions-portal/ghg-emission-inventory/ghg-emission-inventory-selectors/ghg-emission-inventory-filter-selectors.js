@@ -93,7 +93,10 @@ const getFieldOptions = field =>
         }
         case 'location': {
           options = options.filter(o => o.iso_code3 !== COUNTRY_ISO);
-          options = [ nationalOption ];
+          options = [
+            ...options,
+            nationalOption
+          ];
           break;
         }
         default:

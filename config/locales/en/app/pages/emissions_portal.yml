@@ -11,6 +11,10 @@ en:
             national: National
           break-by:
             region-absolute: Region - Absolute
+            sector-absolute: Sector - Absolute
+            category-absolute: Category - Absolute
+            sub-category-absolute: Sub Category - Absolute
+            gas-absolute: Gas - Absolute
           labels:
             break-by: Break by
             region: Region
@@ -19,3 +23,25 @@ en:
             sub-category: Sub Category
             gas: Gas
             chart-type: Chart Type
+        emission-map:
+          title: Map
+        emission-projection:
+          title: Emission Projection
+          description: Explore economic and emissions scenarios to identify opportunities for delivering on countries sustainable development and climate goals. Choose from a comprehensive database of models from the IPCC, private sector and country-specific providers to se it's assumptions and results.
+          region:
+            national: National
+          break-by:
+            region-absolute: Region - Absolute
+          labels:
+            break-by: Break by
+            region: Region
+            sector: Sector
+            developed: Developed By
+            scenario: Scenario
+            model: Model
+            category: Category
+            sub-category: Sub Category
+            gas: Gas
+            chart-type: Chart Type
+          unit:
+            year: Year

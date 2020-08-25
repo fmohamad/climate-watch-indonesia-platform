@@ -103,7 +103,6 @@ const getSelectedIndicatorsValues = createSelector(
   [ getPopulationIndicatorsValues, getSelectedIndicatorCode ],
   (indicators, selectedIndicatorCode) => {
     if (!indicators) return null;
-    console.log('indicators', indicators);
     return indicators.find(
       ind => ind[0].indicator_code === selectedIndicatorCode
     );

@@ -3,6 +3,7 @@ import { handleModule } from 'redux-tools';
 
 // Components
 import { reduxModule as ghgEmissions } from 'providers/ghg-emissions-provider';
+import { reduxModule as emissionProjection } from 'providers/emission-projection-provider';
 import {
   reduxModule as ghgTargetEmissions
 } from 'providers/ghg-target-emissions-provider';
@@ -43,6 +44,7 @@ import router from './router';
 
 const componentsReducers = {
   GHGEmissions: handleModule(ghgEmissions),
+  EmissionProjection: handleModule(emissionProjection),
   GHGTargetEmissions: handleModule(ghgTargetEmissions),
   modalMetadata: handleModule(modalMetadata),
   metadata: handleModule(metadata),

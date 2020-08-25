@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       resources :indicators, only: [:index]
       resources :metadata, only: [:index]
       resources :translations, only: [:index]
+      resources :emission_projections, only: [:index]
 
       namespace :province do
         resources :climate_plans, only: [:index]

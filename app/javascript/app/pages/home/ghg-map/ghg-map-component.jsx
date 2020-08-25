@@ -7,8 +7,8 @@ import MapChoroplethLegend from 'components/map-choropleth-legend';
 import styles from './ghg-map-styles.scss';
 
 const MAP_ZOOM_STEP = 2;
-const MAP_ZOOM_DEFAULT = 5.5;
-const MAP_ZOOM_MIN = 5;
+const MAP_ZOOM_DEFAULT = 4;
+const MAP_ZOOM_MIN = 3;
 
 const MapTooltip = ({ properties }) => (
   <div>
@@ -90,7 +90,7 @@ GHGMap.propTypes = {
 };
 
 GHGMap.defaultProps = {
-  mapCenter: [ 113, -1.86 ],
+  mapCenter: [ 120, -4 ],
   paths: [],
   buckets: [],
   unit: ''

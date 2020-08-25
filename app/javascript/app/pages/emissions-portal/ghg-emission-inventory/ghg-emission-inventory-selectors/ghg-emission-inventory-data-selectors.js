@@ -39,18 +39,18 @@ import {
 const { COUNTRY_ISO } = process.env;
 const { CW_API_URL } = process.env;
 
-const FRONTEND_FILTERED_FIELDS = [ 'region', 'category', 'subCategory', 'gas' ];
+const FRONTEND_FILTERED_FIELDS = ['region', 'sector', 'category', 'subCategory', 'gas']
 
-const getUnit = createSelector([ getMetadataData, getMetricSelected ], (
+const getUnit = createSelector([getMetadataData, getSelectedOptions], (
   meta,
-  metric
+  options,
 ) =>
   {
-    if (!meta || !metric) return null;
-    const { metric: metrics } = meta;
-    const metricObject = metrics &&
-      metrics.find(m => METRIC[metric] === m.code);
-    return metricObject && metricObject.unit;
+    if (!meta || isEmpty(options.gas)) return null;
+    const { gas: gases} = meta;
+    const gasObject = gases &&
+      gases.find(m => options.gas.label === m.label);
+    return gasObject.unit
   });
 
 export const getScale = createSelector([ getUnit ], unit => {
@@ -70,8 +70,8 @@ const outAllSelectedOption = o => o.value !== ALL_SELECTED;
 const getLegendDataOptions = createSelector(
   [ getModelSelected, getFilterOptions ],
   (modelSelected, options) => {
-    if (!options || !options.gas) return null;
-    return options.gas.filter(outAllSelectedOption);
+    if (!options || !options[modelSelected]) return null;
+    return options[modelSelected].filter(outAllSelectedOption);
   }
 );
 
@@ -86,9 +86,9 @@ const getLegendDataSelected = createSelector(
     )
       return null;
 
-    const dataSelected = castArray(selectedOptions.gas);
+    const dataSelected = castArray(selectedOptions[modelSelected]);
     if (isOptionSelected(dataSelected, ALL_SELECTED)) {
-      return options.gas.filter(outAllSelectedOption);
+      return options[modelSelected].filter(outAllSelectedOption);
     }
     return dataSelected;
   }
@@ -102,7 +102,7 @@ const getYColumnOptions = createSelector(
       columns &&
         columns.map(d => ({
           label: d && d.label,
-          value: d && getYColumnValue(`${d.value}`),
+          value: d && getYColumnValue(`${modelSelected}${d.value}`),
           code: d && (d.code || d.label)
         }));
     return uniqBy(getYOption(legendDataSelected), 'value');
@@ -148,20 +148,10 @@ const filterBySelectedOptions = (
 ) =>
   {
     const fieldPassesFilter = (selectedFilterOption, options, fieldValue) =>
-      isOptionSelected(options, fieldValue) ||
+        isOptionSelected(options, fieldValue) &&
         isOptionSelected(selectedFilterOption, fieldValue);
-    const absoluteMetric = METRIC.absolute;
-
-    const byMetric = d => {
-      const notTotalWithAbsoluteMetric = d.metric === absoluteMetric &&
-        d.sector !== SECTOR_TOTAL;
-
-      return d.metric === METRIC[metricSelected] &&
-        (notTotalWithAbsoluteMetric || d.metric !== absoluteMetric);
-    };
 
     return emissionsData
-      .filter(byMetric)
       .filter(
         d =>
           FRONTEND_FILTERED_FIELDS.every(
@@ -243,9 +233,8 @@ const parseChartData = createSelector(
 
         filteredData.forEach(d => {
           const columnObject = yColumnOptions.find(
-            c => c.code === getDFilterValue(d, 'gas')
+            c => c.code === getDFilterValue(d, modelSelected)
           );
-          console.log(columnObject);
           const yKey = columnObject && columnObject.value;
 
           if (yKey) {
@@ -312,56 +301,37 @@ const parseTargetEmissionsData = createSelector(
   }
 );
 
-const getProjectedChartConfig = createSelector(
-  [ parseTargetEmissionsData, getTranslate ],
-  (targetEmissionsData, t) => {
-    if (isEmpty(targetEmissionsData)) return {};
-
-    const targetLabels = t(
-      'pages.national-context.historical-emissions.target-labels',
-      { default: {} }
-    );
-
-    return {
-      projectedColumns: [
-        { label: targetLabels.bau, color: '#113750' },
-        { label: targetLabels.quantified, color: '#ffc735' },
-        { label: targetLabels['not-quantifiable'], color: '#b1b1c1' }
-      ],
-      projectedLabel: {}
-    };
-  }
-);
-
 export const getChartConfig = createSelector(
   [
     getEmissionsData,
     getMetricSelected,
-    getProjectedChartConfig,
-    getCorrectedUnit,
     getYColumnOptions,
+    getSelectedOptions,
+    getUnit,
     getTranslate
   ],
-  (data, metricSelected, projectedConfig, unit, yColumnOptions) => {
-    if (!data || isEmpty(data) || !metricSelected || !yColumnOptions)
+  (data, metricSelected, yColumnOptions, options, unit, t) => {
+    if (!data || isEmpty(data) || !unit || !metricSelected || !yColumnOptions || isEmpty(options))
       return null;
     const tooltip = getTooltipConfig(yColumnOptions);
     const theme = getThemeConfig(yColumnOptions);
     colorCache = { ...theme, ...colorCache };
     const axes = {
-      ...DEFAULT_AXES_CONFIG,
-      yLeft: { ...DEFAULT_AXES_CONFIG.yLeft, unit }
+      xBottom: { name: 'Year', unit: 'date', format: 'YYYY' },
+      yLeft: {
+        name: 'Emissions',
+        unit, 
+        format: 'number'
+      }
     };
 
-    const config = {
+    return {
       axes,
       theme: colorCache,
       tooltip,
       animation: false,
       columns: { x: [ { label: 'year', value: 'x' } ], y: yColumnOptions }
     };
-
-    return { ...config, ...projectedConfig };
   }
 );
 

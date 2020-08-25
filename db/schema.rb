@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_05_061531) do
+ActiveRecord::Schema.define(version: 2020_08_10_004617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,46 @@ ActiveRecord::Schema.define(version: 2020_08_05_061531) do
     t.index ["sector_id"], name: "index_emission_activity_values_on_sector_id"
   end
 
+  create_table "emission_projection_models", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "code", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_emission_projection_models_on_code", unique: true
+  end
+
+  create_table "emission_projection_scenarios", force: :cascade do |t|
+    t.string "name", null: false
+    t.jsonb "translations", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_emission_projection_scenarios_on_name", unique: true
+  end
+
+  create_table "emission_projection_sectors", force: :cascade do |t|
+    t.string "name", null: false
+    t.jsonb "translations", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_emission_projection_sectors_on_name", unique: true
+  end
+
+  create_table "emission_projection_values", force: :cascade do |t|
+    t.bigint "location_id"
+    t.bigint "model_id"
+    t.bigint "scenario_id"
+    t.bigint "sector_id"
+    t.string "source"
+    t.string "developed_by"
+    t.jsonb "values"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["location_id"], name: "index_emission_projection_values_on_location_id"
+    t.index ["model_id"], name: "index_emission_projection_values_on_model_id"
+    t.index ["scenario_id"], name: "index_emission_projection_values_on_scenario_id"
+    t.index ["sector_id"], name: "index_emission_projection_values_on_sector_id"
+  end
+
   create_table "emission_target_labels", force: :cascade do |t|
     t.text "name", null: false
     t.datetime "created_at", null: false
@@ -169,8 +209,7 @@ ActiveRecord::Schema.define(version: 2020_08_05_061531) do
 
   create_table "historical_emissions_metrics", force: :cascade do |t|
     t.string "name", null: false
-    t.string "unit", null: false
-    t.index ["name", "unit"], name: "index_historical_emissions_metrics_on_name_and_unit", unique: true
+    t.text "unit"
   end
 
   create_table "historical_emissions_records", force: :cascade do |t|
@@ -220,17 +259,7 @@ ActiveRecord::Schema.define(version: 2020_08_05_061531) do
     t.jsonb "translations", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "categorization_id"
-    t.index ["categorization_id"], name: "index_indicator_categories_on_categorization_id"
     t.index ["name"], name: "index_indicator_categories_on_name", unique: true
-  end
-
-  create_table "indicator_categorizations", force: :cascade do |t|
-    t.string "name", null: false
-    t.jsonb "translations", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_indicator_categorizations_on_name", unique: true
   end
 
   create_table "indicator_values", force: :cascade do |t|
@@ -379,6 +408,10 @@ ActiveRecord::Schema.define(version: 2020_08_05_061531) do
   add_foreign_key "emission_activity_sectors", "emission_activity_sectors", column: "parent_id", on_delete: :cascade
   add_foreign_key "emission_activity_values", "emission_activity_sectors", column: "sector_id", on_delete: :cascade
   add_foreign_key "emission_activity_values", "locations", on_delete: :cascade
+  add_foreign_key "emission_projection_values", "emission_projection_models", column: "model_id", on_delete: :cascade
+  add_foreign_key "emission_projection_values", "emission_projection_scenarios", column: "scenario_id", on_delete: :cascade
+  add_foreign_key "emission_projection_values", "emission_projection_sectors", column: "sector_id", on_delete: :cascade
+  add_foreign_key "emission_projection_values", "locations", on_delete: :cascade
   add_foreign_key "emission_target_values", "emission_target_labels", column: "label_id", on_delete: :cascade
   add_foreign_key "emission_target_values", "emission_target_sectors", column: "sector_id", on_delete: :cascade
   add_foreign_key "emission_target_values", "locations", on_delete: :cascade
@@ -394,7 +427,6 @@ ActiveRecord::Schema.define(version: 2020_08_05_061531) do
   add_foreign_key "historical_emissions_sectors", "historical_emissions_data_sources", column: "data_source_id", on_delete: :cascade
   add_foreign_key "historical_emissions_sectors", "historical_emissions_sectors", column: "parent_id", on_delete: :cascade
   add_foreign_key "historical_emissions_sub_categories", "historical_emissions_categories", column: "category_id"
-  add_foreign_key "indicator_categories", "indicator_categorizations", column: "categorization_id", on_delete: :cascade
   add_foreign_key "indicator_values", "indicator_categories", column: "category_id", on_delete: :cascade
   add_foreign_key "indicator_values", "indicators", on_delete: :cascade
   add_foreign_key "indicator_values", "locations", on_delete: :cascade

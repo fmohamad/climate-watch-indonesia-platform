@@ -1,0 +1,167 @@
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import castArray from 'lodash/castArray'
+import toArray from 'lodash/toArray'
+import kebabCase from 'lodash/kebabCase'
+import groupBy from 'lodash/groupBy'
+import uniq from 'lodash/uniq'
+import flatMap from 'lodash/flatMap'
+
+import { Chart, Dropdown, Multiselect, Button, Icon } from 'cw-components'
+import ModalShare from 'components/modal-share';
+import cx from 'classnames'
+
+import { TabletLandscape } from 'components/responsive'
+import InfoDownloadToolbox from 'components/info-download-toolbox'
+import SectionTitle from 'components/section-title'
+import MetadataProvider from 'providers/metadata-provider'
+import EmissionProjectionProvider from 'providers/emission-projection-provider'
+import dropdownStyles from 'styles/dropdown.scss'
+import shareIcon from 'assets/icons/share';
+import styles from './emission-projection-styles.scss'
+
+class EmissionProjection extends PureComponent {
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      isOpen: false
+    };
+  }
+
+  handleFilterChange = (field, selected) => {
+    const { onFilterChange } = this.props
+
+    /*const prevSelectedOptionValues = castArray(selectedOptions[field]).map(
+      (o) => o.value
+    )
+    const selectedArray = castArray(selected)
+    const newSelectedOption = selectedArray.find(
+      (o) => !prevSelectedOptionValues.includes(o.value)
+    )
+
+    const removedAnyPreviousOverride = selectedArray
+      .filter((v) => v)
+      .filter((v) => !v.override)
+
+    const values =
+      newSelectedOption && newSelectedOption.override
+        ? newSelectedOption.value
+        : uniq(
+            flatMap(removedAnyPreviousOverride, (v) =>
+              String(v.value).split(','))
+          ).join(',')*/
+
+    onFilterChange({ [field]: selected.value })
+  }
+
+  renderDropdown(field) {
+    const { selectedOptions, filterOptions, t } = this.props
+    const options = filterOptions[field] || []
+    const value = selectedOptions && selectedOptions[field]
+    const label = t(
+      `pages.emissions-portal.emission-projection.labels.${kebabCase(field)}`
+    )
+    return (
+      <Dropdown
+        key={field}
+        label={label}
+        options={options}
+        onValueChange={(selected) => this.handleFilterChange(field, selected)}
+        value={value || null}
+        theme={{ select: dropdownStyles.select }}
+        hideResetButton
+      />
+    )
+  }
+
+  renderChart() {
+    const { chartData, chart, chartLoading, dataOptions, dataSelected } = this.props
+    if (!chartData || !chart.config) return null
+
+    return (
+      <Chart
+        theme={{legend: styles.legend}}
+        type='line'
+        config={chart.config}
+        data={chartData}
+        height={500}
+        loading={chartLoading}
+        dataOptions={dataOptions}
+        dataSelected={dataSelected}
+        onLegendChange={v => this.handleFilterChange('model', v)}
+      />
+    )
+  }
+
+  render() {
+    const shareableLink = `${window.location.origin}${window.location.pathname}`
+    const { isOpen } = this.state
+    const { t, query, chart } = this.props
+
+    return (
+      <div className={styles.page}>
+        <SectionTitle
+          title={t('pages.emissions-portal.emission-projection.title')}
+          description={t('pages.emissions-portal.emission-projection.description')}
+        />
+        <div>
+          <div className={styles.chartMapContainer}>
+            <div className={styles.filtersChartContainer}>
+              <div className={styles.dropdowns}>
+                {this.renderDropdown('sector')}
+                {this.renderDropdown('developed')}
+                {this.renderDropdown('scenario')}
+                {this.renderDropdown('model')}
+                <InfoDownloadToolbox
+                  className={{ buttonWrapper: styles.buttonWrapper }}
+                  slugs={"sources"}
+                  downloadUri={"downloadURI"}
+                />
+                <Button
+                  theme={{ button: cx(styles.shareButton) }}
+                  onClick={() => this.setState({ isOpen: !isOpen })}
+                >
+                  <Icon icon={shareIcon} />
+                  <span className={styles.shareText}>Share</span>
+                </Button>
+              </div>
+              <div className={styles.chartContainer}>
+                {this.renderChart()}
+              </div>
+            </div>
+          </div>
+        </div>
+        <MetadataProvider meta='ghgindo' />
+        {<EmissionProjectionProvider />}
+        <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
+      </div>
+    )
+  }
+}
+
+EmissionProjection.propTypes = {
+  t: PropTypes.func.isRequired,
+  chartData: PropTypes.object,
+  emissionParams: PropTypes.object,
+  emissionTargets: PropTypes.array,
+  selectedOptions: PropTypes.object,
+  filterOptions: PropTypes.object,
+  selectedYear: PropTypes.number,
+  provinceISO: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+  onYearChange: PropTypes.func.isRequired,
+  query: PropTypes.object,
+}
+
+EmissionProjection.defaultProps = {
+  chartData: undefined,
+  emissionParams: undefined,
+  emissionTargets: [],
+  selectedOptions: undefined,
+  filterOptions: undefined,
+  selectedYear: null,
+  query: null,
+}
+
+export default EmissionProjection
