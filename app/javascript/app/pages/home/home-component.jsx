@@ -40,9 +40,6 @@ class Home extends PureComponent {
           </div>
         </Section>
         <SectionsSlideshow />
-        <TabletLandscape>
-          <GHGMap selectedYear={null} query={null} />
-        </TabletLandscape>
         <Province
           title={t('pages.homepage.province.title')}
           description={t('pages.homepage.province.description')}

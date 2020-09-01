@@ -81,6 +81,9 @@ const getLocalizedProvinceName = ({ code_hasc, name }, provincesDetails) => {
   return provinceProperties ? provinceProperties.wri_standard_name : name;
 };
 
+const getMapLoading = ({ GHGEmissions = {} }) =>
+  (GHGEmissions && GHGEmissions.loading);
+
 const getFieldSelected = field => state => {
   const { query } = state.location;
   if (!query || !query[field]) {
@@ -222,5 +225,6 @@ export const getEmissionMap = createStructuredSelector({
   emission: getEmissions,
   map: getPathsForEmissionStyles,
   selectedOptions: getSelectedOptions,
-  years: getYears
+  years: getYears,
+  mapLoading: getMapLoading
 });

@@ -111,13 +111,13 @@ class EmissionProjection extends PureComponent {
               <div className={styles.dropdowns}>
                 {this.renderDropdown('sector')}
                 {this.renderDropdown('developed')}
-                {this.renderDropdown('scenario')}
                 {this.renderDropdown('model')}
-                <InfoDownloadToolbox
+                {this.renderDropdown('scenario')}
+                {/*<InfoDownloadToolbox
                   className={{ buttonWrapper: styles.buttonWrapper }}
                   slugs={"sources"}
                   downloadUri={"downloadURI"}
-                />
+                />*/}
                 <Button
                   theme={{ button: cx(styles.shareButton) }}
                   onClick={() => this.setState({ isOpen: !isOpen })}
