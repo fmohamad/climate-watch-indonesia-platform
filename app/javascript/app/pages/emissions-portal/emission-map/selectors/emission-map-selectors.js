@@ -140,7 +140,8 @@ const getEmissionDataSource = createSelector([ getMetadataData ], meta => {
 
 const getEmissions = createSelector([ getGHGEmissionData, getSelectedSector, getSelectedYear ], 
   (emissionData, selectedSector, selectedYear) => {
-    const filteredEmissionData = filter(emissionData, { sector: selectedSector, gas: 'CO2' });
+    console.log('emissionData', emissionData);
+    const filteredEmissionData = filter(emissionData, { sector: selectedSector, gas: 'CO2EQ' });
 
     if (!filteredEmissionData) return null;
     return filteredEmissionData;
@@ -160,7 +161,7 @@ const getPathsForEmissionStyles = createSelector(
       let value = null;
       !isEmpty(emissions) && emissions.map(emission => {
           if (emission.iso_code3 === iso) {
-            if (emission.gas === 'CO2') {
+            if (emission.gas === 'CO2EQ') {
               value = yearIndex && emission.emissions[yearIndex].value;
             }
           }

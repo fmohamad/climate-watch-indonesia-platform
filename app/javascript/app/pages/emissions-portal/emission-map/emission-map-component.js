@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SectionTitle from 'components/section-title';
 import kebabCase from 'lodash/kebabCase';
-import { Dropdown, Icon } from 'cw-components';
+import { Dropdown, Icon, Loading } from 'cw-components';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import PlayTimeline from 'components/play-timeline';
 import Map from 'components/map';
@@ -236,7 +236,10 @@ class EmissionMap extends Component {
   renderTimeline = () => {
     const { years, selectedOptions } = this.props;
     const { disablePlay } = this.state;
-    const selectedYear = selectedOptions && selectedOptions.year;
+    let selectedYear = selectedOptions && selectedOptions.year;
+    if(selectedYear === undefined) {
+      selectedYear = 2000
+    }
 
     const yearsAsStrings = years.map(y => String(y));
 
@@ -280,9 +283,9 @@ class EmissionMap extends Component {
         <div className={styles.mapSection}>
           {
             mapLoading && 
-            <p style={{position: 'absolute', top: 20, right: 35, fontSize: 17}}>
-              Loading Map Data...
-            </p>
+            <div className={styles.loadingOverlay}>
+              <Loading />
+            </div>
           }
           {this.renderSectorDescription()}
           {this.renderSectorSelector()}

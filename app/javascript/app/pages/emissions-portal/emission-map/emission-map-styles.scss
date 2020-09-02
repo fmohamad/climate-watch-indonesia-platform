@@ -40,6 +40,8 @@
   display: flex;
   justify-content: center;
   margin-bottom: 50px;
+  margin-top: -100px !important;
+  z-index: 2 !important;
 }
 
 .cw__play-timeline-styles_timeline {
@@ -50,6 +52,8 @@
   margin-bottom: 30px;
   margin-left: 75px;
   min-height: 150px;
+  height: 150px !important;
+  margin-top: -235px !important;
 }
 
 :global {
@@ -198,6 +202,19 @@
 
 @keyframes slide {
   100% { left: 0; }
+}
+
+.loadingOverlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255,255,255,0.5);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
