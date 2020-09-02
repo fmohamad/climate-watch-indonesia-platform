@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_10_004617) do
+ActiveRecord::Schema.define(version: 2020_09_01_223914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -183,7 +183,7 @@ ActiveRecord::Schema.define(version: 2020_08_10_004617) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "sector_id"
-    t.index ["name"], name: "index_historical_emissions_categories_on_name", unique: true
+    t.index ["name"], name: "index_historical_emissions_categories_on_name"
     t.index ["sector_id"], name: "index_historical_emissions_categories_on_sector_id"
   end
 
@@ -251,7 +251,7 @@ ActiveRecord::Schema.define(version: 2020_08_10_004617) do
     t.datetime "updated_at", null: false
     t.bigint "category_id"
     t.index ["category_id"], name: "index_historical_emissions_sub_categories_on_category_id"
-    t.index ["name"], name: "index_historical_emissions_sub_categories_on_name", unique: true
+    t.index ["name"], name: "index_historical_emissions_sub_categories_on_name"
   end
 
   create_table "indicator_categories", force: :cascade do |t|

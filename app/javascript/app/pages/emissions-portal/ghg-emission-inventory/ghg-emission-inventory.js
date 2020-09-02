@@ -12,12 +12,18 @@ import {
 class HistoricalContainer extends PureComponent {
   onFilterChange = filter => {
     const { updateFiltersSelected, query } = this.props;
+    
+    let oldQuery = query
+
+    let breabBys = ['region-absolute', 'sector-absolute', 'category-absolute', 'sub-category-absolute', 'gas-absolute']
+
+    if (breabBys.includes(filter.breakBy)) oldQuery = null
 
     if (filter.source) {
       Object.assign(filter, { gas: null, region: null, sector: null });
     }
 
-    updateFiltersSelected({ query: updateQueryParams(query, filter) });
+    updateFiltersSelected({ query: updateQueryParams(oldQuery, filter) });
   };
 
   render() {
