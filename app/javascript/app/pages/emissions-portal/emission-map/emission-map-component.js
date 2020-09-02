@@ -58,7 +58,7 @@ class EmissionMap extends Component {
               onFilterChange({ sector: selectedOptions.sector, year: String(initialYear) });
               this.setState({ disablePlay: false });
             },
-            2000
+            5000
           );
         }
         currentYearIndex += 1;
@@ -258,6 +258,7 @@ class EmissionMap extends Component {
       adaptationParams,
       emissionParams,
       years,
+      mapLoading,
       // selectedOptions,
       // adaptationCode,
       // sources,
@@ -277,6 +278,12 @@ class EmissionMap extends Component {
           <MetadataProvider meta="ghgindo" />
         </div>
         <div className={styles.mapSection}>
+          {
+            mapLoading && 
+            <p style={{position: 'absolute', top: 20, right: 35, fontSize: 17}}>
+              Loading Map Data...
+            </p>
+          }
           {this.renderSectorDescription()}
           {this.renderSectorSelector()}
           <div className={styles.mapContainer}>
