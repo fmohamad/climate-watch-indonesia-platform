@@ -215,7 +215,7 @@ export const getEmissionParams = createSelector(
   (source, sectors) => {
     if (!source) return null;
     // return { location: COUNTRY_ISO, source, sector: sectors[1].id };
-    return { location: COUNTRY_ISO, source };
+    return { location: COUNTRY_ISO, source, category: 90, gas: 47 };
   }
 );
 

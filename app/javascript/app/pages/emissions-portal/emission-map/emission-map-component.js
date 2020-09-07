@@ -58,7 +58,7 @@ class EmissionMap extends Component {
               onFilterChange({ sector: selectedOptions.sector, year: String(initialYear) });
               this.setState({ disablePlay: false });
             },
-            5000
+            10000
           );
         }
         currentYearIndex += 1;

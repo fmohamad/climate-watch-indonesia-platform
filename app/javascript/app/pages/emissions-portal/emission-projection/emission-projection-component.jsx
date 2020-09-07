@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import castArray from 'lodash/castArray'
 import toArray from 'lodash/toArray'
 import kebabCase from 'lodash/kebabCase'
+import filter from 'lodash/filter'
 import groupBy from 'lodash/groupBy'
 import uniq from 'lodash/uniq'
 import flatMap from 'lodash/flatMap'
@@ -57,11 +58,16 @@ class EmissionProjection extends PureComponent {
 
   renderDropdown(field) {
     const { selectedOptions, filterOptions, t } = this.props
-    const options = filterOptions[field] || []
-    const value = selectedOptions && selectedOptions[field]
-    const label = t(
+    let options = filterOptions[field] || []
+    let value = selectedOptions && selectedOptions[field]
+    let label = t(
       `pages.emissions-portal.emission-projection.labels.${kebabCase(field)}`
     )
+    
+    if(field === 'model') {
+      options = filterOptions['model'].filter(data => data.sector === selectedOptions['sector'].value)
+    }
+
     return (
       <Dropdown
         key={field}

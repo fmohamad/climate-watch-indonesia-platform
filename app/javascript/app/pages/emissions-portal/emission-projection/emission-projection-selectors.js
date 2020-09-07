@@ -30,9 +30,9 @@ import {
 } from 'utils/graphs';
 
 const SECTOR_OPTIONS = [
-  {label: 'Multisektor', value: 'Multisektor', name: 'Multisektor'},
-  {label: 'Sektor Energi', value: 'Sektor Energi', name: 'Sektor Energi'},
-  {label: 'Sektor Lahan', value: 'Sektor Lahan', name: 'Sektor Lahan'},
+  {label: 'Multisector', value: 'Multisector', name: 'Multisector'},
+  {label: 'Energy Sector', value: 'Energy Sector', name: 'Energy Sector'},
+  {label: 'Land Sector', value: 'Land Sector', name: 'Land Sector'},
 ]
 
 const DEVELOPED_OPTIONS = [
@@ -40,24 +40,24 @@ const DEVELOPED_OPTIONS = [
 ]
 
 const MODEL_OPTIONS = [
-  {label: 'SNC', value: 'SNC', name: 'SNC'},
-  {label: 'NDC/TNC', value: 'NDC/TNC', name: 'NDC/TNC'},
-  {label: 'RAN-GRK', value: 'RAN-GRK', name: 'RAN-GRK'},
-  {label: 'EPS', value: 'EPS', name: 'EPS'},
-  {label: 'PBL Floor', value: 'PBL Floor', name: 'PBL Floor'},
-  {label: 'PBL Ceiling', value: 'PBL Ceiling', name: 'PBL Ceiling'},
-  {label: 'Indonesia Vision 2045', value: 'Indonesia Vision 2045', name: 'Indonesia Vision 2045'},
-  {label: 'LCSST2050', value: 'LCSST2050', name: 'LCSST2050'},
-  {label: 'Cal 2050', value: 'Cal 2050', name: 'Cal 2050'},
-  {label: 'KEN', value: 'KEN', name: 'KEN'},
-  {label: 'CAT', value: 'CAT', name: 'CAT'},
-  {label: 'EUM', value: 'EUM', name: 'EUM'},
-  {label: 'BPPT-L', value: 'BPPT-L', name: 'BPPT-L'},
-  {label: 'BPPT-H', value: 'BPPT-H', name: 'BPPT-H'},
-  {label: 'B2G', value: 'B2G', name: 'B2G'},
-  {label: 'DDPP', value: 'DDPP', name: 'DDPP'},
-  {label: 'FREL', value: 'FREL', name: 'FREL'},
-  {label: 'BAPPENAS', value: 'BAPPENAS', name: 'BAPPENAS'},
+  {label: 'SNC', value: 'SNC', name: 'SNC', sector: 'Multisector'},
+  {label: 'NDC/TNC', value: 'NDC/TNC', name: 'NDC/TNC', sector: 'Multisector'},
+  {label: 'RAN-GRK', value: 'RAN-GRK', name: 'RAN-GRK', sector: 'Multisector'},
+  {label: 'EPS', value: 'EPS', name: 'EPS', sector: 'Multisector'},
+  {label: 'PBL Floor', value: 'PBL Floor', name: 'PBL Floor', sector: 'Multisector'},
+  {label: 'PBL Ceiling', value: 'PBL Ceiling', name: 'PBL Ceiling', sector: 'Multisector'},
+  {label: 'Indonesia Vision 2045', value: 'Indonesia Vision 2045', name: 'Indonesia Vision 2045', sector: 'Multisector'},
+  {label: 'LCSST2050', value: 'LCSST2050', name: 'LCSST2050', sector: 'Energy Sector'},
+  {label: 'Cal 2050', value: 'Cal 2050', name: 'Cal 2050', sector: 'Energy Sector'},
+  {label: 'KEN', value: 'KEN', name: 'KEN', sector: 'Energy Sector'},
+  {label: 'CAT', value: 'CAT', name: 'CAT', sector: 'Energy Sector'},
+  {label: 'EUM', value: 'EUM', name: 'EUM', sector: 'Energy Sector'},
+  {label: 'BPPT-L', value: 'BPPT-L', name: 'BPPT-L', sector: 'Energy Sector'},
+  {label: 'BPPT-H', value: 'BPPT-H', name: 'BPPT-H', sector: 'Energy Sector'},
+  {label: 'B2G', value: 'B2G', name: 'B2G', sector: 'Energy Sector'},
+  {label: 'DDPP', value: 'DDPP', name: 'DDPP', sector: 'Land Sector'},
+  {label: 'FREL', value: 'FREL', name: 'FREL', sector: 'Land Sector'},
+  {label: 'BAPPENAS', value: 'BAPPENAS', name: 'BAPPENAS', sector: 'Land Sector'},
 ]
 
 const SCENARIO_OPTIONS = [
@@ -65,7 +65,7 @@ const SCENARIO_OPTIONS = [
 ]
 
 const DEFAULTS = {
-  sector: 'Multisektor',
+  sector: 'Multisector',
   developed:'Government',
   model: 'SNC',
   scenario: 'Business as Usual'
@@ -151,15 +151,18 @@ const getYColumnOptions = createSelector(
 const getChartData = createSelector(
   [getEmissionProjectionData, getSelectedOptions, getYColumnOptions],
   (emissionData, options, yColumnOptions) => {
+    console.log('emissionData', emissionData)
+    console.log('options', options)
     if (isEmpty(emissionData)) return null
     if (!options) return null
 
     const filteredData = filter(emissionData, {sector: options.sector.value, model: options.model.value})
-    
+    console.log('filteredData', filteredData)
     const xAxis = emissionData[0].values.map((val) => val.year)
     const data = []
     xAxis.forEach((x) => {
       filteredData.forEach((dataFilter) => {
+        console.log('dataFilter', dataFilter)
         const object = {}
         object.x = x
         yColumnOptions.forEach(yColumn => {
