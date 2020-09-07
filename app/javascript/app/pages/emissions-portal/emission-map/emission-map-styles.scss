@@ -93,14 +93,14 @@
 
 .mapButtonWrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: absolute;
-  left: 0;
-  top: 10%;
-  bottom: 0;
-  width: 100px;
-  height: 80%;
-  background-color: #ffffff;
+  left: 30%;
+  top: 0;
+  // bottom: 0;
+  width: 40%;
+  height: 100px;
+  background-color: transparent;
   -webkit-box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
   -moz-box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
   box-shadow: 2px 0px 7px 0px rgba(158,158,158,1);
