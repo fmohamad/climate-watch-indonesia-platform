@@ -37,7 +37,7 @@ const SOURCE_OPTIONS = [
 const DEFAULTS = {
   source: 'KLHK',
   breakBy: 'region-absolute',
-  gas: 'ALL_GHG',
+  gas: 'CO2EQ',
   sector: ALL_SELECTED,
   region: COUNTRY_ISO,
   chartType: 'line',
@@ -141,7 +141,7 @@ const getDefaults = createSelector(
     sector: get(options, 'sector[0]'),
     category: findOption(options.category, DEFAULTS.category),
     subCategory: findOption(options.subCategory, DEFAULTS.subCategory),
-    gas: get(options, 'gas[0]'),
+    gas: findOption(options.gas, DEFAULTS.gas)
   })
 );
 

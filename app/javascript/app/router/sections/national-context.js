@@ -6,5 +6,5 @@ export default [
     default: true
   },
   { slug: 'climate-funding', path: '/national-context/climate-funding' },
-  { slug: 'sectoral-activity', path: '/national-context/sectoral-activity' }
+  { slug: 'sectoral-activity', path: '/national-context/sectoral-activity' },
 ];

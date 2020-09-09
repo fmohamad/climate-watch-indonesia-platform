@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import MetadataProvider from 'providers/ghg-inventory-metadata-provider';
+import MetadataProvider from 'providers/metadata-provider';
 import GHGEmissionsProvider from 'providers/ghg-emissions-provider';
 import GHGTargetEmissionsProvider from 'providers/ghg-target-emissions-provider';
 import WorldBankProvider from 'providers/world-bank-provider';
@@ -18,21 +18,9 @@ import InfoDownloadToolbox from 'components/info-download-toolbox';
 import dropdownStyles from 'styles/dropdown.scss';
 import lineIcon from 'assets/icons/line_chart.svg';
 import areaIcon from 'assets/icons/area_chart.svg';
-import styles from './ghg-emission-inventory-styles.scss';
+import styles from './historical-emissions-styles.scss';
 
-class Inventory extends PureComponent {
-
-  handleLegendChange = selected => {
-    const { selectedModel } = this.props;
-    const KABUPATEN = 'kabupaten';
-
-    if (selectedModel === KABUPATEN) {
-      this.handleFilterChange('district', selected);
-    } else {
-      this.handleFilterChange('sector', selected);
-    }
-  };
-
+class Historical extends PureComponent {
   handleFilterChange = (field, selected) => {
     const { onFilterChange, selectedOptions } = this.props;
 
@@ -57,13 +45,12 @@ class Inventory extends PureComponent {
     onFilterChange({ [field]: values });
   };
 
-  renderDropdown(field, icons) {
+  renderDropdown(field, multi, icons) {
     const {
       apiSelected,
       selectedOptions,
       filterOptions,
       metricSelected,
-      fieldToBreakBy,
       t
     } = this.props;
     const value = selectedOptions && selectedOptions[field];
@@ -73,10 +60,8 @@ class Inventory extends PureComponent {
     if (!isChartReady) return null;
 
     const label = t(
-      `pages.emissions-portal.ghg-emission-inventory.labels.${kebabCase(field)}`
+      `pages.national-context.historical-emissions.labels.${kebabCase(field)}`
     );
-
-    const multi = fieldToBreakBy === field ? true : false
 
     if (multi) {
       const absoluteMetric = metricSelected === METRIC_OPTIONS.ABSOLUTE_VALUE;
@@ -115,12 +100,31 @@ class Inventory extends PureComponent {
     );
   }
 
+  renderSwitch() {
+    const { filterOptions, selectedOptions } = this.props;
+    return selectedOptions.source && (
+    <div className={styles.switch}>
+      <div className="switch-container">
+        <Switch
+          options={filterOptions.source}
+          onClick={value => this.handleSwitchChange(value)}
+          selectedOption={String(selectedOptions.source.value)}
+          theme={{
+                wrapper: styles.switchWrapper,
+                option: styles.option,
+                checkedOption: styles.checkedOption
+              }}
+        />
+      </div>
+    </div>
+      );
+  }
+
   render() {
     const {
       downloadURI,
       metadataSources,
       emissionParams,
-      metaParams,
       selectedOptions,
       chartData,
       fieldToBreakBy,
@@ -128,25 +132,27 @@ class Inventory extends PureComponent {
     } = this.props;
 
     const icons = { line: lineIcon, area: areaIcon };
-
     return (
       <div className={styles.page}>
         <SectionTitle
-          title={t('pages.emissions-portal.ghg-emission-inventory.title')}
+          title={t('pages.emissions-portal.ghg-emission-inventory-cait.title')}
           description={t(
-            'pages.emissions-portal.ghg-emission-inventory.description'
+            'pages.emissions-portal.ghg-emission-inventory-cait.description'
           )}
         />
         <div className={styles.filtersGroup}>
           <div className={styles.filters}>
             {this.renderDropdown('breakBy')}
-            {this.renderDropdown('region')}
-            {this.renderDropdown('sector')}
-            {this.renderDropdown('category')}
-            {this.renderDropdown('subCategory')}
-            {this.renderDropdown('gas')}
-            {this.renderDropdown('chartType', icons)}
+            {this.renderDropdown('region', true)}
+            {this.renderDropdown('sector', true)}
+            {this.renderDropdown('gas', true)}
+            {this.renderDropdown('chartType', false, icons)}
           </div>
+          <InfoDownloadToolbox
+            className={{ buttonWrapper: styles.buttonWrapper }}
+            slugs={metadataSources}
+            downloadUri={downloadURI}
+          />
         </div>
         <div className={styles.chartContainer}>
           {
@@ -165,19 +171,22 @@ class Inventory extends PureComponent {
                   }
                   config={chartData.config}
                   data={chartData.data}
+                  projectedData={chartData.projectedData || []}
                   domain={chartData.domain}
                   dataOptions={chartData.dataOptions}
                   dataSelected={chartData.dataSelected}
                   height={500}
                   loading={chartData.loading}
-                  onLegendChange={v => this.handleFilterChange('gas', v)}
+                  onLegendChange={v =>
+                    this.handleFilterChange(fieldToBreakBy, v)}
                   getCustomYLabelFormat={value => format('.3s')(value)}
                   showUnit
                 />
               )
           }
         </div>
-        <MetadataProvider params={metaParams} />
+        <MetadataProvider meta="ghgindo" />
+        <MetadataProvider meta="ghgcw" />
         <WorldBankProvider />
         {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
         {emissionParams && <GHGTargetEmissionsProvider />}
@@ -186,7 +195,7 @@ class Inventory extends PureComponent {
   }
 }
 
-Inventory.propTypes = {
+Historical.propTypes = {
   t: PropTypes.func.isRequired,
   apiSelected: PropTypes.string,
   metadataSources: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
@@ -200,7 +209,7 @@ Inventory.propTypes = {
   selectedOptions: PropTypes.object
 };
 
-Inventory.defaultProps = {
+Historical.defaultProps = {
   apiSelected: undefined,
   chartData: undefined,
   metadataSources: undefined,
@@ -212,4 +221,4 @@ Inventory.defaultProps = {
   selectedOptions: undefined
 };
 
-export default Inventory;
+export default Historical;
