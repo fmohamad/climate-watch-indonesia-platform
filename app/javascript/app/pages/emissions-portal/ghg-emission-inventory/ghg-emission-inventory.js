@@ -23,6 +23,14 @@ class HistoricalContainer extends PureComponent {
       Object.assign(filter, { gas: null, region: null, sector: null });
     }
 
+    if (filter.sector) {
+      Object.assign(filter, { category: null, subCategory: null });
+    }
+
+    if (filter.category) {
+      Object.assign(filter, { subCategory: null });
+    }
+
     updateFiltersSelected({ query: updateQueryParams(oldQuery, filter) });
   };
 
