@@ -33,13 +33,13 @@ const SOURCE_OPTIONS = [
 ];
 
 const GAS_OPTIONS = [
-  { label: 'ALL GHG', name: 'ALL GHG', value: 'ALL_GGH', api: API.cw }
+  { label: 'ALL GHG', name: 'ALL GHG', value: 'ALL GHG', api: API.cw }
 ];
 
 const DEFAULTS = {
   source: 'CAIT',
   breakBy: 'region-absolute',
-  gas: 'ALL GHG',
+  gas: 'ALL_GHG',
   sector: ALL_SELECTED,
   region: COUNTRY_ISO,
   chartType: 'line'
@@ -210,6 +210,7 @@ const getDefaults = createSelector([ getFilterOptions ], options => ({
   region: findOption(options.region, DEFAULTS.region),
   sector: findOption(options.sector, DEFAULTS.sector),
   gas: findOption(options.gas, DEFAULTS.gas)
+
 }));
 
 const filterSectorSelectedByMetrics = createSelector(
