@@ -12,8 +12,6 @@ en:
           break-by:
             region-absolute: Region - Absolute
             sector-absolute: Sector - Absolute
-            category-absolute: Category - Absolute
-            sub-category-absolute: Sub Category - Absolute
           labels:
             break-by: Break by
             region: Region

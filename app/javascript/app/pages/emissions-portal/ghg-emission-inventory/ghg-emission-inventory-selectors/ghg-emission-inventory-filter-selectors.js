@@ -132,18 +132,32 @@ export const getFilterOptions = createStructuredSelector({
 
 // DEFAULTS
 const getDefaults = createSelector(
-  [getFilterOptions, getMetadataData],
-  (options, metadata) => ({
-    source: findOption(SOURCE_OPTIONS, DEFAULTS.source),
-    chartType: findOption(CHART_TYPE_OPTIONS, DEFAULTS.chartType),
-    breakBy: findOption(options.breakBy, DEFAULTS.breakBy),
-    region: findOption(options.region, DEFAULTS.region),
-    sector: get(options, 'sector[0]'),
-    category: findOption(options.category, DEFAULTS.category),
-    subCategory: findOption(options.subCategory, DEFAULTS.subCategory),
-    gas: findOption(options.gas, DEFAULTS.gas)
-  })
-);
+  [getFilterOptions, getFieldQuery('breakBy')],
+  (options, breakBy) => {
+    const defs = {
+      source: findOption(SOURCE_OPTIONS, DEFAULTS.source),
+      chartType: findOption(CHART_TYPE_OPTIONS, DEFAULTS.chartType),
+      breakBy: findOption(options.breakBy, DEFAULTS.breakBy),
+      region: findOption(options.region, DEFAULTS.region),
+      sector: get(options, 'sector[0]'),
+      gas: findOption(options.gas, DEFAULTS.gas)
+    }
+
+    if (breakBy == 'sector-absolute') {
+      return {
+        ...defs,
+        category: findOption(options.category, DEFAULTS.category),
+        subCategory: findOption(options.subCategory, DEFAULTS.subCategory),
+      }
+    }
+
+    return {
+      ...defs,
+      category: get(options, 'category[0]'),
+      subCategory: get(options, 'subCategory[0]')
+    }
+  }
+)
 
 const filterSectorSelectedByMetrics = createSelector(
   [

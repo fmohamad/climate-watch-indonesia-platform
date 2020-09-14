@@ -101,7 +101,7 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
   end
 
   def categories
-    params[:category]&.split(',') || HistoricalEmissions::Category.take(1).pluck(:id)
+    params[:category]&.split(',') || HistoricalEmissions::Category.includes(:sector).where(sector: sectors)
   end
 
   def sub_categories
