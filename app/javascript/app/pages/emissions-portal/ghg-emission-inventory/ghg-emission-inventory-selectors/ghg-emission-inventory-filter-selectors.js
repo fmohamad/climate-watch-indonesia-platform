@@ -134,27 +134,15 @@ export const getFilterOptions = createStructuredSelector({
 const getDefaults = createSelector(
   [getFilterOptions, getFieldQuery('breakBy')],
   (options, breakBy) => {
-    const defs = {
+    return {
       source: findOption(SOURCE_OPTIONS, DEFAULTS.source),
       chartType: findOption(CHART_TYPE_OPTIONS, DEFAULTS.chartType),
       breakBy: findOption(options.breakBy, DEFAULTS.breakBy),
       region: findOption(options.region, DEFAULTS.region),
       sector: get(options, 'sector[0]'),
-      gas: findOption(options.gas, DEFAULTS.gas)
-    }
-
-    if (breakBy == 'sector-absolute') {
-      return {
-        ...defs,
-        category: findOption(options.category, DEFAULTS.category),
-        subCategory: findOption(options.subCategory, DEFAULTS.subCategory),
-      }
-    }
-
-    return {
-      ...defs,
-      category: get(options, 'category[0]'),
-      subCategory: get(options, 'subCategory[0]')
+      gas: findOption(options.gas, DEFAULTS.gas),
+      category: findOption(options.category, DEFAULTS.category),
+      subCategory: findOption(options.subCategory, DEFAULTS.subCategory),
     }
   }
 )

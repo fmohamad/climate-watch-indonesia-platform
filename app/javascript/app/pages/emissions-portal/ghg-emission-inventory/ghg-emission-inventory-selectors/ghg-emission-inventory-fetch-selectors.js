@@ -20,12 +20,13 @@ export const getEmissionParams = createSelector(
   [ getSelectedOptions, getMetadataData ],
   (options, metadata) => {
     if (!options || !options.source || !metadata) return null;
-    const { source: selectedSource, gas, category, subCategory } = options;
+    const { source: selectedSource, gas, sector, category, subCategory } = options;
     return {
       api: selectedSource.api,
       location: COUNTRY_ISO,
       ...getParam('gas', gas),
       source: findOption(metadata.dataSource, selectedSource.value).value,
+      ...getParam('sector', sector),
       ...getParam('category', category),
       ...getParam('subCategory', subCategory)
     };
