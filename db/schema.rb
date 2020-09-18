@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_01_223914) do
+ActiveRecord::Schema.define(version: 2020_09_17_045456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,7 +99,9 @@ ActiveRecord::Schema.define(version: 2020_09_01_223914) do
     t.string "code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "sector_id"
     t.index ["code"], name: "index_emission_projection_models_on_code", unique: true
+    t.index ["sector_id"], name: "index_emission_projection_models_on_sector_id"
   end
 
   create_table "emission_projection_scenarios", force: :cascade do |t|
@@ -408,6 +410,7 @@ ActiveRecord::Schema.define(version: 2020_09_01_223914) do
   add_foreign_key "emission_activity_sectors", "emission_activity_sectors", column: "parent_id", on_delete: :cascade
   add_foreign_key "emission_activity_values", "emission_activity_sectors", column: "sector_id", on_delete: :cascade
   add_foreign_key "emission_activity_values", "locations", on_delete: :cascade
+  add_foreign_key "emission_projection_models", "emission_projection_sectors", column: "sector_id"
   add_foreign_key "emission_projection_values", "emission_projection_models", column: "model_id", on_delete: :cascade
   add_foreign_key "emission_projection_values", "emission_projection_scenarios", column: "scenario_id", on_delete: :cascade
   add_foreign_key "emission_projection_values", "emission_projection_sectors", column: "sector_id", on_delete: :cascade

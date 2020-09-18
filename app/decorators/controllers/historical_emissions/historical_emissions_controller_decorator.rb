@@ -127,12 +127,16 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
   end
 
   def fetch_meta_categories
-    ::HistoricalEmissions::Category.where(sector_id: sectors)
-      .or(::HistoricalEmissions::Category.where(name: 'TOTAL'))
+    ::HistoricalEmissions::Category
+      .includes(:sector).where(sector: sectors)
+      .or(::HistoricalEmissions::Category.includes(:sector).where(name: 'TOTAL'))
   end
 
   def fetch_meta_sub_categories
-    ::HistoricalEmissions::SubCategory.where(category_id: categories)
-      .or(::HistoricalEmissions::SubCategory.where(name: 'TOTAL'))
+    base_query = ::HistoricalEmissions::SubCategory
+             .joins(:category)
+
+    base_query.where(historical_emissions_categories: { sector_id: sectors })
+      .or(base_query.where(name: 'TOTAL'))
   end
 end

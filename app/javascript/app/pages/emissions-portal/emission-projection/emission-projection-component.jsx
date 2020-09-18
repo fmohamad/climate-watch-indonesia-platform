@@ -63,10 +63,6 @@ class EmissionProjection extends PureComponent {
     let label = t(
       `pages.emissions-portal.emission-projection.labels.${kebabCase(field)}`
     )
-    
-    if(field === 'model') {
-      options = filterOptions['model'].filter(data => data.sector === selectedOptions['sector'].value)
-    }
 
     return (
       <Dropdown

@@ -80,12 +80,33 @@ const getEmissionProjectionData = ({ EmissionProjection }) => EmissionProjection
 const getChartLoading = ({ EmissionProjection = {} }) =>
   (EmissionProjection && EmissionProjection.loading);
 
-const getFilterOptions = createStructuredSelector({
-  sector: () => SECTOR_OPTIONS,
-  developed: () => DEVELOPED_OPTIONS,
-  model: () => MODEL_OPTIONS,
-  scenario: () => SCENARIO_OPTIONS
-});
+// const getFilterOptions = createStructuredSelector({
+//   sector: () => SECTOR_OPTIONS,
+//   developed: () => DEVELOPED_OPTIONS,
+//   model: () => MODEL_OPTIONS,
+//   scenario: () => SCENARIO_OPTIONS
+// });
+
+const getFilterOptions = createSelector(
+  (getFieldQuery('sector')),
+  (queryValue) => {
+
+    let models = []
+
+    if (queryValue) {
+      models = MODEL_OPTIONS.filter(x => x.sector === queryValue)
+    } else {
+      models = MODEL_OPTIONS.filter(x => x.sector === 'Multisector')
+    }
+
+    return {
+      sector: SECTOR_OPTIONS,
+      developed: DEVELOPED_OPTIONS,
+      model: models,
+      scenario: SCENARIO_OPTIONS
+    }
+  }
+)
 
 const getFieldSelected = field =>
   createSelector(
@@ -103,12 +124,13 @@ const getFieldSelected = field =>
     }
   );
 
+
 const getDefaults = createSelector([ getFilterOptions ], (
   options
 ) => ({
   sector: findOption(SECTOR_OPTIONS, DEFAULTS.sector),
   developed: findOption(DEVELOPED_OPTIONS, DEFAULTS.developed),
-  model: findOption(MODEL_OPTIONS, DEFAULTS.model),
+  model: get(options, 'model[0]'),
   scenario: findOption(SCENARIO_OPTIONS, DEFAULTS.scenario),
 }));
 

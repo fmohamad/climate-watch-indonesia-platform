@@ -76,14 +76,13 @@ class Inventory extends PureComponent {
       `pages.emissions-portal.ghg-emission-inventory.labels.${kebabCase(field)}`
     );
 
-    const multi = fieldToBreakBy === field ? true : false
+    let multi = fieldToBreakBy == field ? true : false
+
+    const disabled = fieldToBreakBy === 'sector' &&
+                     (field === 'category' || 
+                     field === 'subCategory')
 
     if (multi) {
-      const absoluteMetric = metricSelected === METRIC_OPTIONS.ABSOLUTE_VALUE;
-      const disabled = apiSelected === API.indo &&
-        field === 'sector' &&
-        !absoluteMetric;
-
       const values = castArray(value).filter(v => v);
 
       return (
@@ -100,6 +99,7 @@ class Inventory extends PureComponent {
         />
       );
     }
+
     return (
       <Dropdown
         key={field}
@@ -110,6 +110,7 @@ class Inventory extends PureComponent {
         value={value || null}
         theme={{ select: dropdownStyles.select }}
         hideResetButton
+        disabled={disabled}
         {...iconsProp}
       />
     );
