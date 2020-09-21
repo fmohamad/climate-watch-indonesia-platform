@@ -26,9 +26,15 @@ class EmissionProjectionContainer extends PureComponent {
   onFilterChange = filter => {
     const { updateFiltersSelected, query } = this.props;
 
+    let newQuery = query
+
+    if (filter && filter.sector) {
+      newQuery = null
+    }
+
     updateFiltersSelected({
       section: 'emission-projection',
-      query: { ...query, ...filter }
+      query: { ...newQuery, ...filter }
     });
   };
 
