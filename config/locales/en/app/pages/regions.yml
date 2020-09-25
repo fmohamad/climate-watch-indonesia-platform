@@ -13,8 +13,8 @@ en:
             sector: Sektor
             gas: Gas
             metric: Indikator 
-          emission-target-by: Emission target by
-          projected-bau-by: Projected BAU emission by
+          emission-target-by: Emissions target by
+          projected-bau-by: Projected BAU emissions by
         sectoral-circumstances:
           title: Profil Sektoral 
           description: Lorem ipsum dolor sit amet

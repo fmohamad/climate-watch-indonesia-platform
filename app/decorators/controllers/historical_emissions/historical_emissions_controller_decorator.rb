@@ -47,7 +47,7 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
           ::HistoricalEmissions::Gwp.all,
           fetch_meta_categories,
           fetch_meta_sub_categories,
-          Location.all
+          fetch_locations
         ),
         serializer: ::HistoricalEmissions::MetadataSerializer
       )
@@ -61,7 +61,7 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
           ::HistoricalEmissions::Gwp.all,
           ::HistoricalEmissions::Category.all,
           ::HistoricalEmissions::SubCategory.all,
-          Location.all
+          fetch_locations
         ),
         serializer: ::HistoricalEmissions::MetadataSerializer
       )
@@ -127,16 +127,16 @@ HistoricalEmissions::HistoricalEmissionsController.class_eval do
   end
 
   def fetch_meta_categories
-    ::HistoricalEmissions::Category
-      .includes(:sector).where(sector: sectors)
-      .or(::HistoricalEmissions::Category.includes(:sector).where(name: 'TOTAL'))
+    base_query = ::HistoricalEmissions::Category
+    base_query.where(sector_id: sectors).or(base_query.where(name: 'TOTAL'))
   end
 
   def fetch_meta_sub_categories
     base_query = ::HistoricalEmissions::SubCategory
-             .joins(:category)
+    base_query.where(category_id: categories).or(base_query.where(name: 'TOTAL'))
+  end
 
-    base_query.where(historical_emissions_categories: { sector_id: sectors })
-      .or(base_query.where(name: 'TOTAL'))
+  def fetch_locations
+    Location.where(location_type: 'PROVINCE')
   end
 end
