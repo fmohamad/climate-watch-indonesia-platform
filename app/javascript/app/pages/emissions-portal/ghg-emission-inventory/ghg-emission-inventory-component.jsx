@@ -171,7 +171,7 @@ class Inventory extends PureComponent {
                   dataSelected={chartData.dataSelected}
                   height={500}
                   loading={chartData.loading}
-                  onLegendChange={v => this.handleFilterChange('gas', v)}
+                  onLegendChange={v => this.handleFilterChange(fieldToBreakBy, v)}
                   getCustomYLabelFormat={value => format('.3s')(value)}
                   showUnit
                 />
