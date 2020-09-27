@@ -16,7 +16,7 @@ module Api
 
             @values.each do |value|
               value_by_year = value.
-                vakues.
+                values.
                 reduce({}) { |acc, v| acc.update(v['year'] => v['value']) }
 
               csv << [

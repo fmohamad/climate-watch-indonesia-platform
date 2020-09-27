@@ -130,7 +130,6 @@ class Historical extends PureComponent {
       fieldToBreakBy,
       t
     } = this.props;
-
     const icons = { line: lineIcon, area: areaIcon };
     return (
       <div className={styles.page}>

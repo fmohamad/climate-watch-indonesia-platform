@@ -98,9 +98,9 @@ class EmissionProjection extends PureComponent {
 
   render() {
     const shareableLink = `${window.location.origin}${window.location.pathname}`
+    const downloadURI = `${window.location.origin}/api/v1/emission_projections.zip`
     const { isOpen } = this.state
     const { t, query, chart } = this.props
-
     return (
       <div className={styles.page}>
         <SectionTitle
@@ -115,11 +115,11 @@ class EmissionProjection extends PureComponent {
                 {this.renderDropdown('developed')}
                 {this.renderDropdown('model')}
                 {this.renderDropdown('scenario')}
-                {/*<InfoDownloadToolbox
+                <InfoDownloadToolbox
                   className={{ buttonWrapper: styles.buttonWrapper }}
-                  slugs={"sources"}
-                  downloadUri={"downloadURI"}
-                />*/}
+                  slugs={[ 'NDC' ]}
+                  downloadUri={downloadURI}
+                />
                 <Button
                   theme={{ button: cx(styles.shareButton) }}
                   onClick={() => this.setState({ isOpen: !isOpen })}

@@ -46,25 +46,23 @@ class EmissionMap extends Component {
     let currentYearIndex = 0;
     this.setState({ disablePlay: true });
 
-    const playAtStart = setInterval(
-      () => {
-        if (years[currentYearIndex]) {
-          onFilterChange({ sector: selectedOptions.sector, year: String(years[currentYearIndex]) });
-        }
-        if (currentYearIndex > years.length - 1) {
-          clearInterval(playAtStart);
-          setTimeout(
-            () => {
-              onFilterChange({ sector: selectedOptions.sector, year: String(initialYear) });
-              this.setState({ disablePlay: false });
-            },
-            10000
-          );
-        }
-        currentYearIndex += 1;
-      },
-      500
-    );
+    const playAtStart = setInterval(() => {
+      if (years[currentYearIndex]) {
+        onFilterChange({ sector: selectedOptions.sector, year: String(years[currentYearIndex]) });
+      }
+
+      if (currentYearIndex > years.length - 1) {
+        clearInterval(playAtStart);
+        setTimeout(
+          () => {
+            onFilterChange({ sector: selectedOptions.sector, year: String(initialYear) });
+            this.setState({ disablePlay: false });
+          },
+          1000
+        );
+      }
+      currentYearIndex += 1;
+    }, 1500);
   };
   /*renderDropdown = field => {
     const {
@@ -175,13 +173,12 @@ class EmissionMap extends Component {
   renderSectorSelector = () => {
     const { active } = this.state;
     const { sectors } = this.props;
-
     return (
       <div className={styles.mapButtonWrapper} style={{ zIndex: 2 }}>
         {sectors.map((sector, index) => {
           return (
             <div
-              className={styles.mapButton}
+              className={window.location.href.indexOf(sector.code) != -1 ? styles.mapButtonActive : styles.mapButton}
               onClick={() => this.handleFilterChange('sector', sector.code)}
               key={index}
             >
@@ -194,11 +191,21 @@ class EmissionMap extends Component {
                 <p className={styles.buttonText}>
                   {index + 1}
                 </p>
-                {sector.code === 'ENERGY' && (<Icon icon={energy_color} style={{ height: 35, width: 35 }} />)}
-                {sector.code === 'IPPU' && (<Icon icon={industry_color} style={{ height: 35, width: 35 }} />)}
-                {sector.code === 'FORESTRY' && (<Icon icon={forestry_color} style={{ height: 35, width: 35 }} />)}
-                {sector.code === 'WASTE' && (<Icon icon={waste_color} style={{ height: 35, width: 35 }} />)}
-                {sector.code === 'AGRICULTURE' && (<Icon icon={agriculture_color} style={{ height: 35, width: 35 }} />)}
+                {sector.code === 'ENERGY' && (
+                  <Icon icon={energy_color} style={{ height: 35, width: 35 }} />
+                )}
+                {sector.code === 'IPPU' && (
+                  <Icon icon={industry_color} style={{ height: 35, width: 35 }} />
+                )}
+                {sector.code === 'FORESTRY' && (
+                  <Icon icon={forestry_color} style={{ height: 35, width: 35 }} />
+                )}
+                {sector.code === 'WASTE' && (
+                  <Icon icon={waste_color} style={{ height: 35, width: 35 }} />
+                )}
+                {sector.code === 'AGRICULTURE' && (
+                  <Icon icon={agriculture_color} style={{ height: 35, width: 35 }} />
+                )}
               </div>
             </div>
           );

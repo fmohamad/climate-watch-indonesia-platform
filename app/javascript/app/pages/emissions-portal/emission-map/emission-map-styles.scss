@@ -113,20 +113,23 @@
   flex-direction: column;
   flex: 1;
   cursor: pointer;
-  border-top: 1px solid $link-water;
-  border-right: 2px solid $link-water;
-  border-bottom: 1px solid $link-water;
-  border-left: 2px solid $link-water;
+  border-top: 1px solid #ffffff;
+  border-right: 2px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-left: 2px solid #ffffff;
 }
 
 .mapButtonActive {
+  background-color: #cfd6e6;
   display: flex;
+  padding: 15px 5px;
   flex-direction: column;
   flex: 1;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  background-color: #EDEDED;
+  border-top: 1px solid #ffffff;
+  border-right: 2px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-left: 2px solid #ffffff;
 }
 
 .buttonText {
