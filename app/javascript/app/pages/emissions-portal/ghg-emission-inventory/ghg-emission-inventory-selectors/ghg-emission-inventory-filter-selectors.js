@@ -25,8 +25,8 @@ const { COUNTRY_ISO } = process.env;
 
 // OPTIONS
 const CHART_TYPE_OPTIONS = [
-  { label: 'area', value: 'area' },
-  { label: 'line', value: 'line' },
+  { label: 'Stacked Area', value: 'area' },
+  { label: 'Line', value: 'line' },
 ];
 
 const SOURCE_OPTIONS = [

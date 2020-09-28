@@ -63,6 +63,8 @@ class Historical extends PureComponent {
       `pages.national-context.historical-emissions.labels.${kebabCase(field)}`
     );
 
+    let variant = icons ? "icons-labels" : undefined
+
     if (multi) {
       const absoluteMetric = metricSelected === METRIC_OPTIONS.ABSOLUTE_VALUE;
       const disabled = apiSelected === API.indo &&
@@ -95,6 +97,7 @@ class Historical extends PureComponent {
         value={value || null}
         theme={{ select: dropdownStyles.select }}
         hideResetButton
+        variant={variant}
         {...iconsProp}
       />
     );
@@ -130,7 +133,7 @@ class Historical extends PureComponent {
       fieldToBreakBy,
       t
     } = this.props;
-    const icons = { line: lineIcon, area: areaIcon };
+    const icons = { 'Line': lineIcon, 'Area': areaIcon };
     return (
       <div className={styles.page}>
         <SectionTitle

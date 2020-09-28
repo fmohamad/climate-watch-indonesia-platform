@@ -125,7 +125,7 @@ const calculateValue = (currentValue, value, scale, metricData) => {
   const metricRatio = metricData || 1;
   const updatedValue = value || value === 0
     ? value * scale / metricRatio
-    : null;
+    : 0;
   if (updatedValue && (currentValue || currentValue === 0)) {
     return updatedValue + currentValue;
   }
@@ -210,7 +210,12 @@ const parseChartData = createSelector(
       )
         return null;
 
-      const yearValues = emissionsData[0].emissions.map(d => d.year);
+      let yearValues = []
+      let i = 1990
+      while (i < 2031) {
+        yearValues.push(i)
+        i++
+      }
 
       // for CW API we don't have precalculated data per metric, all values provided
       // are absolute metric, we are going to calculate per gdp, per capita

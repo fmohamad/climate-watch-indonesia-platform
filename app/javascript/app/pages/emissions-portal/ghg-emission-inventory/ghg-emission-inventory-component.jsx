@@ -78,6 +78,8 @@ class Inventory extends PureComponent {
 
     let multi = fieldToBreakBy == field ? true : false
 
+    const variant = icons ? "icons-labels" : undefined
+
     const disabled = fieldToBreakBy === 'sector' &&
                      (field === 'category' || 
                      field === 'subCategory')
@@ -110,6 +112,7 @@ class Inventory extends PureComponent {
         value={value || null}
         theme={{ select: dropdownStyles.select }}
         hideResetButton
+        variant={variant}
         disabled={disabled}
         {...iconsProp}
       />
@@ -128,7 +131,7 @@ class Inventory extends PureComponent {
       t
     } = this.props;
 
-    const icons = { line: lineIcon, area: areaIcon };
+    const icons = { 'Line': lineIcon, 'Stacked Area': areaIcon };
 
     return (
       <div className={styles.page}>
