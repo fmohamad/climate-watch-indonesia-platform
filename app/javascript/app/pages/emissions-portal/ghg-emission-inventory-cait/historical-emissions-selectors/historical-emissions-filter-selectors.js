@@ -19,6 +19,7 @@ import {
   getTop10EmittersOptionLabel,
   getSelectedAPI
 } from './historical-emissions-get-selectors';
+import { get } from 'lodash-es';
 
 const { COUNTRY_ISO } = process.env;
 
@@ -39,7 +40,7 @@ const GAS_OPTIONS = [
 const DEFAULTS = {
   source: 'CAIT',
   breakBy: 'region-absolute',
-  gas: 'ALL_GHG',
+  gas: 'ALL GHG',
   sector: ALL_SELECTED,
   region: COUNTRY_ISO,
   chartType: 'line'
@@ -198,7 +199,7 @@ export const getFilterOptions = createStructuredSelector({
   breakBy: getBreakByOptions,
   region: getFieldOptions('location'),
   sector: withAllSelected(getFieldOptions('sector')),
-  gas: () => GAS_OPTIONS,
+  gas: getFieldOptions('gas'),
   chartType: () => CHART_TYPE_OPTIONS
 });
 
@@ -209,7 +210,7 @@ const getDefaults = createSelector([ getFilterOptions ], options => ({
   breakBy: findOption(options.breakBy, DEFAULTS.breakBy),
   region: findOption(options.region, DEFAULTS.region),
   sector: findOption(options.sector, DEFAULTS.sector),
-  gas: findOption(options.gas, DEFAULTS.gas)
+  gas: get(options, 'gas[0]')
 
 }));
 

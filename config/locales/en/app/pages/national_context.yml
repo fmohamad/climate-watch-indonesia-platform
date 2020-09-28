@@ -39,8 +39,8 @@ en:
             national: National
           target-labels:
             bau: BAU
-            quantified: Quantified
-            not-quantifiable: Not Quantifiable
+            quantified: CM1
+            not-quantifiable: CM2
         sectoral-activity:
           title: Emission-producing Activity
           description: ''

@@ -53,6 +53,7 @@ export const getNationalOption = createSelector(
     return {
       ...findOption(meta.location, COUNTRY_ISO, 'iso_code3'),
       code: COUNTRY_ISO,
+      value: COUNTRY_ISO,
       label: t('pages.emissions-portal.ghg-emission-inventory.region.national'),
       override: true,
     };

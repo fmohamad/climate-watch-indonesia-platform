@@ -208,7 +208,13 @@ const getChartData = createSelector(
       })
     })
     return data*/
-    const yearValues = emissionData.length ? emissionData[0].values.map(d => d.year) : [];
+    let yearValues = []
+    let i = 2000
+    while (i < 2055) {
+      yearValues.push(i)
+      i += 5
+    }
+    // const yearValues = emissionData.length ? emissionData[0].values.map(d => d.year) : [];
     const dataParsed = [];
     yearValues.forEach(x => {
       const yItems = {};
@@ -225,10 +231,7 @@ const getChartData = createSelector(
       });
       const item = { x, ...yItems };
       dataParsed.push(item);
-      console.log('item', item);
-      console.log('x', x);
     });
-    console.log('dataParsed', dataParsed);
     return dataParsed;
   }
 )
@@ -255,12 +258,19 @@ const getChartConfig = createSelector(
     );
 
     const axes = {
-      xBottom: { name: year, unit: year, format: 'YYYY' },
+      xBottom: { 
+        name: year,
+        unit: 'Year',
+        format: 'string',
+        label: { dx: 0, dy: 0, className: "" },
+      },
       yLeft: {
         name: 'Value',
         format: 'string',
+        unit: 'Mt CO2',
       },
     }
+
     const columns = { x: [ { label: 'year', value: 'x' } ], y: yColumnOptions }
 
     return {

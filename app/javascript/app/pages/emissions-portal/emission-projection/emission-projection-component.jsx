@@ -67,6 +67,8 @@ class EmissionProjection extends PureComponent {
       `pages.emissions-portal.emission-projection.labels.${kebabCase(field)}`
     )
 
+    let disabled = field === 'developed'
+
     if (multi) {
       const values = castArray(value).filter(v => v);
 
@@ -79,7 +81,7 @@ class EmissionProjection extends PureComponent {
           values={values}
           theme={{ wrapper: dropdownStyles.select }}
           hideResetButton
-          // disabled={disabled}
+          disabled={disabled}
         />
       );
     }
@@ -92,6 +94,7 @@ class EmissionProjection extends PureComponent {
         onValueChange={(selected) => this.handleFilterChange(field, selected)}
         value={value || null}
         theme={{ select: dropdownStyles.select }}
+        disabled={disabled}
         hideResetButton
       />
     )
@@ -110,6 +113,7 @@ class EmissionProjection extends PureComponent {
         height={500}
         loading={chartLoading}
         dataOptions={dataOptions}
+        showUnit
         dataSelected={dataSelected}
         onLegendChange={v => this.handleFilterChange('model', v)}
       />
@@ -132,7 +136,7 @@ class EmissionProjection extends PureComponent {
             <div className={styles.filtersChartContainer}>
               <div className={styles.dropdowns}>
                 {this.renderDropdown('sector', false)}
-                {/*{this.renderDropdown('developed', false)}*/}
+                {this.renderDropdown('developed', false)}
                 {this.renderDropdown('model', true)}
                 {this.renderDropdown('scenario', false)}
                 <InfoDownloadToolbox
