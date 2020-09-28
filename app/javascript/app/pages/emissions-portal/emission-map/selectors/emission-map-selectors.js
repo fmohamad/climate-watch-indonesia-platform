@@ -181,7 +181,7 @@ const getPathsForEmissionStyles = createSelector(
             name: getLocalizedProvinceName(properties, provincesDetails)
           }
         };
-
+        console.log('sectorName', sectorName);
         const thresholds = [ 10, 100, 500, 1000 ];
         const bucketColorScale = createBucketColorScale(thresholds);
         legend = composeBuckets(bucketColorScale.domain());

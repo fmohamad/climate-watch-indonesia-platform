@@ -6,6 +6,7 @@ import kebabCase from 'lodash/kebabCase'
 import filter from 'lodash/filter'
 import groupBy from 'lodash/groupBy'
 import uniq from 'lodash/uniq'
+import startCase from 'lodash/startCase';
 import flatMap from 'lodash/flatMap'
 
 import { Chart, Dropdown, Multiselect, Button, Icon } from 'cw-components'
@@ -31,9 +32,11 @@ class EmissionProjection extends PureComponent {
   }
 
   handleFilterChange = (field, selected) => {
-    const { onFilterChange } = this.props
+    console.log('field', field);
+    console.log('field', selected);
+    const { onFilterChange, selectedOptions } = this.props
 
-    /*const prevSelectedOptionValues = castArray(selectedOptions[field]).map(
+    const prevSelectedOptionValues = castArray(selectedOptions[field]).map(
       (o) => o.value
     )
     const selectedArray = castArray(selected)
@@ -51,18 +54,35 @@ class EmissionProjection extends PureComponent {
         : uniq(
             flatMap(removedAnyPreviousOverride, (v) =>
               String(v.value).split(','))
-          ).join(',')*/
+          ).join(',')
 
-    onFilterChange({ [field]: selected.value })
+    onFilterChange({ [field]: values })
   }
 
-  renderDropdown(field) {
+  renderDropdown(field, multi) {
     const { selectedOptions, filterOptions, t } = this.props
     let options = filterOptions[field] || []
     let value = selectedOptions && selectedOptions[field]
     let label = t(
       `pages.emissions-portal.emission-projection.labels.${kebabCase(field)}`
     )
+
+    if (multi) {
+      const values = castArray(value).filter(v => v);
+
+      return (
+        <Multiselect
+          key={field}
+          label={label}
+          options={options}
+          onValueChange={selected => this.handleFilterChange(field, selected)}
+          values={values}
+          theme={{ wrapper: dropdownStyles.select }}
+          hideResetButton
+          // disabled={disabled}
+        />
+      );
+    }
 
     return (
       <Dropdown
@@ -111,10 +131,10 @@ class EmissionProjection extends PureComponent {
           <div className={styles.chartMapContainer}>
             <div className={styles.filtersChartContainer}>
               <div className={styles.dropdowns}>
-                {this.renderDropdown('sector')}
-                {this.renderDropdown('developed')}
-                {this.renderDropdown('model')}
-                {this.renderDropdown('scenario')}
+                {this.renderDropdown('sector', false)}
+                {/*{this.renderDropdown('developed', false)}*/}
+                {this.renderDropdown('model', true)}
+                {this.renderDropdown('scenario', false)}
                 <InfoDownloadToolbox
                   className={{ buttonWrapper: styles.buttonWrapper }}
                   slugs={[ 'NDC' ]}

@@ -71,6 +71,8 @@ const DEFAULTS = {
   scenario: 'Business as Usual'
 };
 
+const FRONTEND_FILTERED_FIELDS = ['model', 'sector', 'scenario']
+
 const { COUNTRY_ISO } = process.env;
 
 const getQuery = ({ location }) => location && (location.query || null);
@@ -170,21 +172,33 @@ const getYColumnOptions = createSelector(
   }
 );
 
+export const filterBySelectedOptions = (emissionsData, selectedOptions) => {
+  const fieldPassesFilter = (selectedFilterOption, field, data) =>
+    castArray(selectedFilterOption).some(
+      o => o.value === data[field]
+    );
+
+  return emissionsData.filter(
+    d =>
+      FRONTEND_FILTERED_FIELDS.every(
+        field => fieldPassesFilter(selectedOptions[field], field, d)
+      )
+  );
+};
+
 const getChartData = createSelector(
-  [getEmissionProjectionData, getSelectedOptions, getYColumnOptions],
-  (emissionData, options, yColumnOptions) => {
-    console.log('emissionData', emissionData)
-    console.log('options', options)
+  [getEmissionProjectionData, getSelectedOptions, getYColumnOptions, getFilterOptions],
+  (emissionData, options, yColumnOptions, filterOptions) => {
     if (isEmpty(emissionData)) return null
     if (!options) return null
 
-    const filteredData = filter(emissionData, {sector: options.sector.value, model: options.model.value})
-    console.log('filteredData', filteredData)
-    const xAxis = emissionData[0].values.map((val) => val.year)
+    // const filteredData = filter(emissionData, {sector: options.sector.value, model: options.model.value})
+
+    const filteredData = filterBySelectedOptions(emissionData, options, filterOptions);
+    /*const xAxis = emissionData[0].values.map((val) => val.year)
     const data = []
     xAxis.forEach((x) => {
       filteredData.forEach((dataFilter) => {
-        console.log('dataFilter', dataFilter)
         const object = {}
         object.x = x
         yColumnOptions.forEach(yColumn => {
@@ -193,8 +207,29 @@ const getChartData = createSelector(
         data.push(object)
       })
     })
+    return data*/
+    const yearValues = emissionData.length ? emissionData[0].values.map(d => d.year) : [];
+    const dataParsed = [];
+    yearValues.forEach(x => {
+      const yItems = {};
+      filteredData.forEach(d => {
+        const columnObject = yColumnOptions.find(c => c.name === d.model);
+        const yKey = columnObject && columnObject.value;
 
-    return data
+        if (yKey) {
+          const yData = d.values.find(e => e.year === x);
+          if (yData && yData.value) {
+            yItems[yKey] = yData.value;
+          }
+        }
+      });
+      const item = { x, ...yItems };
+      dataParsed.push(item);
+      console.log('item', item);
+      console.log('x', x);
+    });
+    console.log('dataParsed', dataParsed);
+    return dataParsed;
   }
 )
 
@@ -214,7 +249,7 @@ const getChartConfig = createSelector(
     const tooltip = getTooltipConfig(yColumnOptions);
     const theme = getThemeConfig(yColumnOptions);
     colorCache = { ...theme, ...colorCache };
-
+    console.log(colorCache);
     const year = t(
       `pages.emissions-portal.emission-projection.unit.year}`
     );
