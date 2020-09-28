@@ -1,6 +1,6 @@
 @import '../../styles/settings.scss';
 
-$timeline-width: 750px;
+$timeline-width: 768px;
 $theme-secondary: #ffc735;
 $extreme-ticks-correction: 10px;
 
@@ -18,7 +18,7 @@ $extreme-ticks-correction: 10px;
     border-left: $extreme-ticks-correction solid $theme-color;
     border-right: $extreme-ticks-correction solid $theme-color;
     font-family: $font-family-1;
-    font-size: $font-size-sm;
+    font-size: $font-size-s;
     font-weight: $font-weight-light;
     color: $midnight-blue;
 
@@ -68,6 +68,12 @@ $extreme-ticks-correction: 10px;
         position: absolute;
         bottom: 20px;
         transform: translateX(-50%);
+
+        &:hover {
+          color: $theme-secondary;
+          font-weight: bold;
+          cursor: pointer;
+        }
       }
     }
   }

@@ -4,9 +4,10 @@ import cx from 'classnames';
 import { Button, Icon } from 'cw-components';
 import styles from './play-timeline-styles.scss';
 import infoIcon from './assets/play.svg';
+import stopIcon from './assets/stop.svg';
 import playButtonTheme from './play-button-theme.scss';
 
-const PlayTimeline = ({ years, selectedYear, theme, onPlay, disablePlay }) => {
+const PlayTimeline = ({ years, selectedYear, theme, onPlay, onStop, onSelect, disablePlay }) => {
   const yearIndex = selectedYear ? years.indexOf(selectedYear) : 0;
   const getPosition = currentYearIndex =>
     parseInt(currentYearIndex, 10) * 100 / (years.length - 1);
@@ -24,6 +25,9 @@ const PlayTimeline = ({ years, selectedYear, theme, onPlay, disablePlay }) => {
       <Button theme={playButtonTheme} onClick={onPlay} disabled={disablePlay}>
         <Icon icon={infoIcon} />
       </Button>
+      <Button theme={playButtonTheme} onClick={onStop}>
+        <Icon icon={stopIcon} />
+      </Button>
       <div className={cx(styles.timeline, theme.timeline)}>
         {years.map((year, i) => (
           <div
@@ -34,7 +38,7 @@ const PlayTimeline = ({ years, selectedYear, theme, onPlay, disablePlay }) => {
             <div
               className={cx(styles.timelineTickMark, theme.timelineTickMark)}
             />
-            <div className={cx(styles.year, theme.year)}>
+            <div onClick={onSelect} className={cx(styles.year, theme.year)}>
               {year}
             </div>
           </div>
@@ -77,6 +81,8 @@ PlayTimeline.propTypes = {
    * Play onClick
    */
   onPlay: PropTypes.func.isRequired,
+  onStop: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
   disablePlay: PropTypes.bool
 };
 

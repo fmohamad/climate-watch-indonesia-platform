@@ -9,8 +9,10 @@ import groupBy from 'lodash/groupBy';
 import toLower from 'lodash/toLower';
 import startCase from 'lodash/startCase';
 import capitalize from 'lodash/capitalize';
+import find from 'lodash/find';
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
+import isUndefined from 'lodash/isUndefined';
 import { scaleThreshold } from 'd3-scale';
 
 import { getLocale, getTranslate } from 'selectors/translation-selectors';
@@ -140,7 +142,6 @@ const getEmissionDataSource = createSelector([ getMetadataData ], meta => {
 
 const getEmissions = createSelector([ getGHGEmissionData, getSelectedSector, getSelectedYear ], 
   (emissionData, selectedSector, selectedYear) => {
-    console.log('emissionData', emissionData);
     const filteredEmissionData = filter(emissionData, { sector: selectedSector, gas: 'CO2EQ' });
 
     if (!filteredEmissionData) return null;
@@ -148,10 +149,25 @@ const getEmissions = createSelector([ getGHGEmissionData, getSelectedSector, get
   }
 );
 
+const getThresholds = createSelector(
+  [ getSelectedSector ], sector => {
+    if (!sector) return null
+
+    switch (sector) {
+      case 'ENERGY':
+        return [0, 500, 1000, 10000, 100000]
+      case 'FORESTRY':
+        return [-100000, -1000, 0, 100000, 500000]
+      default:
+        return [0, 500, 1000, 10000, 50000]
+    }
+  }
+)
+
 const getPathsForEmissionStyles = createSelector(
-  [ getEmissions, getTranslate, getLocations, getSelectedYear, getYears ],
-  (emissions, t, provincesDetails, selectedYear, years) => {
-    if (!emissions) return null;
+  [ getEmissions, getTranslate, getLocations, getSelectedYear, getYears, getThresholds ],
+  (emissions, t, provincesDetails, selectedYear, years, thresholds) => {
+    if (!emissions || isEmpty(emissions)) return null;
     const yearIndex = years && years.indexOf(parseInt(selectedYear))
     const paths = [];
     let legend = [];
@@ -162,7 +178,10 @@ const getPathsForEmissionStyles = createSelector(
       !isEmpty(emissions) && emissions.map(emission => {
           if (emission.iso_code3 === iso) {
             if (emission.gas === 'CO2EQ') {
-              value = yearIndex && emission.emissions[yearIndex].value;
+              let selectedData = emission.emissions.find(data => data.year == parseInt(selectedYear))
+              if (!isUndefined(selectedData)) {
+                value = selectedData.value
+              } 
             }
           }
         });
@@ -181,8 +200,6 @@ const getPathsForEmissionStyles = createSelector(
             name: getLocalizedProvinceName(properties, provincesDetails)
           }
         };
-        console.log('sectorName', sectorName);
-        const thresholds = [ 10, 100, 500, 1000 ];
         const bucketColorScale = createBucketColorScale(thresholds);
         legend = composeBuckets(bucketColorScale.domain());
         const color = bucketColorScale(value);
