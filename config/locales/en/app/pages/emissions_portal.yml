@@ -27,7 +27,7 @@ en:
           title: Map
         emission-projection:
           title: Emissions Projection
-          description: Explore economic and emissions scenarios to identify opportunities for delivering on countries sustainable development and climate goals. Choose from a comprehensive database of models from the IPCC, private sector and country-specific providers to se it's assumptions and results.
+          description: Explore economic and emissions scenarios to identify opportunities for delivering on countries sustainable development and climate goals. Choose from a comprehensive database of models from the IPCC, private sector and country-specific providers to see their assumptions and results.
           region:
             national: National
           break-by:
