@@ -46,28 +46,71 @@ import {
   getQuery
 } from './emission-map-redux-selectors';
 
+const MAP_BUCKET_COLORS_2 = {
+  'ENERGY': [
+    '#fff6e4',
+    '#fff6e4',
+    '#fed886',
+    '#feca5c',
+    '#fdbb2d'
+  ],
+  'IPPU': [
+    '#ffe1e8',
+    '#ffb1c3',
+    '#ff829f',
+    '#ff547c',
+    '#ff2a5c'
+  ],
+  'FORESTRY': [
+    '#dbe7df',
+    '#afcab8',
+    '#7eaa8d',
+    '#528d67',
+    '#32784b',
+    '#00571e'
+  ],
+  'WASTE': [
+    '#d4eafe',
+    '#a1d1fd',
+    '#74bbfc',
+    '#45a4fa',
+    '#1b90f9'
+  ],
+  'AGRICULTURE': [
+    '#ffead9',
+    '#ffd5b2',
+    '#ffbf8a',
+    '#ffa960',
+    '#ff8d2d'
+  ]
+}
+
 const { COUNTRY_ISO } = process.env;
 
-const createBucketColorScale = thresholds =>
-  scaleThreshold().domain(thresholds).range(MAP_BUCKET_COLORS);
+const createBucketColorScale = (thresholds, sector) => {
+  return scaleThreshold().domain(thresholds).range(MAP_BUCKET_COLORS_2[sector]);
+}
 
-const composeBuckets = bucketValues => {
+const composeBuckets = (bucketValues, sector) => {
   const buckets = [];
+  const colorBySector = MAP_BUCKET_COLORS_2[sector]
 
   bucketValues
     .map(v => Math.round(v))
-    .concat([ null ])
+    // .concat([ null ])
     .reduce(
       (prev, curr, index) => {
         let range = '';
-        if (prev && curr) {
-          range = `${prev}-${curr}`;
+        if (!prev && curr) {
+          return curr
+        } else if(prev && curr) {
+          range = `${prev.toLocaleString()} to ${curr.toLocaleString()}`;
         } else {
-          range = prev ? `>${prev}` : `0-${curr}`;
+          range = `${curr.toLocaleString()}`;
         }
         buckets.push({
           name: `${range} ${EMISSIONS_UNIT_NO_HTML}`,
-          color: MAP_BUCKET_COLORS[index]
+          color: colorBySector[index]
         });
         return curr;
       },
@@ -155,18 +198,18 @@ const getThresholds = createSelector(
 
     switch (sector) {
       case 'ENERGY':
-        return [0, 500, 1000, 10000, 100000]
+        return [1, 501, 1001, 10001, 100001]
       case 'FORESTRY':
-        return [-100000, -1000, 0, 100000, 500000]
+        return [-100001, -1001, 1, 100001, 500001]
       default:
-        return [0, 500, 1000, 10000, 50000]
+        return [1, 501, 1001, 10001, 50001]
     }
   }
 )
 
 const getPathsForEmissionStyles = createSelector(
-  [ getEmissions, getTranslate, getLocations, getSelectedYear, getYears, getThresholds ],
-  (emissions, t, provincesDetails, selectedYear, years, thresholds) => {
+  [ getEmissions, getTranslate, getLocations, getSelectedYear, getYears, getThresholds, getSelectedSector ],
+  (emissions, t, provincesDetails, selectedYear, years, thresholds, sector) => {
     if (!emissions || isEmpty(emissions)) return null;
     const yearIndex = years && years.indexOf(parseInt(selectedYear))
     const paths = [];
@@ -200,10 +243,9 @@ const getPathsForEmissionStyles = createSelector(
             name: getLocalizedProvinceName(properties, provincesDetails)
           }
         };
-        const bucketColorScale = createBucketColorScale(thresholds);
-        legend = composeBuckets(bucketColorScale.domain());
+        const bucketColorScale = createBucketColorScale(thresholds, sector);
+        legend = composeBuckets(bucketColorScale.domain(), sector);
         const color = bucketColorScale(value);
-
         paths.push({ ...enhancedPaths, style: getMapStyles(color) });
       } else {
         const { properties } = path;

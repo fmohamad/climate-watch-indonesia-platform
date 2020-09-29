@@ -75,12 +75,20 @@ class EmissionMap extends Component {
   renderSectorSelector = () => {
     const { active } = this.state;
     const { sectors } = this.props;
+    let activeSector = ''
+    const params = window.location.search.split("=")
+
+    if(params[1] === undefined) {
+      activeSector = 'ENERGY'
+    } else {
+      activeSector = params[1]
+    }
     return (
       <div className={styles.mapButtonWrapper} style={{ zIndex: 2 }}>
         {sectors.map((sector, index) => {
           return (
             <div
-              className={window.location.href.indexOf(sector.code) != -1 ? styles.mapButtonActive : styles.mapButton}
+              className={activeSector === sector.code ? styles.mapButtonActive : styles.mapButton}
               onClick={() => this.handleFilterChange('sector', sector.code)}
               key={index}
             >
