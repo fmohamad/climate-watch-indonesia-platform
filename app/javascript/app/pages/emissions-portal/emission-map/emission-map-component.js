@@ -88,7 +88,7 @@ class EmissionMap extends Component {
         {sectors.map((sector, index) => {
           return (
             <div
-              className={activeSector === sector.code ? styles.mapButtonActive : styles.mapButton}
+              className={activeSector.indexOf(sector.code) !== -1 ? styles.mapButtonActive : styles.mapButton}
               onClick={() => this.handleFilterChange('sector', sector.code)}
               key={index}
             >
