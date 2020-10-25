@@ -3,13 +3,18 @@ import PropTypes from 'prop-types';
 import { Input, Table, Dropdown, Button, Icon } from 'cw-components';
 import ModalShare from 'components/modal-share';
 import cx from 'classnames'
-
+import kebabCase from 'lodash/kebabCase';
+import startCase from 'lodash/startCase';
+import castArray from 'lodash/castArray';
+import uniq from 'lodash/uniq';
+import flatMap from 'lodash/flatMap';
 import { renameKeys } from 'utils';
 import SectionTitle from 'components/section-title';
 import FundingOportunitiesProvider from 'providers/funding-oportunities-provider';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import shareIcon from 'assets/icons/share';
 import styles from './climate-funding-styles.scss';
+import dropdownStyles from 'styles/dropdown.scss';
 
 const setColumnWidth = columnName => {
   const narrowColumns = [ 'website_link' ];
@@ -22,8 +27,222 @@ class ClimateFunding extends PureComponent {
     super(props);
   
     this.state = {
-      isOpen: false
+      isOpen: false,
+      sectors: [
+        {
+          label: 'Kehutanan & REDD+',
+          value: 'Kehutanan & REDD+'
+        },
+        {
+          label: 'Pertanian',
+          value: 'Pertanian'
+        },
+        {
+          label: 'Efisiensi Energi',
+          value: 'Efisiensi Energi'
+        },
+        {
+          label: 'Infrastruktur dan Industri',
+          value: 'Infrastruktur dan Industri'
+        },
+        {
+          label: 'Energi Terbarukan',
+          value: 'Energi Terbarukan'
+        },
+        {
+          label: 'Transportasi',
+          value: 'Transportasi'
+        },
+        {
+          label: 'Perubahan Iklim / Umum',
+          value: 'Perubahan Iklim / Umum'
+        },
+        {
+          label: 'Bantuan Keuangan',
+          value: 'Bantuan Keuangan'
+        },
+        {
+          label: 'Bantuan Teknis',
+          value: 'Bantuan Teknis'
+        },
+        {
+          label: 'Peningkatan Kapasitas',
+          value: 'Peningkatan Kapasitas'
+        },
+        {
+          label: 'Penggunaan Lahan',
+          value: 'Penggunaan Lahan'
+        },
+        {
+          label: 'Adaptasi Ekosistem',
+          value: 'Adaptasi Ekosistem'
+        },
+        {
+          label: 'Air',
+          value: 'Air'
+        },
+        {
+          label: 'Adaptasi Berbasis Masyarakat',
+          value: 'Adaptasi Berbasis Masyarakat'
+        },
+        {
+          label: 'Adaptasi Perkotaan',
+          value: 'Adaptasi Perkotaan'
+        },
+        {
+          label: 'Perubahan Iklim (Umum)',
+          value: 'Perubahan Iklim (Umum)'
+        },
+        {
+          label: 'Gender',
+          value: 'Gender'
+        },
+        {
+          label: 'Limbah',
+          value: 'Limbah'
+        },
+        {
+          label: 'Lainnya',
+          value: 'Lainnya'
+        }
+      ],
+      selectedSector: {
+        label: 'Kehutanan & REDD+',
+        value: 'Kehutanan & REDD+'
+      },
+      supports: [
+        {
+          label: 'Bantuan Keuangan',
+          value: 'Bantuan Keuangan'
+        },
+        {
+          label: 'Bantuan Teknis',
+          value: 'Bantuan Teknis'
+        },
+        {
+          label: 'Peningkatan Kapasitas',
+          value: 'Peningkatan Kapasitas'
+        },
+        {
+          label: 'Perubahan Iklim (Umum)',
+          value: 'Perubahan Iklim (Umum)'
+        },
+        {
+          label: 'Lainnya',
+          value: 'Lainnya'
+        }
+      ],
+      selectedSupport: {
+        label: 'Bantuan Keuangan',
+        value: 'Bantuan Keuangan'
+      }
     };
+  }
+
+  handleFilterChange = (field, selected) => {
+    const { onSearchChange } = this.props;
+
+    /*const prevSelectedOptionValues = castArray(selectedOptions[field])
+      .filter(o => o)
+      .map(o => o.value);*/
+    /*const selectedArray = castArray(selected);
+    const newSelectedOption = selectedArray.find(
+      o => !prevSelectedOptionValues.includes(o.value)
+    );
+
+    const removedAnyPreviousOverride = selectedArray
+      .filter(v => v)
+      .filter(v => !v.override);
+
+    const values = newSelectedOption && newSelectedOption.override
+      ? newSelectedOption.value
+      : uniq(
+        flatMap(removedAnyPreviousOverride, v => String(v.value).split(','))
+      ).join(',');*/
+    const value = selected.value
+    if(field === 'sector'){
+      this.setState({
+        selectedSector: selected
+      }, () => {
+        onSearchChange(this.state.selectedSector.value);
+      })
+    } else {
+      this.setState({
+        selectedSupport: selected
+      }, () => {
+        onSearchChange(this.state.selectedSector.value);
+      })
+    }
+  };
+
+  renderDropdown(field, multi, icons) {
+    /*const {
+      apiSelected,
+      selectedOptions,
+      filterOptions,
+      metricSelected,
+      t
+    } = this.props;
+    const value = selectedOptions && selectedOptions[field];
+    const options = filterOptions[field] || [];
+    const iconsProp = icons ? { icons } : {};
+    const isChartReady = filterOptions.source;
+    if (!isChartReady) return null;*/
+
+    const {
+      t,
+    } = this.props;
+
+    const { sectors, selectedSector, supports, selectedSupport } = this.state 
+
+    let options = []
+    let value = {}
+    if(field === 'sector') {
+      options = sectors
+      value = selectedSector
+    } else {
+      options = supports
+      value = selectedSupport
+    }
+
+    const label = t(
+      `pages.national-context.climate-funding.labels.${kebabCase(field)}`
+    );
+
+    /*if (multi) {
+      const absoluteMetric = metricSelected === METRIC_OPTIONS.ABSOLUTE_VALUE;
+      const disabled = apiSelected === API.indo &&
+        field === 'sector' &&
+        !absoluteMetric;
+
+      const values = castArray(value).filter(v => v);
+
+      return (
+        <Multiselect
+          key={field}
+          label={label}
+          placeholder={`Filter by ${startCase(field)}`}
+          options={options}
+          onValueChange={selected => this.handleFilterChange(field, selected)}
+          values={values}
+          theme={{ wrapper: dropdownStyles.select }}
+          hideResetButton
+          disabled={disabled}
+        />
+      );
+    }*/
+    return (
+      <Dropdown
+        key={field}
+        label={label}
+        placeholder={`Filter by ${startCase(field)}`}
+        options={options}
+        onValueChange={selected => this.handleFilterChange(field, selected)}
+        value={value || null}
+        theme={{ select: dropdownStyles.select }}
+        hideResetButton
+      />
+    );
   }
 
   render() {
@@ -37,7 +256,7 @@ class ClimateFunding extends PureComponent {
     const defaultColumns = Object.values(tableHeaders);
 
     const tableData = data.map(d => renameKeys(d, tableHeaders));
-
+    console.log('tableData', tableData);
     const title = nt('title');
     const description = nt('description');
 
@@ -53,7 +272,13 @@ class ClimateFunding extends PureComponent {
               )}
               theme={styles}
             />
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ width: '300px' }}>
+              {this.renderDropdown('support', false)}
+            </div>
+            <div style={{ width: '300px' }}>
+              {this.renderDropdown('sector', false)}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
               <InfoDownloadToolbox
                 className={{ buttonWrapper: styles.buttonWrapper }}
                 slugs={sources}
