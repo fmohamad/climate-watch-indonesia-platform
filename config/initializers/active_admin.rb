@@ -15,7 +15,7 @@ ActiveAdmin.setup do |config|
   config.namespace :admin do |admin|
     admin.build_menu do |menu|
       menu.add label: 'Dashboard', priority: 1
-      menu.add label: 'Indonesia Platform', if: proc{ current_admin_user.role == 'superuser' || current_admin_user.role == 'admin' }, priority: 3
+      menu.add label: 'Indonesia Platform', if: proc{ current_admin_user.role == 'superuser' || current_admin_user.role == 'admin' || current_admin_user.role == 'admin_national' }, priority: 3
       menu.add label: 'West Papua Platform', if: proc{ current_admin_user.role == 'superuser' || current_admin_user.role == 'admin' || current_admin_user.role == 'admin_wp' }, priority: 4
     end
   end

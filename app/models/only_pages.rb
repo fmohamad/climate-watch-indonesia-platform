@@ -6,16 +6,16 @@ class OnlyPages < ActiveAdmin::AuthorizationAdapter
         if subject.name == "Dashboard"
           action == :read &&
             subject.name == "Dashboard" &&
-            user.role == "superuser" || user.role == "admin" || user.role == "admin_wp"
+            user.role == "superuser" || user.role == "admin" || user.role == "admin_wp" || user.role == "admin_national"
         elsif subject.name == "Translations"
           if action == :read
             action == :read &&
             subject.name == "Translations" &&
-            user.role == "superuser" || user.role == "admin"
+            user.role == "superuser" || user.role == "admin" || user.role == "admin_national"
           elsif action == :update
             action == :update &&
             subject.name == "Translations" &&
-            user.role == "superuser" || user.role == "admin"
+            user.role == "superuser" || user.role == "admin" || user.role == "admin_national"
           end
         elsif platform_west_papua(subject)
           if action == :read
@@ -31,11 +31,11 @@ class OnlyPages < ActiveAdmin::AuthorizationAdapter
           if action == :read
             action == :read &&
               platform_indonesia(subject) &&
-              user.role == "superuser" || user.role == "admin"
+              user.role == "superuser" || user.role == "admin" || user.role == "admin_national"
           elsif action == :import_worker
             action == :import_worker &&
               platform_indonesia(subject) &&
-              user.role == "superuser" || user.role == "admin"
+              user.role == "superuser" || user.role == "admin" || user.role == "admin_national"
           end
         end
     when normalized(AdminUser)
