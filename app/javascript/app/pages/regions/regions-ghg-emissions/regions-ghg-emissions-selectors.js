@@ -35,15 +35,19 @@ const getQuery = ({ location }) => location && (location.query || null);
 
 const getMetadataData = ({ metadata }) =>
   metadata && metadata.ghgindo && metadata.ghgindo.data;
+
 export const getEmissionsData = ({ GHGEmissions }) =>
   get(GHGEmissions, 'data.length') ? GHGEmissions.data : [];
+
 const getTargetEmissionsData = ({ GHGTargetEmissions }) =>
   get(GHGTargetEmissions, 'data.length') ? GHGTargetEmissions.data : [];
+
 const getProvinceTargetEmissionsData = createSelector(
   [ getTargetEmissionsData, getProvince ],
   (emissionTargets, provinceISO) =>
     emissionTargets.filter(e => e.location === provinceISO)
 );
+
 const getProvinceEmissionsData = createSelector(
   [ getEmissionsData, getProvince ],
   (emissionsData, provinceISO) =>
@@ -140,9 +144,9 @@ const getSectorsSelected = createSelector(
   }
 );
 
-export const getEmissionParams = createSelector([ getSource ], source => {
+export const getEmissionParams = createSelector([ getProvince, getSource ], (provinceISO, source) => {
   if (!source) return null;
-  return { location: COUNTRY_ISO, source };
+  return { location: provinceISO, source };
 });
 
 // DATA
@@ -207,7 +211,6 @@ const parseChartData = createSelector(
   ],
   (emissionsData, yColumnOptions, selectedOptions, unit, scale) => {
     if (!emissionsData || !yColumnOptions) return null;
-
     const yearValues = emissionsData.length
       ? emissionsData[0].emissions.map(d => d.year)
       : [];
@@ -222,11 +225,10 @@ const parseChartData = createSelector(
       filteredData.forEach(d => {
         const columnObject = yColumnOptions.find(c => c.code === d.sector);
         const yKey = columnObject && columnObject.value;
-
         if (yKey) {
           const yData = d.emissions.find(e => e.year === x);
           if (yData && yData.value) {
-            yItems[yKey] = (yItems[yKey] || 0) + yData.value * scale;
+            yItems[yKey] = (yItems[yKey] || 0) + yData.value * 1000;
           }
         }
       });
