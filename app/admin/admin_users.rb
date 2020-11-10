@@ -40,7 +40,7 @@ ActiveAdmin.register AdminUser do
   form do |f|
     f.inputs do
       f.input :email
-      f.input :role, as: :select, collection: %w(superuser admin admin_wp),
+      f.input :role, as: :select, collection: %w(superuser admin admin_wp admin_national),
                      selected: 'admin', include_blank: false
       f.input :password
       f.input :password_confirmation
