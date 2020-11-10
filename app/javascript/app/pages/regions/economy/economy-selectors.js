@@ -205,6 +205,8 @@ const getYColumnOptions = createSelector(
 
 const filteredDataBySelectedOptions = (model, data, selectedOptions) => {
     if (isUndefined(selectedOptions.indicator)) return null
+    if (isUndefined(selectedOptions.district)) return null
+    if (isUndefined(selectedOptions.sector)) return null
 
     const selectedIndicator = selectedOptions.indicator.value
     const selectedDistricts = castArray(selectedOptions.district).map(o => o.value)
@@ -436,6 +438,8 @@ const getSources = createSelector(
     if (isEmpty(data) || isUndefined(data) || !model || !options) return []
 
     const filteredData = filteredDataBySelectedOptions(model, data, options)
+
+    if (!filteredData) return []
 
     return uniq(filteredData.map(o => o.source))
   }
