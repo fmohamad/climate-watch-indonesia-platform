@@ -3,6 +3,7 @@ import castArray from 'lodash/castArray';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
+import isUndefined from 'lodash/isUndefined';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
 import upperFirst from 'lodash/upperFirst';
@@ -203,6 +204,8 @@ const getYColumnOptions = createSelector(
 );
 
 const filteredDataBySelectedOptions = (model, data, selectedOptions) => {
+    if (isUndefined(selectedOptions.indicator)) return null
+
     const selectedIndicator = selectedOptions.indicator.value
     const selectedDistricts = castArray(selectedOptions.district).map(o => o.value)
     const selectedSectors = castArray(selectedOptions.sector).map(o => o.value)
@@ -235,6 +238,10 @@ const parseChartData = createSelector(
   (model, indicatorData, yColumnOptions, selectedOptions) => {
     if (isEmpty(indicatorData)) return null
     if (!yColumnOptions) return null;
+    if (selectedOptions.indicator === undefined) return null
+    if (isUndefined(selectedOptions.district)) return null
+    if (isUndefined(selectedOptions.indicator)) return null
+    if (isUndefined(selectedOptions.sector)) return null
 
     const filteredData = filteredDataBySelectedOptions(model, indicatorData, selectedOptions)
 
@@ -426,7 +433,7 @@ const getTableData = createSelector(
 const getSources = createSelector(
   [getSelectedModel, getIndicatorData, getSelectedOptions],
   (model, data, options) => {
-    if (isEmpty(data) || !model || !options) return []
+    if (isEmpty(data) || isUndefined(data) || !model || !options) return []
 
     const filteredData = filteredDataBySelectedOptions(model, data, options)
 
