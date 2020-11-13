@@ -3263,9 +3263,9 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
-"cw-components@github:ClimateWatch-Vizzuality/climate-watch-components#1.63.1":
-  version "1.63.1"
-  resolved "https://codeload.github.com/ClimateWatch-Vizzuality/climate-watch-components/tar.gz/5fff9610763d0ae6445c29c185848979d6407d44"
+"cw-components@github:ClimateWatch-Vizzuality/climate-watch-components#1.50.1":
+  version "1.50.1"
+  resolved "https://codeload.github.com/ClimateWatch-Vizzuality/climate-watch-components/tar.gz/7969dd0014d8d31778a5a822bb4a9742bcadd8d6"
   dependencies:
     "@d3fc/d3fc-discontinuous-scale" "^3.0.7"
     "@latticejs/recharts-sunburst" "^1.0.1-beta.0"
@@ -10074,15 +10074,15 @@ react-virtualized@9.20.1:
     prop-types "^15.6.0"
     react-lifecycles-compat "^3.0.4"
 
-react@16.3.2:
-  version "16.3.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.3.2.tgz#fdc8420398533a1e58872f59091b272ce2f91ea9"
-  integrity sha512-o5GPdkhciQ3cEph6qgvYB7LTOHw/GB0qRI6ZFNugj49qJCFfgHwVNjZ5u+b7nif4vOeMIOuYj3CeYe2IBD74lg==
+react@16.8.0:
+  version "16.8.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.8.0.tgz#8533f0e4af818f448a276eae71681d09e8dd970a"
+  integrity sha512-g+nikW2D48kqgWSPwNo0NH9tIGG3DsQFlrtrQ1kj6W77z5ahyIHG0w8kPpz4Sdj6gyLnz0lEd/xsjOoGge2MYQ==
   dependencies:
-    fbjs "^0.8.16"
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
-    prop-types "^15.6.0"
+    prop-types "^15.6.2"
+    scheduler "^0.13.0"
 
 read-file-stdin@^0.2.1:
   version "0.2.1"
@@ -10997,6 +10997,14 @@ sax@~1.2.1, sax@~1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
+
+scheduler@^0.13.0:
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.6.tgz#466a4ec332467b31a91b9bf74e5347072e4cd889"
+  integrity sha512-IWnObHt413ucAYKsD9J1QShUKkbKLQQHdxRyw73sw4FN26iWr3DY/H34xGPe4nmL1DwXyWmSWmMrA9TfQbE/XQ==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 schema-utils@^0.3.0:
   version "0.3.0"

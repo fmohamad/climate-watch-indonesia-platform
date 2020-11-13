@@ -32,6 +32,18 @@ class OnlyPages < ActiveAdmin::AuthorizationAdapter
             action == :read &&
               platform_indonesia(subject) &&
               user.role == "superuser" || user.role == "admin" || user.role == "admin_national"
+          elsif action == :create
+            action == :create &&
+              platform_indonesia(subject) &&
+              user.role == "superuser" || user.role == "admin" || user.role == "admin_national"
+          elsif action == :update
+            action == :update &&
+              platform_indonesia(subject) &&
+              user.role == "superuser" || user.role == "admin" || user.role == "admin_national"
+          elsif action == :destroy
+            action == :destoy &&
+              platform_indonesia(subject) &&
+              user.role == "superuser" || user.role == "admin" || user.role == "admin_national"
           elsif action == :import_worker
             action == :import_worker &&
               platform_indonesia(subject) &&
@@ -39,10 +51,10 @@ class OnlyPages < ActiveAdmin::AuthorizationAdapter
           end
         end
     when normalized(AdminUser)
-      if action == :read || action == :create || action == :update || action == :destroy
-        user.role == "superuser"
-      else
-        false
+      if user.role == "superuser"
+        action == :read || action == :create || action == :update || action == :destroy
+      elsif user.role == "admin" || user.role == "admin_wp" || user.role == "admin_national"
+        action == :show || action == :update || action == :destroy
       end
     else
       false
