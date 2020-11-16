@@ -1,103 +1,99 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import { NavLink } from 'redux-first-router-link'
-import kebabCase from 'lodash/kebabCase'
-import startCase from 'lodash/startCase'
-import castArray from 'lodash/castArray'
-import uniq from 'lodash/uniq'
-import flatMap from 'lodash/flatMap'
-import isEmpty from 'lodash/isEmpty'
-import SectionTitle from 'components/section-title'
-import InfoDownloadToolbox from 'components/info-download-toolbox'
-import ProvinceMetaProvider from 'providers/province-meta-provider'
-import IndicatorsProvider from 'providers/indicators-provider'
-import Chart from 'components/chart'
-import { Switch, Dropdown, Button, Icon, Multiselect } from 'cw-components'
-import cx from 'classnames'
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { NavLink } from 'redux-first-router-link';
+import kebabCase from 'lodash/kebabCase';
+import startCase from 'lodash/startCase';
+import castArray from 'lodash/castArray';
+import uniq from 'lodash/uniq';
+import flatMap from 'lodash/flatMap';
+import isEmpty from 'lodash/isEmpty';
+import SectionTitle from 'components/section-title';
+import InfoDownloadToolbox from 'components/info-download-toolbox';
+import ProvinceMetaProvider from 'providers/province-meta-provider';
+import IndicatorsProvider from 'providers/indicators-provider';
+import Chart from 'components/chart';
+import { Switch, Dropdown, Button, Icon, Multiselect } from 'cw-components';
+import cx from 'classnames';
 import shareIcon from 'assets/icons/share';
 import lineIcon from 'assets/icons/line_chart.svg';
 import barIcon from 'assets/icons/barChart.svg';
 import ModalShare from 'components/modal-share';
 
-import dropdownStyles from 'styles/dropdown'
-import button from 'styles/themes/button'
+import dropdownStyles from 'styles/dropdown';
+import button from 'styles/themes/button';
 import CustomTooltip from './bar-chart-tooltip';
-import styles from './social-styles'
+import styles from './social-styles';
 
 class RegionPopulation extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      isOpen: false
-    };
+    this.state = { isOpen: false };
   }
 
-  handleSwitchChange = (option) => {
-    const { provinceISO, updateFiltersSelected } = this.props
+  handleSwitchChange = option => {
+    const { provinceISO, updateFiltersSelected } = this.props;
 
     updateFiltersSelected({
       section: 'social',
       region: provinceISO,
-      query: { model: option.value },
-    })
-  }
+      query: { model: option.value }
+    });
+  };
 
   handleFilterChange = (field, selected) => {
-    const { onFilterChange, selectedOptions } = this.props
+    const { onFilterChange, selectedOptions } = this.props;
 
     const prevSelectedOptionValues = castArray(selectedOptions[field])
-      .filter((o) => o)
-      .map((o) => o.value)
-    const selectedArray = castArray(selected)
+      .filter(o => o)
+      .map(o => o.value);
+    const selectedArray = castArray(selected);
     const newSelectedOption = selectedArray.find(
-      (o) => !prevSelectedOptionValues.includes(o.value)
-    )
+      o => !prevSelectedOptionValues.includes(o.value)
+    );
 
     const removedAnyPreviousOverride = selectedArray
-      .filter((v) => v)
-      .filter((v) => !v.override)
+      .filter(v => v)
+      .filter(v => !v.override);
 
-    const values =
-      newSelectedOption && newSelectedOption.override
-        ? newSelectedOption.value
-        : uniq(
-          flatMap(removedAnyPreviousOverride, (v) =>
-            String(v.value).split(','))
-        ).join(',')
+    const values = newSelectedOption && newSelectedOption.override
+      ? newSelectedOption.value
+      : uniq(
+        flatMap(removedAnyPreviousOverride, v => String(v.value).split(','))
+      ).join(',');
 
-    onFilterChange({ [field]: values })
-  }
+    onFilterChange({ [field]: values });
+  };
 
   renderSwitch() {
-    const { selectedModel, filterOptions } = this.props
+    const { selectedModel, filterOptions } = this.props;
 
     return (
       <div className={styles.switch}>
-        <div className='switch-container'>
+        <div className="switch-container">
           <Switch
             options={filterOptions.model}
-            onClick={(value) => this.handleSwitchChange(value)}
+            onClick={value => this.handleSwitchChange(value)}
             selectedOption={String(selectedModel.value)}
             theme={{
               wrapper: styles.switchWrapper,
               option: styles.option,
-              checkedOption: styles.checkedOption,
+              checkedOption: styles.checkedOption
             }}
           />
         </div>
       </div>
-    )
+    );
   }
 
   renderDropdown(field, multi, icons) {
-    const { selectedOptions, filterOptions, t } = this.props
+    const { selectedOptions, filterOptions, t } = this.props;
 
-    const value = (selectedOptions && selectedOptions[field]) || []
-    const options = filterOptions[field] || []
+    const value = selectedOptions && selectedOptions[field] || [];
+    const options = filterOptions[field] || [];
     const iconsProp = icons ? { icons } : {};
 
-    const label = t(`pages.regions.economy.labels.${kebabCase(field)}`)
+    const label = t(`pages.regions.economy.labels.${kebabCase(field)}`);
 
     if (multi) {
       const values = castArray(value).filter(v => v);
@@ -120,24 +116,31 @@ class RegionPopulation extends PureComponent {
         label={label}
         placeholder={`Filter by ${startCase(field)}`}
         options={options}
-        onValueChange={(selected) => this.handleFilterChange(field, selected)}
+        onValueChange={selected => this.handleFilterChange(field, selected)}
         value={value || null}
         theme={{ select: dropdownStyles.select }}
         hideResetButton
         {...iconsProp}
       />
-    )
+    );
   }
 
   renderChart() {
-    const { chart, chartData, selectedOptions, dataOptions, dataSelected, t } = this.props
-    
+    const {
+      chart,
+      chartData,
+      selectedOptions,
+      dataOptions,
+      dataSelected,
+      t
+    } = this.props;
+    console.log('chartData', chartData);
     return (
       <Chart
         type={
           selectedOptions &&
-          selectedOptions.chartType &&
-          selectedOptions.chartType.value
+            selectedOptions.chartType &&
+            selectedOptions.chartType.value
         }
         config={chart.config}
         data={chartData}
@@ -149,12 +152,11 @@ class RegionPopulation extends PureComponent {
         barSize={20}
         customMessage={t('common.chart-no-data')}
         showUnit
-        onLegendChange={v =>
-          this.handleFilterChange('district', v)}
+        onLegendChange={v => this.handleFilterChange('district', v)}
         getCustomYLabelFormat={chart.config.yLabelFormat}
         customTooltip={<CustomTooltip />}
       />
-    )
+    );
   }
 
   render() {
@@ -163,14 +165,14 @@ class RegionPopulation extends PureComponent {
       indicatorParams,
       metaParams,
       selectedModel,
-      chartData,
-    } = this.props
+      chartData
+    } = this.props;
 
-    const { isOpen } = this.state
-    const sources = ['PBdA2019n', 'PBdA2019o', 'PBdA2019p']
-    const section = 'wp_social'
-    const downloadURI = `indicators.zip?section=${section}`
-    const shareableLink = `${window.location.href}`
+    const { isOpen } = this.state;
+    const sources = [ 'PBdA2019n', 'PBdA2019o', 'PBdA2019p' ];
+    const section = 'wp_social';
+    const downloadURI = `indicators.zip?section=${section}`;
+    const shareableLink = `${window.location.href}`;
     const icons = { line: lineIcon, bar: barIcon };
 
     return (
@@ -187,7 +189,7 @@ class RegionPopulation extends PureComponent {
               className={{ buttonWrapper: styles.buttonWrapper }}
               slugs={sources}
               downloadUri={downloadURI}
-            // shareableLink={shareableLink}
+              /* shareableLink={shareableLink} */
             />
             <Button
               theme={{ button: cx(styles.shareButton) }}
@@ -216,8 +218,8 @@ class RegionPopulation extends PureComponent {
               <Button theme={{ button: cx(button.darkBlue, styles.button) }}>
                 <NavLink
                   exact={'/en/national-context' || false}
-                  key='/en/national-context'
-                  to='/en/national-context'
+                  key="/en/national-context"
+                  to="/en/national-context"
                   activeClassName={styles.active}
                   onTouchStart={undefined}
                   onMouseDown={undefined}
@@ -229,11 +231,15 @@ class RegionPopulation extends PureComponent {
             {!isEmpty(chartData) && this.renderChart()}
           </div>
         </div>
-        <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
+        <ModalShare
+          isOpen={isOpen}
+          closeModal={() => this.setState({ isOpen: false })}
+          sharePath={shareableLink}
+        />
         <IndicatorsProvider params={indicatorParams} />
         <ProvinceMetaProvider metaParams={metaParams} />
       </div>
-    )
+    );
   }
 }
 
@@ -250,8 +256,8 @@ RegionPopulation.propTypes = {
   indicatorParams: PropTypes.object,
   metaParams: PropTypes.object,
   dataOptions: PropTypes.array,
-  dataSelected: PropTypes.array,
-}
+  dataSelected: PropTypes.array
+};
 
 RegionPopulation.defaultProps = {
   provinceISO: '',
@@ -266,6 +272,6 @@ RegionPopulation.defaultProps = {
   metaParams: null,
   dataOptions: [],
   dataSelected: []
-}
+};
 
-export default RegionPopulation
+export default RegionPopulation;

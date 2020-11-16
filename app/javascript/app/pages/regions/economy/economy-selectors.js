@@ -9,10 +9,7 @@ import find from 'lodash/find';
 import upperFirst from 'lodash/upperFirst';
 import uniq from 'lodash/uniq';
 import sortBy from 'lodash/sortBy';
-import {
-  ALL_SELECTED,
-  WEST_PAPUA,
-} from 'constants/constants';
+import { ALL_SELECTED, WEST_PAPUA } from 'constants/constants';
 
 import {
   getAllSelectedOption,
@@ -28,92 +25,86 @@ import {
   getTooltipConfig
 } from 'utils/graphs';
 
-const section = 'wp_economic'
-const KABUPATEN = 'kabupaten'
-const SEKTOR = 'sektor'
+const section = 'wp_economic';
+const KABUPATEN = 'kabupaten';
+const SEKTOR = 'sektor';
 
 const getQuery = ({ location }) => location && (location.query || null);
 
-const getMetadataParams = createSelector(
-  getProvince,
-  provinceISO => {
-    if (!provinceISO) return null
+const getMetadataParams = createSelector(getProvince, provinceISO => {
+  if (!provinceISO) return null;
 
-    return { section, location: provinceISO }
-  }
-)
+  return { section, location: provinceISO };
+});
 
-const getMetadataData = ({ provinceMeta }) => provinceMeta && provinceMeta.data
+const getMetadataData = ({ provinceMeta }) => provinceMeta && provinceMeta.data;
 
 const getIndicatorData = ({ indicators }) =>
-  indicators && indicators.data && indicators.data.values
+  indicators && indicators.data && indicators.data.values;
 
-const getIndicatorParams = () => ({ section })
+const getIndicatorParams = () => ({ section });
 
-const getChartType = () => ([
+const getChartType = () => [
   { label: 'line', value: 'line' },
-  { label: 'area', value: 'area' },
-])
+  { label: 'area', value: 'area' }
+];
 
-const getSelectedModel = createSelector(
-  getQuery,
-  query => {
-    if (!query || !query.indicator) return 'kabupaten'
+const getSelectedModel = createSelector(getQuery, query => {
+  if (!query || !query.indicator) return 'kabupaten';
 
-    return query.indicator.split('-')[1]
-  }
-)
+  return query.indicator.split('-')[1];
+});
 
 const getFieldOptionsNotFiltered = field => createSelector(
   [ getMetadataData, getQuery ],
   metadata => get(metadata, field, [])
-    .map(o => ({ label: o.label || o.name, value: o.id, code: o.code || o.iso_code3 }))
+    .map(o => ({
+      label: o.label || o.name,
+      value: o.id,
+      code: o.code || o.iso_code3
+    }))
     .filter(o => o)
 );
 
 const getIndicatorOptions = field => createSelector(
   [ getMetadataData, getQuery ],
   metadata => get(metadata, field, [])
-    .map(o => ({ label: o.label || o.name, value: o.code, code: o.code || o.iso_code3 }))
+    .map(o => ({
+      label: o.label || o.name,
+      value: o.code,
+      code: o.code || o.iso_code3
+    }))
     .filter(o => o)
 );
 
 const getFieldOptions = field =>
-  createSelector(
-    [ getFieldOptionsNotFiltered(field),
-      getSelectedModel
-    ], 
-    (
-      options,
-      modelSelected
-    ) =>
+  createSelector([ getFieldOptionsNotFiltered(field), getSelectedModel ], (
+    options,
+    modelSelected
+  ) =>
     {
-
       if (modelSelected === KABUPATEN) {
-        if (field === 'locations') return sortBy(options, ['label'])
+        if (field === 'locations') return sortBy(options, [ 'label' ]);
         return options.filter(o => o.label === 'total');
       }
 
       if (field === 'locations') {
-        options.unshift(WEST_PAPUA)
-        return options
+        options.unshift(WEST_PAPUA);
+        return options;
       }
 
-      return sortBy(options.filter(o => o.label !== 'total'), ['label']);
-    }
-  );
+      return sortBy(options.filter(o => o.label !== 'total'), [ 'label' ]);
+    });
 
 const getFilterOptions = createStructuredSelector({
   indicator: getIndicatorOptions('indicators'),
   district: withAllSelected(getFieldOptions('locations')),
   sector: withAllSelected(getFieldOptions('sectors')),
-  chartType: getChartType,
+  chartType: getChartType
 });
 
 // DEFAULTS
-const getDefaults = createSelector([ getFilterOptions], (
-  options,
-) => ({
+const getDefaults = createSelector([ getFilterOptions ], options => ({
   indicator: get(options, 'indicator[0]'),
   sector: get(options, 'sector[0]'),
   district: get(options, 'district[0]'),
@@ -141,143 +132,158 @@ export const getSelectedOptions = createStructuredSelector({
   indicator: getFieldSelected('indicator'),
   sector: getFieldSelected('sector'),
   district: getFieldSelected('district'),
-  chartType: getFieldSelected('chartType'),
+  chartType: getFieldSelected('chartType')
 });
 
 // DATA
-export const getUnit = createSelector(
-  [getMetadataData, getSelectedOptions],
-  (meta, options) => {
+export const getUnit = createSelector([ getMetadataData, getSelectedOptions ], (
+  meta,
+  options
+) =>
+  {
     if (isEmpty(meta) || isEmpty(meta.indicators)) return null;
-    const indicator = find(meta.indicators, ['code', options.indicator.code])
+    const indicator = find(meta.indicators, [ 'code', options.indicator.code ]);
 
-    return indicator.unit
-  }
-);
+    return indicator.unit;
+  });
 
 const getLegendDataOptions = createSelector(
-  [getSelectedModel, getFilterOptions],
+  [ getSelectedModel, getFilterOptions ],
   (model, options) => {
-    if (!model) return null
-    if (isEmpty(options)) return null
+    if (!model) return null;
+    if (isEmpty(options)) return null;
 
-    if (model === KABUPATEN) return options.district
+    if (model === KABUPATEN) return options.district;
 
-    return options.sector
+    return options.sector;
   }
-)
+);
 const getLegendDataSelected = createSelector(
-  [getSelectedModel, getSelectedOptions, getFilterOptions],
+  [ getSelectedModel, getSelectedOptions, getFilterOptions ],
   (model, options, filterOptions) => {
+    if (!model) return null;
+    if (isEmpty(options) || isNil(options.district) || isNil(options.sector))
+      return null;
+    if (
+      isEmpty(filterOptions) ||
+        isNil(filterOptions.district) ||
+        isNil(filterOptions.sector)
+    )
+      return null;
 
-    if (!model) return null
-    if (isEmpty(options) || isNil(options.district) || isNil(options.sector) ) return null
-    if (isEmpty(filterOptions) || isNil(filterOptions.district) || isNil(filterOptions.sector) ) return null
-
-    
     if (model === KABUPATEN) {
-      if(options.district.value === 'all-selected'){
-        return castArray(filterOptions.district)
-      } 
+      if (options.district.value === 'all-selected') {
+        return castArray(filterOptions.district);
+      }
 
-      return castArray(options.district)
+      return castArray(options.district);
     }
 
-    if(options.sector.value === 'all-selected'){
-      return castArray(filterOptions.sector)
+    if (options.sector.value === 'all-selected') {
+      return castArray(filterOptions.sector);
     }
 
-    return castArray(options.sector)
+    return castArray(options.sector);
   }
-)
+);
 
 const getYColumnOptions = createSelector(
   [ getLegendDataSelected ],
   legendDataSelected => {
     if (!legendDataSelected) return null;
-    const selectedLegend = legendDataSelected.filter(data => data.value !== 'all-selected')
-    return selectedLegend.map(d => ({
-      ...d,
-      value: getYColumnValue(d.value)
-    }));
+    const selectedLegend = legendDataSelected.filter(
+      data => data.value !== 'all-selected'
+    );
+    return selectedLegend.map(d => ({ ...d, value: getYColumnValue(d.value) }));
   }
 );
 
 const filteredDataBySelectedOptions = (model, data, selectedOptions) => {
-    if (isUndefined(selectedOptions.indicator)) return null
-    if (isUndefined(selectedOptions.district)) return null
-    if (isUndefined(selectedOptions.sector)) return null
+  if (isUndefined(selectedOptions.indicator)) return null;
+  if (isUndefined(selectedOptions.district)) return null;
+  if (isUndefined(selectedOptions.sector)) return null;
 
-    const selectedIndicator = selectedOptions.indicator.value
-    const selectedDistricts = castArray(selectedOptions.district).map(o => o.value)
-    const selectedSectors = castArray(selectedOptions.sector).map(o => o.value)
+  const selectedIndicator = selectedOptions.indicator.value;
+  const selectedDistricts = castArray(selectedOptions.district).map(
+    o => o.value
+  );
+  const selectedSectors = castArray(selectedOptions.sector).map(o => o.value);
 
-    const filteredBySource = filter(data, function(o) {
-      return !isEmpty(o.source)
-    })
+  const filteredBySource = filter(data, function(o) {
+    return !isEmpty(o.source);
+  });
 
-    const filterByInd = filter(filteredBySource, function(o) {
-      return o.indicator_code === selectedIndicator
-    })
+  const filterByInd = filter(filteredBySource, function(o) {
+    return o.indicator_code === selectedIndicator;
+  });
 
-    const selectAllDistrict = selectedDistricts[0] === ALL_SELECTED
-    const selectAllSector = selectedSectors[0] === ALL_SELECTED
+  const selectAllDistrict = selectedDistricts[0] === ALL_SELECTED;
+  const selectAllSector = selectedSectors[0] === ALL_SELECTED;
 
-    if (model === KABUPATEN) {
-      return selectAllDistrict ? filterByInd : filter(filterByInd, o => selectedDistricts.includes(o.location_id))
-    }
+  if (model === KABUPATEN) {
+    return selectAllDistrict
+      ? filterByInd
+      : filter(filterByInd, o => selectedDistricts.includes(o.location_id));
+  }
 
-    return selectAllSector ? filterByInd : filter(filterByInd, o => selectedSectors.includes(o.category_id))
-}
+  return selectAllSector
+    ? filterByInd
+    : filter(filterByInd, o => selectedSectors.includes(o.category_id));
+};
 
 const parseChartData = createSelector(
-  [
-    getSelectedModel,
-    getIndicatorData,
-    getYColumnOptions,
-    getSelectedOptions,
-  ],
+  [ getSelectedModel, getIndicatorData, getYColumnOptions, getSelectedOptions ],
   (model, indicatorData, yColumnOptions, selectedOptions) => {
-    if (isEmpty(indicatorData)) return null
+    if (isEmpty(indicatorData)) return null;
     if (!yColumnOptions) return null;
-    if (selectedOptions.indicator === undefined) return null
-    if (isUndefined(selectedOptions.district)) return null
-    if (isUndefined(selectedOptions.indicator)) return null
-    if (isUndefined(selectedOptions.sector)) return null
+    if (selectedOptions.indicator === undefined) return null;
+    if (isUndefined(selectedOptions.district)) return null;
+    if (isUndefined(selectedOptions.indicator)) return null;
+    if (isUndefined(selectedOptions.sector)) return null;
 
-    const filteredData = filteredDataBySelectedOptions(model, indicatorData, selectedOptions)
+    const filteredData = filteredDataBySelectedOptions(
+      model,
+      indicatorData,
+      selectedOptions
+    );
 
-    if (isEmpty(filteredData) || isNil(filteredData)) return null
+    if (isEmpty(filteredData) || isNil(filteredData)) return null;
 
-    const yearAxis = filteredData[0].values.map(o => o.year)
+    const yearAxis = filteredData[0].values.map(o => o.year);
 
-    const data = []
+    const data = [];
     if (model === KABUPATEN) {
       yearAxis.forEach(x => {
-        const object = {}
+        const object = {};
 
-        object.x = x
+        object.x = x;
         yColumnOptions.forEach(option => {
-          const dataByOption = find(filteredData, ['location_iso_code3', option.code])
-          object[option.value] = find(dataByOption.values, ['year', x]).value
-        })
+          const dataByOption = find(filteredData, [
+            'location_iso_code3',
+            option.code
+          ]);
+          object[option.value] = find(dataByOption.values, [ 'year', x ]).value;
+        });
 
-        data.push(object)
-      })
+        data.push(object);
+      });
     }
 
     if (model === SEKTOR) {
       yearAxis.forEach(x => {
-        const object = {}
+        const object = {};
 
-        object.x = x
+        object.x = x;
         yColumnOptions.forEach(option => {
-          const dataByOption = find(filteredData, ['category_id', option.code])
-          object[option.value] = find(dataByOption.values, ['year', x]).value 
-        })
+          const dataByOption = find(filteredData, [
+            'category_id',
+            option.code
+          ]);
+          object[option.value] = find(dataByOption.values, [ 'year', x ]).value;
+        });
 
-        data.push(object)
-      })
+        data.push(object);
+      });
     }
 
     return data;
@@ -287,34 +293,48 @@ const parseChartData = createSelector(
 // Y LABEL FORMATS
 const getCustomYLabelFormat = unit => {
   const formatY = {
-    'million-idr': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value/1e3),
-    'percent': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
-    'people': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
+    'million-idr': value =>
+      Intl
+        .NumberFormat('in-ID', { maximumFractionDigits: 2 })
+        .format(value / 1e3),
+    percent: value =>
+      Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
+    people: value =>
+      Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value)
   };
   return formatY[unit];
 };
 
 const getFormatFunction = unit => {
   const formatY = {
-    'million-idr': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value/1e3),
-    'percent': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
-    'people': value => Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
-  }
+    'million-idr': value =>
+      Intl
+        .NumberFormat('in-ID', { maximumFractionDigits: 2 })
+        .format(value / 1e3),
+    percent: value =>
+      Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
+    people: value =>
+      Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value)
+  };
 
-  return formatY[unit]
-}
+  return formatY[unit];
+};
 
 const getTableValueFormat = (unit, value) => {
   const formatY = {
-    'million-idr': Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value/1e3),
-    'percent': Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
-    'people': Intl.NumberFormat('in-ID', { maximumFractionDigits: 2 }).format(value),
-  }
+    'million-idr': Intl
+      .NumberFormat('in-ID', { maximumFractionDigits: 2 })
+      .format(value / 1e3),
+    percent: Intl
+      .NumberFormat('in-ID', { maximumFractionDigits: 2 })
+      .format(value),
+    people: Intl
+      .NumberFormat('in-ID', { maximumFractionDigits: 2 })
+      .format(value)
+  };
 
-  return formatY[unit]
-}
-
-let colorCache = {};
+  return formatY[unit];
+};
 
 export const getChartConfig = createSelector(
   [
@@ -325,8 +345,10 @@ export const getChartConfig = createSelector(
     getTranslate
   ],
   (data, yColumnOptions, unit, options, t) => {
-    if (!yColumnOptions || !data) return null
-    if (!unit || isNil(options.indicator)) return null
+    if (!yColumnOptions || !data) return null;
+    if (!unit || isNil(options.indicator)) return null;
+
+    let colorCache = {};
 
     const theme = getThemeConfig(yColumnOptions);
 
@@ -337,7 +359,7 @@ export const getChartConfig = createSelector(
       x: { label: year },
       theme,
       formatFunction: getFormatFunction(unit)
-    }
+    };
 
     colorCache = { ...theme, ...colorCache };
 
@@ -348,11 +370,11 @@ export const getChartConfig = createSelector(
         unit: upperFirst(t(`common.unit.${unit}`)),
         format: 'number'
       }
-    }
+    };
 
-    const yLabelFormat = getCustomYLabelFormat(unit)
-    const columns = { x: [ { label: year, value: 'x' } ], y: yColumnOptions }
-
+    const yLabelFormat = getCustomYLabelFormat(unit);
+    const columns = { x: [ { label: year, value: 'x' } ], y: yColumnOptions };
+    console.log('colorCache', colorCache);
     return {
       axes,
       theme: colorCache,
@@ -360,93 +382,97 @@ export const getChartConfig = createSelector(
       tooltip,
       columns,
       yLabelFormat
-    }
+    };
   }
 );
 
-const getDefaultColumns = createSelector(
-  parseChartData,
-  data => {
-    if (!data || isEmpty(data)) return null
+const getDefaultColumns = createSelector(parseChartData, data => {
+  if (!data || isEmpty(data)) return null;
 
-    const years = data.map(dt => dt.x)
+  const years = data.map(dt => dt.x);
 
-    const defaultColumns = ['indicator', 'unit', ...years]
+  const defaultColumns = [ 'indicator', 'unit', ...years ];
 
-    return defaultColumns
-  }
-)
+  return defaultColumns;
+});
 
-const firstColumnHeaders = () => (['indicator', 'unit'])
+const firstColumnHeaders = () => [ 'indicator', 'unit' ];
 
-const narrowColumns = createSelector(
-  parseChartData,
-  data => {
-    if (!data || isEmpty(data)) return null
+const narrowColumns = createSelector(parseChartData, data => {
+  if (!data || isEmpty(data)) return null;
 
-    return [ 'unit' ] + data.map(dt => dt.x) 
-  }
-)
+  return [ 'unit' ] + data.map(dt => dt.x);
+});
 
 const getTableData = createSelector(
-  [getSelectedModel, getDefaultColumns, getIndicatorData, parseChartData, getSelectedOptions, getUnit, getTranslate],
+  [
+    getSelectedModel,
+    getDefaultColumns,
+    getIndicatorData,
+    parseChartData,
+    getSelectedOptions,
+    getUnit,
+    getTranslate
+  ],
   (model, columns, indicatorData, parsedData, options, unit, t) => {
-    if (!parsedData || !options || !unit || !model) return null
+    if (!parsedData || !options || !unit || !model) return null;
 
-    const filteredData = filteredDataBySelectedOptions(model, indicatorData, options)
+    const filteredData = filteredDataBySelectedOptions(
+      model,
+      indicatorData,
+      options
+    );
 
-    const tableData = []
+    const tableData = [];
     if (model === KABUPATEN) {
       filteredData.forEach(data => {
-        const objectData = {}
+        const objectData = {};
 
-        objectData.indicator = data.location
-        objectData.unit = upperFirst(t(`common.unit.${unit}`))
+        objectData.indicator = data.location;
+        objectData.unit = upperFirst(t(`common.unit.${unit}`));
 
         data.values.forEach(value => {
-          objectData[value.year] = getTableValueFormat(unit, value.value)
-        })
+          objectData[value.year] = getTableValueFormat(unit, value.value);
+        });
 
-        tableData.push(objectData)
-      })
+        tableData.push(objectData);
+      });
     }
-
 
     if (model === SEKTOR) {
       filteredData.forEach(data => {
-        const objectData = {}
+        const objectData = {};
 
-        objectData.indicator = data.category
-        objectData.unit = upperFirst(t(`common.unit.${unit}`))
+        objectData.indicator = data.category;
+        objectData.unit = upperFirst(t(`common.unit.${unit}`));
 
         data.values.forEach(value => {
-          objectData[value.year] = getTableValueFormat(unit, value.value)
-        })
+          objectData[value.year] = getTableValueFormat(unit, value.value);
+        });
 
-        tableData.push(objectData)
-      })
+        tableData.push(objectData);
+      });
     }
-    
-    return tableData
 
+    return tableData;
   }
-)
+);
 
 const getSources = createSelector(
-  [getSelectedModel, getIndicatorData, getSelectedOptions],
+  [ getSelectedModel, getIndicatorData, getSelectedOptions ],
   (model, data, options) => {
-    if (isEmpty(data) || isUndefined(data) || !model || !options) return []
+    if (isEmpty(data) || isUndefined(data) || !model || !options) return [];
 
-    const filteredData = filteredDataBySelectedOptions(model, data, options)
+    const filteredData = filteredDataBySelectedOptions(model, data, options);
 
-    if (!filteredData) return []
+    if (!filteredData) return [];
 
-    return uniq(filteredData.map(o => o.source))
+    return uniq(filteredData.map(o => o.source));
   }
-)
+);
 
 const getChartLoading = ({ provinceMeta = {}, indicators = {} }) =>
-  (provinceMeta && provinceMeta.loading) || (indicators && indicators.loading);
+  provinceMeta && provinceMeta.loading || indicators && indicators.loading;
 
 const getDataLoading = createSelector(
   [ getChartLoading, parseChartData ],

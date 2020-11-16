@@ -1,25 +1,32 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import cx from "classnames";
-import castArray from "lodash/castArray";
-import kebabCase from "lodash/kebabCase";
-import uniq from "lodash/uniq";
-import flatMap from "lodash/flatMap";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
+import castArray from 'lodash/castArray';
+import kebabCase from 'lodash/kebabCase';
+import uniq from 'lodash/uniq';
+import flatMap from 'lodash/flatMap';
 
-import { Chart, Dropdown, Multiselect, Table, Button, Icon } from "cw-components";
+import {
+  Chart,
+  Dropdown,
+  Multiselect,
+  Table,
+  Button,
+  Icon
+} from 'cw-components';
 
-import InfoDownloadToolbox from "components/info-download-toolbox";
-import SectionTitle from "components/section-title";
-import ProvinceMetaProvider from "providers/province-meta-provider";
-import IndicatorProvider from "providers/indicators-provider";
-import dropdownStyles from "styles/dropdown.scss";
-import lineIcon from "assets/icons/line_chart.svg";
-import areaIcon from "assets/icons/area_chart.svg";
-import shareIcon from "assets/icons/share";
-import ModalShare from "components/modal-share";
-import CustomTooltip from "./bar-chart-tooltip";
+import InfoDownloadToolbox from 'components/info-download-toolbox';
+import SectionTitle from 'components/section-title';
+import ProvinceMetaProvider from 'providers/province-meta-provider';
+import IndicatorProvider from 'providers/indicators-provider';
+import dropdownStyles from 'styles/dropdown.scss';
+import lineIcon from 'assets/icons/line_chart.svg';
+import areaIcon from 'assets/icons/area_chart.svg';
+import shareIcon from 'assets/icons/share';
+import ModalShare from 'components/modal-share';
+import CustomTooltip from './bar-chart-tooltip';
 
-import styles from "./economy-styles.scss";
+import styles from './economy-styles.scss';
 
 class Economies extends PureComponent {
   constructor(props) {
@@ -30,21 +37,25 @@ class Economies extends PureComponent {
 
   handleLegendChange = selected => {
     const { selectedModel } = this.props;
-    const KABUPATEN = "kabupaten";
+    const KABUPATEN = 'kabupaten';
 
     if (selectedModel === KABUPATEN) {
-      this.handleFilterChange("district", selected);
+      this.handleFilterChange('district', selected);
     } else {
-      this.handleFilterChange("sector", selected);
+      this.handleFilterChange('sector', selected);
     }
   };
 
   handleFilterChange = (field, selected) => {
     const { onFilterChange, selectedOptions } = this.props;
 
-    const prevSelectedOptionValues = castArray(selectedOptions[field]).map(o => o.value);
+    const prevSelectedOptionValues = castArray(selectedOptions[field]).map(
+      o => o.value
+    );
     const selectedArray = castArray(selected);
-    const newSelectedOption = selectedArray.find(o => !prevSelectedOptionValues.includes(o.value));
+    const newSelectedOption = selectedArray.find(
+      o => !prevSelectedOptionValues.includes(o.value)
+    );
 
     const removedAnyPreviousOverride = selectedArray
       .filter(v => v)
@@ -52,7 +63,9 @@ class Economies extends PureComponent {
 
     const values = newSelectedOption && newSelectedOption.override
       ? newSelectedOption.value
-      : uniq(flatMap(removedAnyPreviousOverride, v => String(v.value).split(","))).join(",");
+      : uniq(
+        flatMap(removedAnyPreviousOverride, v => String(v.value).split(','))
+      ).join(',');
 
     onFilterChange({ [field]: values });
   };
@@ -64,7 +77,8 @@ class Economies extends PureComponent {
     const value = selectedOptions && selectedOptions[field];
     const options = filterOptions[field] || [];
     const iconsProp = icons ? { icons } : {};
-    const disabled = field === "sector" && selectedModel === "kabupaten" || field === "district" && selectedModel === "sektor";
+    const disabled = field === 'sector' && selectedModel === 'kabupaten' ||
+      field === 'district' && selectedModel === 'sektor';
 
     const label = t(`pages.regions.economy.labels.${kebabCase(field)}`);
     if (multi) {
@@ -97,13 +111,19 @@ class Economies extends PureComponent {
   }
 
   renderChart() {
-    const { chartData, selectedOptions } = this.props;
+    const { chartData, selectedOptions, config } = this.props;
     if (!chartData || !chartData.data) return null;
-
     return (
       <Chart
-        theme={chartData.config.theme}
-        type={selectedOptions && selectedOptions.chartType && selectedOptions.chartType.value}
+        theme={{
+          legend: styles.legend,
+          projectedLegend: styles.projectedLegend
+        }}
+        type={
+          selectedOptions &&
+            selectedOptions.chartType &&
+            selectedOptions.chartType.value
+        }
         config={chartData.config}
         data={chartData.data}
         dataOptions={chartData.dataOptions}
@@ -111,7 +131,6 @@ class Economies extends PureComponent {
         height={500}
         loading={chartData.loading}
         getCustomYLabelFormat={chartData.config.yLabelFormat}
-        customTooltip={<CustomTooltip />}
         onLegendChange={v => this.handleLegendChange(v)}
         showUnit
       />
@@ -151,22 +170,32 @@ class Economies extends PureComponent {
 
     const { isOpen } = this.state;
 
-    const section = "wp_economic";
+    const section = 'wp_economic';
     const downloadURI = `indicators.zip?section=${section}`;
 
     return (
       <div className={styles.page}>
-        <SectionTitle title={t("pages.regions.economy.title")} description={t("pages.regions.economy.description")} />
+        <SectionTitle
+          title={t('pages.regions.economy.title')}
+          description={t('pages.regions.economy.description')}
+        />
         <div>
           <div className={styles.chartMapContainer}>
             <div className={styles.filtersChartContainer}>
               <div className={styles.dropdowns}>
-                {this.renderDropdown("indicator", false)}
-                {this.renderDropdown("district", true)}
-                {this.renderDropdown("sector", true)}
-                {this.renderDropdown("chartType", false, icons)}
-                <InfoDownloadToolbox className={{ buttonWrapper: styles.buttonWrapper }} slugs={sources} downloadUri={downloadURI} />
-                <Button theme={{ button: cx(styles.shareButton) }} onClick={() => this.setState({ isOpen: !isOpen })}>
+                {this.renderDropdown('indicator', false)}
+                {this.renderDropdown('district', true)}
+                {this.renderDropdown('sector', true)}
+                {this.renderDropdown('chartType', false, icons)}
+                <InfoDownloadToolbox
+                  className={{ buttonWrapper: styles.buttonWrapper }}
+                  slugs={sources}
+                  downloadUri={downloadURI}
+                />
+                <Button
+                  theme={{ button: cx(styles.shareButton) }}
+                  onClick={() => this.setState({ isOpen: !isOpen })}
+                >
                   <Icon icon={shareIcon} />
                   <span className={styles.shareText}>Share</span>
                 </Button>
@@ -180,7 +209,11 @@ class Economies extends PureComponent {
             </div>
           </div>
         </div>
-        <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
+        <ModalShare
+          isOpen={isOpen}
+          closeModal={() => this.setState({ isOpen: false })}
+          sharePath={shareableLink}
+        />
         {metadataParams && <ProvinceMetaProvider metaParams={metadataParams} />}
         {indicatorParams && <IndicatorProvider params={indicatorParams} />}
       </div>
