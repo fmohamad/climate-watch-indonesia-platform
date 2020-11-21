@@ -1,7 +1,7 @@
 ActiveAdmin.setup do |config|
   config.site_title = 'Climate Watch Indonesia'
   config.authentication_method = :authenticate_admin_user!
-  config.authorization_adapter = "OnlyPages"
+  # config.authorization_adapter = "OnlyPages"
 
   config.current_user_method = :current_admin_user
 
@@ -14,9 +14,8 @@ ActiveAdmin.setup do |config|
 
   config.namespace :admin do |admin|
     admin.build_menu do |menu|
-      menu.add label: 'Dashboard', priority: 1
-      menu.add label: 'Indonesia Platform', if: proc{ current_admin_user.role == 'superuser' || current_admin_user.role == 'admin' || current_admin_user.role == 'admin_national' }, priority: 3
-      menu.add label: 'West Papua Platform', if: proc{ current_admin_user.role == 'superuser' || current_admin_user.role == 'admin' || current_admin_user.role == 'admin_wp' }, priority: 4
+      menu.add label: 'Indonesia Platform', if: proc{ %w[superuser admin admin_national].include?(current_admin_user.role) }, priority: 3
+      menu.add label: 'West Papua Platform', if: proc{ %w[superuser admin admin_wp].include?(current_admin_user.role) }, priority: 4
     end
   end
 end

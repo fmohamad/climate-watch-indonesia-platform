@@ -374,7 +374,6 @@ export const getChartConfig = createSelector(
 
     const yLabelFormat = getCustomYLabelFormat(unit);
     const columns = { x: [ { label: year, value: 'x' } ], y: yColumnOptions };
-    console.log('colorCache', colorCache);
     return {
       axes,
       theme: colorCache,

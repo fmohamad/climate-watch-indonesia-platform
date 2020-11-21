@@ -3,7 +3,7 @@ ActiveAdmin.register AdminUser do
   permit_params :email, :password, :password_confirmation, :role
 
   controller do
-    before_action :check_admin_role, only: [:new]
+    before_action :check_admin_role, only: [:new, :update, :read, :destroy]
 
     def check_admin_role
       !current_admin_user.superuser? &&
