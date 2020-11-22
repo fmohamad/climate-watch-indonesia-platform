@@ -267,8 +267,6 @@ const getChartData = createSelector(
   }
 )
 
-let colorCache = {};
-
 // Y LABEL FORMATS
 const getCustomYLabelFormat = (unit) => {
   const formatY = {
@@ -289,12 +287,15 @@ const getChartConfig = createSelector(
     if (!yColumnOptions || !data) return null
     if (isNil(options.indicator)) return null
 
+    let colorCache = {};
+    
     const name = options.indicator.label
     const { unit } = options.indicator
 
     const tooltip = getTooltipConfig(yColumnOptions);
     const theme = getThemeConfig(yColumnOptions);
     colorCache = { ...theme, ...colorCache };
+    console.log('colorCache', colorCache)
 
     const year = t(
       `pages.regions.economy.unit.year}`

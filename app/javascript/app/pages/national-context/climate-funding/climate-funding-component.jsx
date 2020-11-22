@@ -6,6 +6,7 @@ import cx from 'classnames'
 import kebabCase from 'lodash/kebabCase';
 import startCase from 'lodash/startCase';
 import castArray from 'lodash/castArray';
+import filter from 'lodash/filter'
 import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
 import { renameKeys } from 'utils';
@@ -107,8 +108,8 @@ class ClimateFunding extends PureComponent {
         }
       ],
       selectedSector: {
-        label: 'Kehutanan & REDD+',
-        value: 'Kehutanan & REDD+'
+        label: '',
+        value: ''
       },
       supports: [
         {
@@ -133,15 +134,51 @@ class ClimateFunding extends PureComponent {
         }
       ],
       selectedSupport: {
-        label: 'Bantuan Keuangan',
-        value: 'Bantuan Keuangan'
-      }
+        label: '',
+        value: ''
+      },
+      searchValue: '',
+      data: [],
+      filteredData: []
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    /*this.setState({
+      data: this.props.data
+    })*/
+    if(this.props.data !== prevProps.data) {
+      /*const filteredTableData = filter(this.props.data, function(item) {
+        return item.mode_of_support.indexOf(this.state.selectedSupport.value) !== -1
+      })*/
+      this.setState({
+        data: this.props.data
+      })
+    }
+    console.log('balakutak mahluk laut');
+    /*const filteredData = filter(this.state.data, function(item) {
+      return item.mode_of_support.indexOf('Bantuan Keuangan') !== -1
+    })*/
+  }
+
+  filterData() {
+    const {selectedSector, selectedSupport, data} = this.state
+    const filteredSectorData = filter(data, function(item) {
+      return item.sectors_and_topics.indexOf(selectedSector.value) !== -1
+    })
+
+    const filteredSupportData = filter(filteredSectorData, function(item) {
+      return item.mode_of_support.indexOf(selectedSupport.value) !== -1
+    })
+
+    this.setState({
+      data: filteredSupportData
+    })
+    console.log('this.state.data', this.state.data);
   }
 
   handleFilterChange = (field, selected) => {
     const { onSearchChange } = this.props;
-
     /*const prevSelectedOptionValues = castArray(selectedOptions[field])
       .filter(o => o)
       .map(o => o.value);*/
@@ -160,20 +197,29 @@ class ClimateFunding extends PureComponent {
         flatMap(removedAnyPreviousOverride, v => String(v.value).split(','))
       ).join(',');*/
     const value = selected.value
+    // this.filterData(value)
     if(field === 'sector'){
       this.setState({
         selectedSector: selected
       }, () => {
-        onSearchChange(this.state.selectedSector.value);
+        this.filterData()
+        // onSearchChange(this.state.selectedSector.value);
       })
     } else {
       this.setState({
         selectedSupport: selected
       }, () => {
-        onSearchChange(this.state.selectedSector.value);
+        this.filterData()
+        // onSearchChange(this.state.selectedSector.value);
       })
     }
   };
+
+  handleSearch = (value) => {
+    const { onSearchChange } = this.props;
+    onSearchChange(value);
+    this.filterData()
+  }
 
   renderDropdown(field, multi, icons) {
     /*const {
@@ -248,7 +294,8 @@ class ClimateFunding extends PureComponent {
   render() {
     const shareableLink = `${window.location.origin}${window.location.pathname}`
     const { isOpen } = this.state
-    const { t, data, titleLinks, onSearchChange, sources } = this.props;
+    const { t, titleLinks, onSearchChange, sources } = this.props;
+    const { data } = this.state;
     const nt = key => t(`pages.national-context.climate-funding.${key}`);
 
     const tableHeaders = nt('table-headers', {});
@@ -256,7 +303,7 @@ class ClimateFunding extends PureComponent {
     const defaultColumns = Object.values(tableHeaders);
 
     const tableData = data.map(d => renameKeys(d, tableHeaders));
-    console.log('tableData', tableData);
+    // console.log('tableData', tableData);
     const title = nt('title');
     const description = nt('description');
 
@@ -266,7 +313,7 @@ class ClimateFunding extends PureComponent {
         <div>
           <div className={styles.actions}>
             <Input
-              onChange={onSearchChange}
+              onChange={value => this.handleSearch(value)}
               placeholder={t(
                 'pages.national-context.climate-funding.search-placeholder'
               )}
