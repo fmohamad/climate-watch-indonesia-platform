@@ -14,7 +14,7 @@ export const getSelectedAPI = createSelector(
   sourceQuery => sourceQuery === 'CAIT' ? API.cw : API.indo
 );
 
-const _getMetadata = ({ ghgInventoryMetadata }) => ghgInventoryMetadata;
+const _getMetadata = ({ metadata }) => metadata;
 
 export const getMetadata = createSelector([ _getMetadata, getSelectedAPI ], (
   metadata,

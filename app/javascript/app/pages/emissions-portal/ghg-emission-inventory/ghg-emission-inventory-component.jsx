@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import MetadataProvider from 'providers/ghg-inventory-metadata-provider';
+import GHGMetadataProvider from 'providers/ghg-inventory-metadata-provider';
+import MetadataProvider from 'providers/metadata-provider'
 import GHGEmissionsProvider from 'providers/ghg-emissions-provider';
 import GHGTargetEmissionsProvider from 'providers/ghg-target-emissions-provider';
 import WorldBankProvider from 'providers/world-bank-provider';
@@ -181,7 +182,9 @@ class Inventory extends PureComponent {
               )
           }
         </div>
-        <MetadataProvider params={metaParams} />
+        <GHGMetadataProvider params={metaParams} />
+        <MetadataProvider meta='ghgindo' />
+        <MetadataProvider meta='ghgcw' />
         <WorldBankProvider />
         {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
         {emissionParams && <GHGTargetEmissionsProvider />}
