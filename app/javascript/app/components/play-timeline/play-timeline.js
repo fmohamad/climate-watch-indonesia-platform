@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Button, Icon } from 'cw-components';
 import styles from './play-timeline-styles.scss';
-import infoIcon from './assets/play.svg';
+import playIcon from './assets/play.svg';
 import stopIcon from './assets/stop.svg';
 import playButtonTheme from './play-button-theme.scss';
 
@@ -22,11 +22,8 @@ const PlayTimeline = ({ years, selectedYear, theme, onPlay, onStop, onSelect, di
 
   return (
     <div className={cx(styles.timelineContainer, theme.timelineContainer)}>
-      <Button theme={playButtonTheme} onClick={onPlay} disabled={disablePlay}>
-        <Icon icon={infoIcon} />
-      </Button>
-      <Button theme={playButtonTheme} onClick={onStop}>
-        <Icon icon={stopIcon} />
+      <Button theme={playButtonTheme} onClick={disablePlay ? onStop : onPlay} >
+        <Icon icon={disablePlay ? stopIcon : playIcon} />
       </Button>
       <div className={cx(styles.timeline, theme.timeline)}>
         {years.map((year, i) => (
@@ -93,3 +90,4 @@ PlayTimeline.defaultProps = {
 };
 
 export default PlayTimeline;
+
