@@ -102,7 +102,7 @@ const getYColumnOptions = createSelector(
       columns &&
         columns.map(d => ({
           label: d && d.label,
-          value: d && getYColumnValue(`${modelSelected}${d.value}`),
+          value: d && getYColumnValue(`${modelSelected}${d.code}`),
           code: d && (d.code || d.label)
         }));
     return uniqBy(getYOption(legendDataSelected), 'value');
@@ -314,7 +314,7 @@ export const getChartConfig = createSelector(
     if (!data || isEmpty(data) || !unit || !metricSelected || !yColumnOptions || isEmpty(options))
       return null;
     const tooltip = getTooltipConfig(yColumnOptions);
-    const theme = getThemeConfig(yColumnOptions);
+    const theme = getThemeConfig(yColumnOptions, colorCache);
     colorCache = { ...theme, ...colorCache };
     const axes = {
       xBottom: { name: 'Year', unit: 'date', format: 'YYYY' },

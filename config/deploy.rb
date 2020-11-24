@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.11.2"
+# lock "~> 3.11.2"
 
 set :application, "indonesia-platform"
 set :repo_url, "https://github.com/anggiaramadhan/indonesia-platform.git"
@@ -9,6 +9,7 @@ set :repo_url, "https://github.com/anggiaramadhan/indonesia-platform.git"
 set :branch, :develop
 
 # Default deploy_to directory is /var/www/my_app_name
+# set :deploy_to, "/home/cwi/#{fetch :application}"
 set :deploy_to, "/home/deploy/#{fetch :application}"
 
 # Default value for :linked_files is []
