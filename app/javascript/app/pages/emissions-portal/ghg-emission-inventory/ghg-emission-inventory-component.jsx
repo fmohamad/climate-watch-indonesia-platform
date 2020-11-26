@@ -147,8 +147,8 @@ class Inventory extends PureComponent {
             {this.renderDropdown('breakBy')}
             {this.renderDropdown('region')}
             {this.renderDropdown('sector')}
-            {this.renderDropdown('category')}
-            {this.renderDropdown('subCategory')}
+            {/*this.renderDropdown('category')*/}
+            {/*this.renderDropdown('subCategory')*/}
             {this.renderDropdown('gas')}
             {this.renderDropdown('chartType', icons)}
           </div>

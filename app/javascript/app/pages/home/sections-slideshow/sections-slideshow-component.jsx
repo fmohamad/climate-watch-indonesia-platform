@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Carousel } from 'cw-components';
 import Link from 'redux-first-router-link';
 // redirect actions
-import { NATIONAL_CONTEXT, CLIMATE_GOALS, REGIONS } from 'router';
+import { NATIONAL_CONTEXT, CLIMATE_GOALS, REGIONS, EMISSIONS_PORTAL } from 'router';
 import routerRegionSections from 'router/sections/regions';
 // images
 import climateSmImage from 'assets/carousel_climate_goals@1x';
@@ -81,20 +81,30 @@ class SectionsSlideshowComponent extends Component {
     const slideFour = t('pages.homepage.slide-four') || {};
     const regionsPayload = {
       locale,
-      region: 'ID.AC',
+      region: 'ID.PB',
       section: routerRegionSections.find(section => section.default).slug
     };
 
     const slidesData = [
       {
-        pagingTitle: slideOne.paging,
-        title: slideOne.title,
-        text: slideOne.description,
-        buttonText: slideOne.button,
-        smImage: climateSmImage,
-        bgImage: climateBgImage,
-        altText: 'Climate goals chart',
-        routerAction: { type: CLIMATE_GOALS }
+        pagingTitle: slideThree.paging,
+        title: slideThree.title,
+        text: slideThree.description,
+        buttonText: slideThree.button,
+        smImage: anualSmImage,
+        bgImage: anualBgImage,
+        altText: 'GHG chart',
+        routerAction: { type: EMISSIONS_PORTAL }
+      },
+      {
+        pagingTitle: slideFour.paging,
+        title: slideFour.title,
+        text: slideFour.description,
+        buttonText: slideFour.button,
+        smImage: emissionPortalSmImage,
+        bgImage: emissionPortalBgImage,
+        altText: 'Emission Portal',
+        routerAction: { type: REGIONS, payload: regionsPayload }
       },
       {
         pagingTitle: slideTwo.paging,
@@ -107,25 +117,15 @@ class SectionsSlideshowComponent extends Component {
         routerAction: { type: NATIONAL_CONTEXT }
       },
       {
-        pagingTitle: slideThree.paging,
-        title: slideThree.title,
-        text: slideThree.description,
-        buttonText: slideThree.button,
-        smImage: anualSmImage,
-        bgImage: anualBgImage,
-        altText: 'GHG chart',
-        routerAction: { type: REGIONS, payload: regionsPayload }
+        pagingTitle: slideOne.paging,
+        title: slideOne.title,
+        text: slideOne.description,
+        buttonText: slideOne.button,
+        smImage: climateSmImage,
+        bgImage: climateBgImage,
+        altText: 'Climate goals chart',
+        routerAction: { type: CLIMATE_GOALS }
       },
-      {
-        pagingTitle: slideFour.paging,
-        title: slideFour.title,
-        text: slideFour.description,
-        buttonText: slideFour.button,
-        smImage: emissionPortalSmImage,
-        bgImage: emissionPortalBgImage,
-        altText: 'Emission Portal',
-        routerAction: { type: REGIONS, payload: regionsPayload }
-      }
     ];
 
     return (

@@ -84,7 +84,7 @@ const getIndicatorDistribution = createSelector(_getIndicator, (indicators) => {
 const getYearOptions = createSelector(getIndicatorPopulation, (indicators) => {
   if (isEmpty(indicators)) return null;
   const { values } = indicators[0];
-  return values.map((val) => ({
+  return values.reverse().map((val) => ({
     label: val.year,
     value: val.year,
   }));

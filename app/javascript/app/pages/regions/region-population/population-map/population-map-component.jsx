@@ -84,7 +84,6 @@ class PopulationMap extends PureComponent {
           handleZoomIn={this.handleZoomIn}
           handleZoomOut={this.handleZoomOut}
           onGeographyClick={this.handleDistrictClick}
-          onGeographyEnter={this.handleEnter}
           tooltip={MapTooltip}
           forceUpdate
           zoomEnable
