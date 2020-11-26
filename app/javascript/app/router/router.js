@@ -50,6 +50,7 @@ export const routes = {
     nav: true,
     navNestedMenu: true,
     label: 'Province Module',
+    slug: 'regions',
     link: '/regions',
     path: '/:locale?/regions/:region?/:section?',
     module: '/regions',

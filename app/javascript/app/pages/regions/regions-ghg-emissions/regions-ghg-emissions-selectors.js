@@ -167,14 +167,14 @@ export const getUnit = createSelector(
 
 export const getScale = createSelector([ getUnit ], unit => {
   if (!unit) return null;
-  if (unit.startsWith('kt')) return 1000;
+  if (unit.startsWith('Mt')) return 1000000;
   return 1;
 });
 
 const getCorrectedUnit = createSelector([ getUnit, getScale ], (unit, scale) =>
   {
     if (!unit || !scale) return null;
-    return unit.replace('kt', 't');
+    return unit.replace('Mt', 't');
   });
 
 const getLegendDataOptions = getFieldOptions('sector');
@@ -236,7 +236,7 @@ const parseChartData = createSelector(
         if (yKey) {
           const yData = d.emissions.find(e => e.year === x);
           if (yData && yData.value) {
-            yItems[yKey] = (yItems[yKey] || 0) + yData.value * 1000;
+            yItems[yKey] = (yItems[yKey] || 0) + yData.value;
           }
         }
       });
@@ -252,9 +252,9 @@ let colorCache = {};
 // Y LABEL FORMATS
 const getCustomYLabelFormat = unit => {
   const formatY = {
-    'tCO2e': value => `${format(',.2f')(value/1e6)} juta`,
-    'tCO2e/Capita': value => value,
-    'tCO2e/billion Rupiah': value => `${format(',.0f')(value/1e3)} ribu`
+    'MtCO2e': value => `${(value)}`,
+    'MtCO2e/Capita': value => value,
+    'MtCO2e/billion Rupiah': value => `${format(',.0f')(value/1e3)} ribu`
   };
   return formatY[unit];
 };
@@ -270,12 +270,12 @@ export const getChartConfig = createSelector(
   ],
   (data, targetEmissionsData, unit, yColumnOptions, metricSelected, t) => {
     if (!data || !metricSelected) return null;
-    const tooltip = getTooltipConfig(yColumnOptions);
+    const tooltipModified = getTooltipConfig(yColumnOptions);
     const theme = getThemeConfig(yColumnOptions);
     colorCache = { ...theme, ...colorCache };
     const axes = {
       ...DEFAULT_AXES_CONFIG,
-      yLeft: { ...DEFAULT_AXES_CONFIG.yLeft, unit }
+      yLeft: { ...DEFAULT_AXES_CONFIG.yLeft, unit: `${unit} juta`}
     };
     const targetLabels = t(
       'pages.national-context.historical-emissions.target-labels',
@@ -296,7 +296,7 @@ export const getChartConfig = createSelector(
     const config = {
       axes,
       theme: colorCache,
-      tooltip,
+      tooltip: tooltipModified,
       animation: false,
       columns: { x: [ { label: 'year', value: 'x' } ], y: yColumnOptions },
       yLabelFormat

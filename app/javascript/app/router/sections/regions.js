@@ -39,16 +39,4 @@ export default [
     member: 'ID.PB',
     province: true,
   },
-  {
-    slug: 'policy',
-    path: '/:locale/regions/:region/policy',
-    member: 'ID.PB',
-    province: true,
-  },
-  {
-    slug: 'map',
-    path: '/:locale/regions/:region/map',
-    member: 'ID.PB',
-    province: true,
-  },
 ]
