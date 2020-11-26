@@ -31,6 +31,10 @@ const { COUNTRY_ISO } = process.env;
 
 const FRONTEND_FILTERED_FIELDS = [ 'gas', 'sector', 'metric' ];
 
+const DEFAULTS = {
+  gas: 'CO2EQ'
+}
+
 const getQuery = ({ location }) => location && (location.query || null);
 
 const getMetadataData = ({ metadata }) =>
@@ -56,6 +60,7 @@ const getProvinceEmissionsData = createSelector(
 
 const getSource = createSelector(getMetadataData, meta => {
   if (!meta || !meta.dataSource) return null;
+  console.log(meta)
   const selected = meta.dataSource.find(
     source => source.label === SOURCE.SIGN_SMART
   );
@@ -105,7 +110,7 @@ const getDefaults = createSelector([ getFilterOptions, getAllSelectedOption ], (
   allSelectedOption
 ) => ({
   sector: allSelectedOption,
-  gas: get(options, 'gas[0]'),
+  gas: findOption(options.gas, DEFAULTS.gas),
   metric: get(options, 'metric[0]')
 }));
 
@@ -219,10 +224,13 @@ const parseChartData = createSelector(
       emissionsData,
       selectedOptions
     );
+
+    const filterByCategory = filteredData.filter(data => data.category == SECTOR_TOTAL && data.subCategory == SECTOR_TOTAL)
+
     const dataParsed = [];
     yearValues.forEach(x => {
       const yItems = {};
-      filteredData.forEach(d => {
+      filterByCategory.forEach(d => {
         const columnObject = yColumnOptions.find(c => c.code === d.sector);
         const yKey = columnObject && columnObject.value;
         if (yKey) {
@@ -245,8 +253,8 @@ let colorCache = {};
 const getCustomYLabelFormat = unit => {
   const formatY = {
     'tCO2e': value => `${format(',.2f')(value/1e6)} juta`,
-    'tCO2e /Capita': value => value,
-    'tCO2e/billion Rupiahs': value => `${format(',.0f')(value/1e3)} ribu`
+    'tCO2e/Capita': value => value,
+    'tCO2e/billion Rupiah': value => `${format(',.0f')(value/1e3)} ribu`
   };
   return formatY[unit];
 };
