@@ -236,7 +236,7 @@ class RegionPopulation extends PureComponent {
           closeModal={() => this.setState({ isOpen: false })}
           sharePath={shareableLink}
         />
-        <IndicatorsProvider params={indicatorParams} />
+        <IndicatorsProvider />
         <ProvinceMetaProvider metaParams={metaParams} />
       </div>
     );
