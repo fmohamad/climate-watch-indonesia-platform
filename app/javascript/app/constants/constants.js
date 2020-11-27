@@ -1,6 +1,6 @@
 export const ALL_SELECTED = 'all-selected';
 
-export const API_TARGET_DATA_SCALE = 1000;
+export const API_TARGET_DATA_SCALE = 1;
 export const METRIC_OPTIONS = {
   ABSOLUTE_VALUE: 'absolute',
   PER_CAPITA: 'per_gdp',

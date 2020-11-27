@@ -261,7 +261,7 @@ const getCustomYLabelFormat = unit => {
 
 export const getChartConfig = createSelector(
   [
-    getProvinceEmissionsData,
+    parseChartData,
     getProvinceTargetEmissionsData,
     getCorrectedUnit,
     getYColumnOptions,
@@ -336,6 +336,16 @@ const parseTargetEmissionsData = createSelector(
   }
 );
 
+const getChartDomain = createSelector(
+  parseChartData,
+  data => {
+    if (!data) return null
+    const domainY = [ 'auto', 'auto'];
+    const domain = { x: [ 'auto', 'auto' ], y: domainY }
+    return domain
+  }
+)
+
 const getChartLoading = ({ metadata = {}, GHGEmissions = {} }) =>
   (metadata && metadata.ghgindo.loading) || (GHGEmissions && GHGEmissions.loading);
 
@@ -356,6 +366,7 @@ const getEmissionTargetsForCharts = createSelector(
 
 export const getChartData = createStructuredSelector({
   data: parseChartData,
+  domain: getChartDomain,
   projectedData: parseTargetEmissionsData,
   config: getChartConfig,
   loading: getDataLoading,
