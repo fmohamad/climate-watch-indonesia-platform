@@ -72,12 +72,13 @@ const getBreakByOptions = createSelector([getTranslate], (t) => {
 
 const getFieldOptions = (field) =>
   createSelector(
-    [getMetadataData, getNationalOption, getFieldQuery('breakBy')],
-    (metadata, nationalOption, queryBreakBy) => {
+    [getMetadataData, getNationalOption, getFieldQuery('breakBy'), getAllSelectedOption],
+    (metadata, nationalOption, queryBreakBy, allSelectedOption) => {
       if (!metadata || !metadata[field]) return null;
 
       const breakBySelected = queryBreakBy || DEFAULTS.breakBy;
       const isAbsoluteMetric = breakBySelected.includes('absolute');
+      const isBrekBySector = breakBySelected.includes('sector')
 
       const transformToOption = (o) => ({
         label: o.label,
@@ -92,6 +93,9 @@ const getFieldOptions = (field) =>
         case 'sector': {
           if (isAbsoluteMetric) {
             options = options.filter((o) => o.code !== SECTOR_TOTAL);
+            if (isBrekBySector) {
+              options = [ allSelectedOption, ...options]
+            }
           } break;
         }
         case 'location': {
@@ -161,6 +165,11 @@ const filterSectorSelectedByMetrics = createSelector(
         sectorOptions.find((o) => o.code === SECTOR_TOTAL) || sectorSelected
       );
     }
+
+    if (sectorSelected.value === ALL_SELECTED) {
+      return sectorOptions.filter(o => o.value !== ALL_SELECTED)
+    }
+
     return sectorSelected;
   }
 );
