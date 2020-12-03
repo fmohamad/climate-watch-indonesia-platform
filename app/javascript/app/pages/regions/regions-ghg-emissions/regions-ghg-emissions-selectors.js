@@ -60,7 +60,6 @@ const getProvinceEmissionsData = createSelector(
 
 const getSource = createSelector(getMetadataData, meta => {
   if (!meta || !meta.dataSource) return null;
-  console.log(meta)
   const selected = meta.dataSource.find(
     source => source.label === SOURCE.SIGN_SMART
   );
@@ -149,9 +148,12 @@ const getSectorsSelected = createSelector(
   }
 );
 
-export const getEmissionParams = createSelector([ getProvince, getSource ], (provinceISO, source) => {
+export const getEmissionParams = createSelector([ getMetadataData, getSource ], (meta, source) => {
   if (!source) return null;
-  return { location: provinceISO, source };
+  const category = findOption(meta.category, SECTOR_TOTAL).value;
+  const sub_category = findOption(meta.subCategory, SECTOR_TOTAL).value;
+
+  return { location: 'IDN', source, category, sub_category };
 });
 
 // DATA
@@ -225,12 +227,10 @@ const parseChartData = createSelector(
       selectedOptions
     );
 
-    const filterByCategory = filteredData.filter(data => data.category == SECTOR_TOTAL && data.subCategory == SECTOR_TOTAL)
-
     const dataParsed = [];
     yearValues.forEach(x => {
       const yItems = {};
-      filterByCategory.forEach(d => {
+      filteredData.forEach(d => {
         const columnObject = yColumnOptions.find(c => c.code === d.sector);
         const yKey = columnObject && columnObject.value;
         if (yKey) {

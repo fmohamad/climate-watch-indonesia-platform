@@ -3,7 +3,7 @@ import flatten from 'lodash/flatten';
 import { scaleQuantile } from 'd3-scale';
 
 import { getProvince, getLocations } from 'selectors/provinces-selectors';
-import { METRIC } from 'constants';
+import { METRIC, SECTOR_TOTAL } from 'constants';
 
 import indonesiaPaths from 'utils/maps/indonesia-paths';
 import { getTranslate } from 'selectors/translation-selectors';
@@ -112,11 +112,14 @@ export const getMap = createSelector(
           provincePath.properties.latitude
         ]
         : DEFAULT_MAP_CENTER;
+
       const filteredEmissions = filterBySelectedOptions(
         emissions,
         selectedOptions
       );
+
       if (!filteredEmissions.length) return { paths: indonesiaPaths };
+
       const normalizedEmissions = flatten(
         filteredEmissions.map(
           e =>
