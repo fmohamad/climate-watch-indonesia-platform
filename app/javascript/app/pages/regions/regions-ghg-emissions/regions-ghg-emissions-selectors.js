@@ -158,24 +158,27 @@ export const getEmissionParams = createSelector([ getMetadataData, getSource ], 
 
 // DATA
 export const getUnit = createSelector(
-  [ getMetadataData, getFieldSelected('metric') ],
-  (meta, metric) => {
-    if (!meta || !metric) return null;
-    const { metric: metrics } = meta;
-    const metricObject = metrics && metrics.find(m => metric.code === m.code);
-    return metricObject && metricObject.unit;
+  [ getMetadataData, getFieldSelected('gas') ],
+  (meta, gas) => {
+    if (!meta || !gas) return null;
+    const { unit } = findOption(meta.gas, gas.value)
+
+    return unit
   }
 );
 
 export const getScale = createSelector([ getUnit ], unit => {
   if (!unit) return null;
   if (unit.startsWith('Mt')) return 1000000;
+  if (unit.startsWith('kt')) return 1000;
   return 1;
 });
 
-const getCorrectedUnit = createSelector([ getUnit, getScale ], (unit, scale) =>
+export const getCorrectedUnit = createSelector([ getUnit, getScale ], (unit, scale) =>
   {
     if (!unit || !scale) return null;
+    if (unit.startsWith('kt')) return unit.replace('kt', 't');
+
     return unit.replace('Mt', 't');
   });
 
@@ -236,7 +239,7 @@ const parseChartData = createSelector(
         if (yKey) {
           const yData = d.emissions.find(e => e.year === x);
           if (yData && yData.value) {
-            yItems[yKey] = (yItems[yKey] || 0) + yData.value;
+            yItems[yKey] = (yItems[yKey] || 0) + yData.value * scale;
           }
         }
       });
@@ -275,7 +278,7 @@ export const getChartConfig = createSelector(
     colorCache = { ...theme, ...colorCache };
     const axes = {
       ...DEFAULT_AXES_CONFIG,
-      yLeft: { ...DEFAULT_AXES_CONFIG.yLeft, unit: `${unit} juta`}
+      yLeft: { ...DEFAULT_AXES_CONFIG.yLeft, unit: `${unit}`}
     };
     const targetLabels = t(
       'pages.national-context.historical-emissions.target-labels',

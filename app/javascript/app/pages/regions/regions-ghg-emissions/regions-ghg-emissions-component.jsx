@@ -148,7 +148,7 @@ class RegionsGhgEmissions extends PureComponent {
               <div className={styles.dropdowns}>
                 {this.renderDropdown('metric', false)}
                 {this.renderDropdown('sector', true)}
-                {this.renderDropdown('gas', true)}
+                {this.renderDropdown('gas', false)}
                 <InfoDownloadToolbox
                   className={{ buttonWrapper: styles.buttonWrapper }}
                   slugs={sources}
