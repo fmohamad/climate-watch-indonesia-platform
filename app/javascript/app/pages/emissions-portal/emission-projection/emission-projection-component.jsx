@@ -32,8 +32,6 @@ class EmissionProjection extends PureComponent {
   }
 
   handleFilterChange = (field, selected) => {
-    console.log('field', field);
-    console.log('field', selected);
     const { onFilterChange, selectedOptions } = this.props
 
     const prevSelectedOptionValues = castArray(selectedOptions[field]).map(
