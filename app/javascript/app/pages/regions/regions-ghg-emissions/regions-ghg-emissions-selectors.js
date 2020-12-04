@@ -60,7 +60,6 @@ const getProvinceEmissionsData = createSelector(
 
 const getSource = createSelector(getMetadataData, meta => {
   if (!meta || !meta.dataSource) return null;
-  console.log(meta)
   const selected = meta.dataSource.find(
     source => source.label === SOURCE.SIGN_SMART
   );
@@ -149,31 +148,37 @@ const getSectorsSelected = createSelector(
   }
 );
 
-export const getEmissionParams = createSelector([ getProvince, getSource ], (provinceISO, source) => {
+export const getEmissionParams = createSelector([ getMetadataData, getSource ], (meta, source) => {
   if (!source) return null;
-  return { location: provinceISO, source };
+  const category = findOption(meta.category, SECTOR_TOTAL).value;
+  const sub_category = findOption(meta.subCategory, SECTOR_TOTAL).value;
+
+  return { location: 'IDN', source, category, sub_category };
 });
 
 // DATA
 export const getUnit = createSelector(
-  [ getMetadataData, getFieldSelected('metric') ],
-  (meta, metric) => {
-    if (!meta || !metric) return null;
-    const { metric: metrics } = meta;
-    const metricObject = metrics && metrics.find(m => metric.code === m.code);
-    return metricObject && metricObject.unit;
+  [ getMetadataData, getFieldSelected('gas') ],
+  (meta, gas) => {
+    if (!meta || !gas) return null;
+    const { unit } = findOption(meta.gas, gas.value)
+
+    return unit
   }
 );
 
 export const getScale = createSelector([ getUnit ], unit => {
   if (!unit) return null;
   if (unit.startsWith('Mt')) return 1000000;
+  if (unit.startsWith('kt')) return 1000;
   return 1;
 });
 
-const getCorrectedUnit = createSelector([ getUnit, getScale ], (unit, scale) =>
+export const getCorrectedUnit = createSelector([ getUnit, getScale ], (unit, scale) =>
   {
     if (!unit || !scale) return null;
+    if (unit.startsWith('kt')) return unit.replace('kt', 't');
+
     return unit.replace('Mt', 't');
   });
 
@@ -225,18 +230,16 @@ const parseChartData = createSelector(
       selectedOptions
     );
 
-    const filterByCategory = filteredData.filter(data => data.category == SECTOR_TOTAL && data.subCategory == SECTOR_TOTAL)
-
     const dataParsed = [];
     yearValues.forEach(x => {
       const yItems = {};
-      filterByCategory.forEach(d => {
+      filteredData.forEach(d => {
         const columnObject = yColumnOptions.find(c => c.code === d.sector);
         const yKey = columnObject && columnObject.value;
         if (yKey) {
           const yData = d.emissions.find(e => e.year === x);
           if (yData && yData.value) {
-            yItems[yKey] = (yItems[yKey] || 0) + yData.value;
+            yItems[yKey] = (yItems[yKey] || 0) + yData.value * scale;
           }
         }
       });
@@ -261,7 +264,7 @@ const getCustomYLabelFormat = unit => {
 
 export const getChartConfig = createSelector(
   [
-    getProvinceEmissionsData,
+    parseChartData,
     getProvinceTargetEmissionsData,
     getCorrectedUnit,
     getYColumnOptions,
@@ -275,7 +278,7 @@ export const getChartConfig = createSelector(
     colorCache = { ...theme, ...colorCache };
     const axes = {
       ...DEFAULT_AXES_CONFIG,
-      yLeft: { ...DEFAULT_AXES_CONFIG.yLeft, unit: `${unit} juta`}
+      yLeft: { ...DEFAULT_AXES_CONFIG.yLeft, unit: `${unit}`}
     };
     const targetLabels = t(
       'pages.national-context.historical-emissions.target-labels',
@@ -336,6 +339,16 @@ const parseTargetEmissionsData = createSelector(
   }
 );
 
+const getChartDomain = createSelector(
+  parseChartData,
+  data => {
+    if (!data) return null
+    const domainY = [ 'auto', 'auto'];
+    const domain = { x: [ 'auto', 'auto' ], y: domainY }
+    return domain
+  }
+)
+
 const getChartLoading = ({ metadata = {}, GHGEmissions = {} }) =>
   (metadata && metadata.ghgindo.loading) || (GHGEmissions && GHGEmissions.loading);
 
@@ -356,6 +369,7 @@ const getEmissionTargetsForCharts = createSelector(
 
 export const getChartData = createStructuredSelector({
   data: parseChartData,
+  domain: getChartDomain,
   projectedData: parseTargetEmissionsData,
   config: getChartConfig,
   loading: getDataLoading,

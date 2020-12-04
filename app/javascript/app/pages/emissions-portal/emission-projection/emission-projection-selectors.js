@@ -82,16 +82,9 @@ const getEmissionProjectionData = ({ EmissionProjection }) => EmissionProjection
 const getChartLoading = ({ EmissionProjection = {} }) =>
   (EmissionProjection && EmissionProjection.loading);
 
-// const getFilterOptions = createStructuredSelector({
-//   sector: () => SECTOR_OPTIONS,
-//   developed: () => DEVELOPED_OPTIONS,
-//   model: () => MODEL_OPTIONS,
-//   scenario: () => SCENARIO_OPTIONS
-// });
-
 const getFilterOptions = createSelector(
-  (getFieldQuery('sector')),
-  (queryValue) => {
+  [getFieldQuery('sector'), getAllSelectedOption],
+  (queryValue, allSelectedOption) => {
 
     let models = []
 
@@ -100,6 +93,8 @@ const getFilterOptions = createSelector(
     } else {
       models = MODEL_OPTIONS.filter(x => x.sector === 'Multisector')
     }
+
+    models = [allSelectedOption, ...models]
 
     return {
       sector: SECTOR_OPTIONS,
@@ -115,17 +110,18 @@ const getFieldSelected = field =>
     [
       getFieldQuery(field),
       getDefaults,
-      getFilterOptions
+      getFilterOptions,
+      getAllSelectedOption
     ],
-    (queryValue, defaults, options) => {
+    (queryValue, defaults, options, allSelectedOption) => {
       if (!queryValue) return defaults[field];
+      if (queryValue === ALL_SELECTED) return allSelectedOption;
       const findSelectedOption = value => findOption(options[field], value);
       return queryValue.includes(',')
         ? queryValue.split(',').map(v => findSelectedOption(v))
         : findSelectedOption(queryValue);
     }
   );
-
 
 const getDefaults = createSelector([ getFilterOptions ], (
   options
@@ -136,10 +132,21 @@ const getDefaults = createSelector([ getFilterOptions ], (
   scenario: findOption(SCENARIO_OPTIONS, DEFAULTS.scenario),
 }));
 
+const getModelSelected = createSelector(
+  [getFilterOptions, getFieldSelected('model')],
+  (options, modelSelected) => {
+    if (!options || !modelSelected) return null
+
+    if (modelSelected.value === ALL_SELECTED) return options.model
+
+    return castArray(modelSelected)
+  }
+)
+
 const getSelectedOptions = createStructuredSelector({
   sector: getFieldSelected('sector'),
   developed: getFieldSelected('developed'),
-  model: getFieldSelected('model'),
+  model: getModelSelected,
   scenario: getFieldSelected('scenario')
 });
 
@@ -192,29 +199,15 @@ const getChartData = createSelector(
     if (isEmpty(emissionData)) return null
     if (!options) return null
 
-    // const filteredData = filter(emissionData, {sector: options.sector.value, model: options.model.value})
-
     const filteredData = filterBySelectedOptions(emissionData, options, filterOptions);
-    /*const xAxis = emissionData[0].values.map((val) => val.year)
-    const data = []
-    xAxis.forEach((x) => {
-      filteredData.forEach((dataFilter) => {
-        const object = {}
-        object.x = x
-        yColumnOptions.forEach(yColumn => {
-          object[yColumn.value] = find(dataFilter.values, ['year', x]).value
-        })
-        data.push(object)
-      })
-    })
-    return data*/
+    
     let yearValues = []
     let i = 2000
     while (i < 2055) {
       yearValues.push(i)
       i += 5
     }
-    // const yearValues = emissionData.length ? emissionData[0].values.map(d => d.year) : [];
+
     const dataParsed = [];
     yearValues.forEach(x => {
       const yItems = {};
@@ -252,7 +245,6 @@ const getChartConfig = createSelector(
     const tooltip = getTooltipConfig(yColumnOptions);
     const theme = getThemeConfig(yColumnOptions);
     colorCache = { ...theme, ...colorCache };
-    console.log(colorCache);
     const year = t(
       `pages.emissions-portal.emission-projection.unit.year}`
     );
