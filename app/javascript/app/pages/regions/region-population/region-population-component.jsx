@@ -155,7 +155,7 @@ class RegionPopulation extends PureComponent {
                 <p>{popGrowth !== null && popGrowth.toLocaleString('id')}</p>
               </div>
             </Card>
-            <Card theme={cardTheme} title={t('pages.regions.region-population.cards.card-3')}>
+            <Card theme={cardTheme} title={t('pages.regions.region-population.cards.card-3') + '\xB2'}>
               <div className={styles.cardContent}>
                 <p>
                   {popDensity !== null && popDensity.toLocaleString('id')}

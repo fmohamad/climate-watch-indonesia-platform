@@ -240,7 +240,7 @@ const parseChartData = createSelector(
           if (yKey) {
             const yData = d.emissions.find(e => e.year === x);
             if (yData && yData.value) {
-              yItems[yKey] = yData.value;
+              yItems[yKey] = yData.value * scale;
             }
           }
         });
@@ -307,7 +307,7 @@ export const getChartConfig = createSelector(
     getMetricSelected,
     getYColumnOptions,
     getSelectedOptions,
-    getUnit,
+    getCorrectedUnit,
     getTranslate
   ],
   (data, metricSelected, yColumnOptions, options, unit, t) => {
