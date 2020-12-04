@@ -6,7 +6,7 @@ import GHGEmissionsProvider from 'providers/ghg-emissions-provider';
 import GHGTargetEmissionsProvider from 'providers/ghg-target-emissions-provider';
 import WorldBankProvider from 'providers/world-bank-provider';
 import SectionTitle from 'components/section-title';
-import { Switch, Chart, Dropdown, Multiselect } from 'cw-components';
+import { Switch, Chart, Dropdown, Multiselect, Button, Icon } from 'cw-components';
 import { API, METRIC_OPTIONS } from 'constants';
 import { format } from 'd3-format';
 import startCase from 'lodash/startCase';
@@ -15,6 +15,9 @@ import castArray from 'lodash/castArray';
 import uniq from 'lodash/uniq';
 import flatMap from 'lodash/flatMap';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
+import ModalShare from 'components/modal-share';
+import cx from 'classnames'
+import shareIcon from 'assets/icons/share';
 
 import dropdownStyles from 'styles/dropdown.scss';
 import lineIcon from 'assets/icons/line_chart.svg';
@@ -22,6 +25,13 @@ import areaIcon from 'assets/icons/area_chart.svg';
 import styles from './ghg-emission-inventory-styles.scss';
 
 class Inventory extends PureComponent {
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      isOpen: false
+    };
+  }
 
   handleLegendChange = selected => {
     const { selectedModel } = this.props;
@@ -81,9 +91,8 @@ class Inventory extends PureComponent {
 
     const variant = icons ? "icons-labels" : undefined
 
-    const disabled = fieldToBreakBy === 'sector' &&
-                     (field === 'category' || 
-                     field === 'subCategory')
+    const disabled = field === 'category' || 
+                     field === 'subCategory'
 
     if (multi) {
       const values = castArray(value).filter(v => v);
@@ -133,6 +142,8 @@ class Inventory extends PureComponent {
     } = this.props;
 
     const icons = { 'Line': lineIcon, 'Stacked Area': areaIcon };
+    const shareableLink = `${window.location.origin}${window.location.pathname}`
+    const { isOpen } = this.state
 
     return (
       <div className={styles.page}>
@@ -147,10 +158,22 @@ class Inventory extends PureComponent {
             {this.renderDropdown('breakBy')}
             {this.renderDropdown('region')}
             {this.renderDropdown('sector')}
-            {/*this.renderDropdown('category')*/}
-            {/*this.renderDropdown('subCategory')*/}
+            {this.renderDropdown('category')}
+            {this.renderDropdown('subCategory')}
             {this.renderDropdown('gas')}
             {this.renderDropdown('chartType', icons)}
+            <InfoDownloadToolbox
+              className={{ buttonWrapper: styles.buttonWrapper }}
+              slugs={[ 'SIGNSa', 'SIGNSb' ]}
+              downloadUri={downloadURI}
+            />
+            <Button
+              theme={{ button: cx(styles.shareButton) }}
+              onClick={() => this.setState({ isOpen: !isOpen })}
+            >
+              <Icon icon={shareIcon} />
+              <span className={styles.shareText}>Share</span>
+            </Button>
           </div>
         </div>
         <div className={styles.chartContainer}>
@@ -185,6 +208,7 @@ class Inventory extends PureComponent {
         <GHGMetadataProvider params={metaParams} />
         <MetadataProvider meta='ghgindo' />
         <MetadataProvider meta='ghgcw' />
+        <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
         <WorldBankProvider />
         {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
         {emissionParams && <GHGTargetEmissionsProvider />}
