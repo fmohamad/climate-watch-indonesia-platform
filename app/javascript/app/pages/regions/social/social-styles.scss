@@ -141,6 +141,7 @@ $dropdown-max-width: 265px;
 
 .button {
   align-self: flex-end;
+  z-index: 1000;
   a {
     color: #ffffff !important;
   }

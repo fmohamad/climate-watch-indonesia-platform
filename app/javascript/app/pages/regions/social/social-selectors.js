@@ -257,7 +257,9 @@ const getChartData = createSelector(
 
       yColumnOptions.forEach(yColumn => {
         const filterByCode = find(filteredIndicators, ['location_iso_code3', yColumn.code])
-        object[yColumn.value] = find(filterByCode.values, ['year', x]).value
+        if(find(filterByCode.values, ['year', x]).value !== 0) {
+          object[yColumn.value] = find(filterByCode.values, ['year', x]).value
+        }
       })
 
       data.push(object)

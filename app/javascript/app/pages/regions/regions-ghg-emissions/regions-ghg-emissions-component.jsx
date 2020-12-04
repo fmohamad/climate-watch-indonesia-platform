@@ -7,7 +7,7 @@ import groupBy from 'lodash/groupBy'
 import uniq from 'lodash/uniq'
 import flatMap from 'lodash/flatMap'
 
-import { Chart, Dropdown, Multiselect } from 'cw-components'
+import { Chart, Dropdown, Multiselect, Button, Icon } from 'cw-components'
 
 import { TabletLandscape } from 'components/responsive'
 import InfoDownloadToolbox from 'components/info-download-toolbox'
@@ -18,10 +18,19 @@ import GHGTargetEmissionsProvider from 'providers/ghg-target-emissions-provider'
 import dropdownStyles from 'styles/dropdown.scss'
 import GHGMap from './ghg-map'
 import EmissionTargetChart from './emission-target-chart'
+import ModalShare from 'components/modal-share';
+import shareIcon from 'assets/icons/share';
+import cx from 'classnames';
 
 import styles from './regions-ghg-emissions-styles.scss'
 
 class RegionsGhgEmissions extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = { isOpen: false };
+  }
+
   handleFilterChange = (field, selected) => {
     const { onFilterChange, selectedOptions } = this.props
 
@@ -131,6 +140,8 @@ class RegionsGhgEmissions extends PureComponent {
 
   render() {
     const { emissionParams, selectedYear, provinceISO, t, query } = this.props
+    const { isOpen } = this.state;
+    const shareableLink = `${window.location.href}`;
 
     const sources = ['RADGRK', 'SIGNSa']
     const downloadURI = `emissions/download?source=${sources.join(
@@ -155,6 +166,13 @@ class RegionsGhgEmissions extends PureComponent {
                   slugs={sources}
                   downloadUri={downloadURI}
                 />
+                <Button
+                  theme={{ button: cx(styles.shareButton) }}
+                  onClick={() => this.setState({ isOpen: !isOpen })}
+                >
+                  <Icon icon={shareIcon} />
+                  <span className={styles.shareText}>Share</span>
+                </Button>
               </div>
               <div className={styles.chartContainer}>{this.renderChart()}</div>
             </div>
@@ -164,6 +182,11 @@ class RegionsGhgEmissions extends PureComponent {
           </div>
         </div>
         <div>{this.renderPieCharts()}</div>
+        <ModalShare
+          isOpen={isOpen}
+          closeModal={() => this.setState({ isOpen: false })}
+          sharePath={shareableLink}
+        />
         <MetadataProvider meta='ghgindo' />
         {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
         {emissionParams && <GHGTargetEmissionsProvider />}
