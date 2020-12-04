@@ -12,7 +12,7 @@ const PlayTimeline = ({ years, selectedYear, theme, onPlay, onStop, onSelect, di
   const getPosition = currentYearIndex =>
     parseInt(currentYearIndex, 10) * 100 / (years.length - 1);
   const correctedTickPosition = currentYearIndex => {
-    const CORRECTION_PERCENTAGE = 2.5;
+    const CORRECTION_PERCENTAGE = 0;
     if (currentYearIndex === 0)
       return getPosition(currentYearIndex) - CORRECTION_PERCENTAGE;
     if (currentYearIndex === years.length - 1)
