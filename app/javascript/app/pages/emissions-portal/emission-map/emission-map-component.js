@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SectionTitle from 'components/section-title';
 import kebabCase from 'lodash/kebabCase';
-import { Dropdown, Icon, Loading } from 'cw-components';
+import { Dropdown, Icon, Loading, Button } from 'cw-components';
 import InfoDownloadToolbox from 'components/info-download-toolbox';
 import PlayTimeline from 'components/play-timeline';
 import Map from 'components/map';
@@ -23,6 +23,9 @@ import industry_color from 'assets/icons/industry_color';
 import industry_white from 'assets/icons/industry_white';
 import waste_color from 'assets/icons/waste_color';
 import waste_white from 'assets/icons/waste_white';
+import ModalShare from 'components/modal-share';
+import shareIcon from 'assets/icons/share';
+import cx from 'classnames'
 
 import styles from './emission-map-styles.scss';
 
@@ -31,7 +34,7 @@ const MAP_CENTER = [ 115, -4 ];
 class EmissionMap extends Component {
   constructor() {
     super();
-    this.state = { disablePlay: false, active: false, playAtStart: 1 };
+    this.state = { disablePlay: false, active: false, playAtStart: 1, isOpen: false };
   }
 
   handleFilterChange = (filter, selected) => {
@@ -186,6 +189,8 @@ class EmissionMap extends Component {
       // sources,
       t
     } = this.props;
+    const { isOpen } = this.state
+    const shareableLink = `${window.location.origin}${window.location.pathname}`
 
     return (
       <div>
@@ -194,7 +199,18 @@ class EmissionMap extends Component {
             title={t('pages.emissions-portal.emission-map.title')}
           />
           <div className={styles.filtersGroup}>
-            {}
+            <InfoDownloadToolbox
+              className={{ buttonWrapper: styles.buttonWrapper }}
+              slugs={[ 'SIGNSa', 'SIGNSb' ]}
+              downloadUri={null}
+            />
+            <Button
+              theme={{ button: cx(styles.shareButton) }}
+              onClick={() => this.setState({ isOpen: !isOpen })}
+            >
+              <Icon icon={shareIcon} />
+              <span className={styles.shareText}>Share</span>
+            </Button>
           </div>
           <MetadataProvider meta="ghgindo" />
         </div>
@@ -228,6 +244,7 @@ class EmissionMap extends Component {
             }
           </div>
         </div>
+        <ModalShare isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} sharePath={shareableLink} />
         {emissionParams && <GHGEmissionsProvider params={emissionParams} />}
         {adaptationParams && <AdaptationProvider params={adaptationParams} />}
       </div>

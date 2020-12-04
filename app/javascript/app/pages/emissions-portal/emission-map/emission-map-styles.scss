@@ -7,7 +7,7 @@
 }
 
 .page {
-  @include row();
+  @include row(6,6);
 
   margin-top: $gutter-padding;
 }
@@ -20,6 +20,7 @@
 .filtersGroup {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   margin-bottom: 25px;
 }
 
@@ -220,6 +221,17 @@
   justify-content: center;
 }
 
+.shareButton {
+  margin-top: 22px;
+  margin-left: 10px;
+  width: 120px;
+  color: $theme-color;
+  background-color: $action-color;
+
+  .shareText {
+    margin-left: 10px;
+  }
+}
 
 
 
