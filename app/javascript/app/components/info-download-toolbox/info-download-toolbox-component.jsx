@@ -120,7 +120,7 @@ class InfoDownloadToolbox extends PureComponent {
     data-for="blueTooltip"
     data-tip={downloadTooltipdata || 'Download chart in .csv'}
   >
-    {/*<Button
+    <Button
       onClick={this.handleDownloadClick}
       theme={{
               button: cx(buttonThemes.outline, styles.button, theme.infobutton)
@@ -128,7 +128,7 @@ class InfoDownloadToolbox extends PureComponent {
       disabled={!downloadUri}
     >
       <Icon icon={downloadIcon} />
-    </Button>*/}
+    </Button>
   </div>
 );
     };
