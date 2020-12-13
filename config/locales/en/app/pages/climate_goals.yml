@@ -1,0 +1,32 @@
+en:
+  app:
+    pages:
+      climate-goals:
+        title: Climate Goals
+        description: 'This section provides context for Indonesias’s climate change response, including information on provincial development priorities, population, economy, energy, and climate risks from natural disasters.'
+        no-content: 'No content for this category'
+        no-content-search: 'No content for this search or category'
+        overview:
+          title: Overview
+          description: ''
+          overview-title: Indonesia's climate commitment
+          dropdown-documents-placeholder: Read Indonesia's NDC documents
+          button-title: Compare with other countries
+          mitigation-contribution: Mitigation contribution
+          adaptation-contribution: Adaptation contribution
+          card-ghg: GHG Target
+          card-non-ghg: Non-GHG Target
+          card-mitigation-action: Identified Sectors for Mitigation Action
+          card-adaptation-action: Identified Sectors for Adaptation Action
+          target-year: Target year
+          target-type: Target type
+          timeline-title: Timeline of UNFCCC Document Submissions
+        mitigation:
+          title: Mitigation
+          description: ''
+        adaptation:
+          title: Adaptation
+          description: ''
+        sectoral-information:
+          title: Sectoral Information
+          description: ''

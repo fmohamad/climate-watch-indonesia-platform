@@ -1,0 +1,34 @@
+en:
+  app:
+    common:
+      chart-no-data: No data
+      table-no-data: No data found
+      table-empty-value: Not specified
+      table-data-info: Table data information
+      download-table-data-info: Download table data in .csv
+      download-options-table-data-info: Download table data
+      all-selected-option: All Selected
+      years-label: years
+      no-card-content: Not included
+      metadata:
+        title: Title
+        source_organization: Source Organization
+        learn_more_link: Learn more link
+        summary: Summary
+        description: Description
+        caution: Caution
+        citation: Citation
+        modal-default-title: Data sources
+        not-specified: Not specified
+      dimension:
+        thousand: ribu
+        million: juta
+      unit:
+        million-idr: juta rupiah
+        million: juta rupiah
+        idr: rupiah
+        year: tahun
+        percent: percent
+        people: thousand of heads
+        age: age
+

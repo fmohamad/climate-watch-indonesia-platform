@@ -1,0 +1,164 @@
+@import '~styles/settings.scss';
+@import '~styles/layout.scss';
+
+$logo-width: 215px;
+$flag-height: 40px;
+
+// Header wrapper
+.headerContainer {
+  background-color: $white;
+  height: $header-height;
+  width: 100%;
+  position: fixed;
+  z-index: 5;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.header {
+  @include row();
+
+  height: 100%;
+  flex-wrap: nowrap;
+
+  & > :last-child {
+    flex: 1;
+  }
+}
+
+.navbarContainer {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+// True for every side of header
+
+.navElement {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+// Left side of the header
+.logo {
+  color: $marine-blue;
+  width: $logo-width;
+  font-size: $font-size-s;
+  font-family: $font-family-2;
+  text-transform: uppercase;
+  padding-top: 9px;
+  cursor: pointer;
+
+  .climateExplorer {
+    font-size: $font-size-m;
+    font-weight: $font-weight-light;
+  }
+
+  .bold {
+    font-weight: $font-weight-extra-bold;
+  }
+}
+
+// Tabs Container
+
+// TODO: Create a more responsive tabs container (the active link is sometimes not visible)
+.tabsContainer {
+  display: flex;
+  align-items: center;
+  overflow-x: scroll;
+  height: 100%;
+
+  @media #{$tablet-landscape} {
+    overflow-x: hidden;
+    justify-content: start;
+  }
+}
+
+// Sticky navbar
+
+.stickyNavElement {
+  display: flex;
+  height: 100%;
+  justify-content: flex-start;
+}
+
+.smallLogo {
+  display: none;
+  height: 35px;
+}
+
+.smallFlag {
+  display: none;
+  height: 25px;
+}
+
+.country {
+  color: $prussian-blue;
+  font-size: $font-size-sm;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  color: $theme-color;
+  font-size: $font-size-s;
+  font-weight: $font-weight-bold;
+  letter-spacing: 1px;
+
+  &.active::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    background-color: #ffc735;
+    width: 100%;
+    height: 3px;
+  }
+
+  @media #{$tablet-landscape} {
+    text-decoration: none;
+    position: relative;
+    height: 100%;
+    font-family: $font-family-1;
+
+    &.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #ffc735;
+      width: 100%;
+      height: 3px;
+    }
+  }
+}
+
+.leftTabs {
+  display: flex;
+
+  > *:last-child {
+    margin-left: 15px;
+  }
+}
+
+.rightTabs {
+  display: flex;
+  align-items: center;
+  border-left: 1px solid $iron;
+  padding-left: 20px;
+}
+
+.button {
+  width: 50px;
+  box-shadow: none;
+  border: none;
+
+  &:hover { box-shadow: none; }
+}

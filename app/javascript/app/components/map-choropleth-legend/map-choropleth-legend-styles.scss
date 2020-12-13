@@ -1,0 +1,38 @@
+@import '~styles/settings.scss';
+@import '~styles/layout.scss';
+
+$bucket-size: 14px;
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border-top: 1px solid rgba(26, 28, 34, 0.1);
+}
+
+.valueText {
+  font-size: 9px;
+  color: $midnight-blue;
+}
+
+.buckets {
+  margin: 0 8px;
+}
+
+.bucket {
+  width: $bucket-size;
+  height: $bucket-size;
+  display: inline-block;
+}
+
+.bucketLegend {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.title {
+  color: $raven;
+  font-size: $font-size-s;
+}

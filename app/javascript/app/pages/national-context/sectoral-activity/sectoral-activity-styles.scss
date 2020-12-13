@@ -1,0 +1,81 @@
+@import '~styles/settings.scss';
+@import '~styles/layout.scss';
+
+.mapSection {
+  background-color: $link-water;
+}
+
+.page {
+  @include row();
+
+  margin-top: $gutter-padding;
+}
+
+.mapContainer {
+  @include row();
+}
+
+.filtersGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+}
+
+.filters {
+  @include xy-gutters($gutter-position: ('bottom'));
+}
+
+.buttonWrapper {
+  max-width: 100px;
+}
+
+.map {
+  height: calc(100% - 100px);
+  position: relative;
+}
+
+.timelineWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.legend {
+  margin-bottom: 30px;
+  min-height: 150px;
+}
+
+:global {
+  .tooltip {
+    &.__react_component_tooltip.type-dark {
+      color: $black;
+      background-color: $white;
+      opacity: 1;
+
+      &::after {
+        border-top-color: $white;
+      }
+    }
+  }
+}
+
+@media #{$tablet-landscape} {
+  .filtersGroup {
+    flex-direction: row;
+  }
+
+  .filters {
+    @include columns($columns: (3,3,2));
+
+    margin-bottom: 0;
+  }
+
+  .legend {
+    margin-top: -100px;
+    margin-bottom: 0;
+  }
+
+  .buttonWrapper {
+    align-self: flex-end;
+  }
+}

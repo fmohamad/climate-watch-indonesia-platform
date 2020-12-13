@@ -1,0 +1,69 @@
+en:
+  app:
+    pages:
+      national-context:
+        title: National Context
+        description: "This section provides context for Indonesias’s climate change response, including information on provincial development priorities, population, economy, energy, and climate risks from natural disasters."
+        socioeconomic:
+          title: Socioeconomic Indicators
+          labels:
+            national-indicators: National indicators
+            province-indicators: Province indicators
+            indicators: Indicators
+          population:
+            title: Population
+            description: Lorem ipsum dolor sit amet
+          economic:
+            title: Economic profile
+            description: Lorem ipsum dolor sit amet
+          energy:
+            title: Energy
+            description: Lorem ipsum dolor sit amet
+        historical-emissions:
+          title: Historical Emissions
+          description: ''
+          labels:
+            break-by: Break by
+            region: Region
+            sector: Sector
+            gas: Gas
+            chart-type: Chart Type
+          break-by:
+            region-absolute: Region - Absolute
+            region-per_gdp: Region - Per GDP
+            region-per_capita: Region - Per Capita
+            sector-absolute: Sector
+            gas-absolute: Gas
+          region:
+            top-10: Top 10 Emitters
+            national: National
+          target-labels:
+            bau: BAU
+            quantified: CM1
+            not-quantifiable: CM2
+        sectoral-activity:
+          title: Emission-producing Activity
+          description: ''
+          labels:
+            year: Year
+            indicator: Indicator
+            activity: Activity
+          legend-no-data: No Data
+          primary-source-of-emissions: Primary source of emissions
+        climate-funding:
+          title: Climate Funding Opportunity
+          description: ''
+          labels:
+            support: Support
+            sector: Sector
+            chart-type: Chart Type
+          view-more-link: View more
+          visit-website-link: Visit Website
+          search-placeholder: Search
+          table-headers:
+            source: Source
+            project_name: Project name
+            mode_of_support: Mode of support
+            sectors_and_topics: Sectors and topics
+            description: Description
+            last_update_year: Last Updated Year
