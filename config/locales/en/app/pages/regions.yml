@@ -24,12 +24,6 @@ en:
             title: Energi
           agriculture:
             title: Pertanian
-        vulnerability-adaptivity:
-          title: Vulnerability and adaptivity
-          header: Climate vulnerability and adaptive capacity
-          description: Lorem ipsum dolor sit amet
-          sub-header: Vulnerability class and adaptative capacity
-          data-from: Data from
         climate-sectoral-plan:
           title: Perencanaan Iklim Sektoral
           header: Perencanaan kebijakan iklim dan pembangunan sektoral

@@ -155,7 +155,6 @@ class ClimateFunding extends PureComponent {
         data: this.props.data
       })
     }
-    console.log('balakutak mahluk laut');
     /*const filteredData = filter(this.state.data, function(item) {
       return item.mode_of_support.indexOf('Bantuan Keuangan') !== -1
     })*/

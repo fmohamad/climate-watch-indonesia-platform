@@ -462,7 +462,6 @@ const getPathsForActivitiesStyles = createSelector(
     getLocations
   ],
   (emissions, activity, t, selectedYear, provincesDetails) => {
-    console.log('emissions', emissions);
     if (!emissions || !selectedYear) return null;
 
     const paths = [];

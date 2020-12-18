@@ -19,28 +19,6 @@ en:
           energy:
             title: Energy
             description: Lorem ipsum dolor sit amet
-        historical-emissions:
-          title: Historical Emissions
-          description: ''
-          labels:
-            break-by: Break by
-            region: Region
-            sector: Sector
-            gas: Gas
-            chart-type: Chart Type
-          break-by:
-            region-absolute: Region - Absolute
-            region-per_gdp: Region - Per GDP
-            region-per_capita: Region - Per Capita
-            sector-absolute: Sector
-            gas-absolute: Gas
-          region:
-            top-10: Top 10 Emitters
-            national: National
-          target-labels:
-            bau: BAU
-            quantified: CM1
-            not-quantifiable: CM2
         sectoral-activity:
           title: Emission-producing Activity
           description: ''
@@ -67,3 +45,4 @@ en:
             sectors_and_topics: Sectors and topics
             description: Description
             last_update_year: Last Updated Year
+
