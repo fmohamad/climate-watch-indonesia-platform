@@ -29,110 +29,10 @@ class ClimateFunding extends PureComponent {
   
     this.state = {
       isOpen: false,
-      sectors: [
-        {
-          label: 'Kehutanan & REDD+',
-          value: 'Kehutanan & REDD+'
-        },
-        {
-          label: 'Pertanian',
-          value: 'Pertanian'
-        },
-        {
-          label: 'Efisiensi Energi',
-          value: 'Efisiensi Energi'
-        },
-        {
-          label: 'Infrastruktur dan Industri',
-          value: 'Infrastruktur dan Industri'
-        },
-        {
-          label: 'Energi Terbarukan',
-          value: 'Energi Terbarukan'
-        },
-        {
-          label: 'Transportasi',
-          value: 'Transportasi'
-        },
-        {
-          label: 'Perubahan Iklim / Umum',
-          value: 'Perubahan Iklim / Umum'
-        },
-        {
-          label: 'Bantuan Keuangan',
-          value: 'Bantuan Keuangan'
-        },
-        {
-          label: 'Bantuan Teknis',
-          value: 'Bantuan Teknis'
-        },
-        {
-          label: 'Peningkatan Kapasitas',
-          value: 'Peningkatan Kapasitas'
-        },
-        {
-          label: 'Penggunaan Lahan',
-          value: 'Penggunaan Lahan'
-        },
-        {
-          label: 'Adaptasi Ekosistem',
-          value: 'Adaptasi Ekosistem'
-        },
-        {
-          label: 'Air',
-          value: 'Air'
-        },
-        {
-          label: 'Adaptasi Berbasis Masyarakat',
-          value: 'Adaptasi Berbasis Masyarakat'
-        },
-        {
-          label: 'Adaptasi Perkotaan',
-          value: 'Adaptasi Perkotaan'
-        },
-        {
-          label: 'Perubahan Iklim (Umum)',
-          value: 'Perubahan Iklim (Umum)'
-        },
-        {
-          label: 'Gender',
-          value: 'Gender'
-        },
-        {
-          label: 'Limbah',
-          value: 'Limbah'
-        },
-        {
-          label: 'Lainnya',
-          value: 'Lainnya'
-        }
-      ],
       selectedSector: {
         label: '',
         value: ''
       },
-      supports: [
-        {
-          label: 'Bantuan Keuangan',
-          value: 'Bantuan Keuangan'
-        },
-        {
-          label: 'Bantuan Teknis',
-          value: 'Bantuan Teknis'
-        },
-        {
-          label: 'Peningkatan Kapasitas',
-          value: 'Peningkatan Kapasitas'
-        },
-        {
-          label: 'Perubahan Iklim (Umum)',
-          value: 'Perubahan Iklim (Umum)'
-        },
-        {
-          label: 'Lainnya',
-          value: 'Lainnya'
-        }
-      ],
       selectedSupport: {
         label: '',
         value: ''
@@ -152,17 +52,16 @@ class ClimateFunding extends PureComponent {
   }
 
   filterData() {
-    const {selectedSector, selectedSupport, data} = this.state
-    const filteredSectorData = filter(data, function(item) {
-      return item.sectors_and_topics.indexOf(selectedSector.value) !== -1
-    })
+    const {selectedSector, selectedSupport } = this.state
+    const { data } = this.props
 
-    const filteredSupportData = filter(filteredSectorData, function(item) {
-      return item.mode_of_support.indexOf(selectedSupport.value) !== -1
+    const filteredData = filter(data, function(item) {
+      return item.sectors_and_topics.indexOf(selectedSector.value) !== -1
+        && item.mode_of_support.indexOf(selectedSupport.value) !== -1
     })
 
     this.setState({
-      data: filteredSupportData
+      data: filteredData
     })
   }
 
