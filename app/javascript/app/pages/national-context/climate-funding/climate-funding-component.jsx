@@ -144,20 +144,11 @@ class ClimateFunding extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    /*this.setState({
-      data: this.props.data
-    })*/
     if(this.props.data !== prevProps.data) {
-      /*const filteredTableData = filter(this.props.data, function(item) {
-        return item.mode_of_support.indexOf(this.state.selectedSupport.value) !== -1
-      })*/
       this.setState({
         data: this.props.data
       })
     }
-    /*const filteredData = filter(this.state.data, function(item) {
-      return item.mode_of_support.indexOf('Bantuan Keuangan') !== -1
-    })*/
   }
 
   filterData() {
@@ -173,28 +164,10 @@ class ClimateFunding extends PureComponent {
     this.setState({
       data: filteredSupportData
     })
-    console.log('this.state.data', this.state.data);
   }
 
   handleFilterChange = (field, selected) => {
     const { onSearchChange } = this.props;
-    /*const prevSelectedOptionValues = castArray(selectedOptions[field])
-      .filter(o => o)
-      .map(o => o.value);*/
-    /*const selectedArray = castArray(selected);
-    const newSelectedOption = selectedArray.find(
-      o => !prevSelectedOptionValues.includes(o.value)
-    );
-
-    const removedAnyPreviousOverride = selectedArray
-      .filter(v => v)
-      .filter(v => !v.override);
-
-    const values = newSelectedOption && newSelectedOption.override
-      ? newSelectedOption.value
-      : uniq(
-        flatMap(removedAnyPreviousOverride, v => String(v.value).split(','))
-      ).join(',');*/
     const value = selected.value
     // this.filterData(value)
     if(field === 'sector'){
@@ -202,14 +175,12 @@ class ClimateFunding extends PureComponent {
         selectedSector: selected
       }, () => {
         this.filterData()
-        // onSearchChange(this.state.selectedSector.value);
       })
     } else {
       this.setState({
         selectedSupport: selected
       }, () => {
         this.filterData()
-        // onSearchChange(this.state.selectedSector.value);
       })
     }
   };
@@ -221,24 +192,12 @@ class ClimateFunding extends PureComponent {
   }
 
   renderDropdown(field, multi, icons) {
-    /*const {
-      apiSelected,
-      selectedOptions,
-      filterOptions,
-      metricSelected,
-      t
-    } = this.props;
-    const value = selectedOptions && selectedOptions[field];
-    const options = filterOptions[field] || [];
-    const iconsProp = icons ? { icons } : {};
-    const isChartReady = filterOptions.source;
-    if (!isChartReady) return null;*/
-
     const {
       t,
     } = this.props;
 
-    const { sectors, selectedSector, supports, selectedSupport } = this.state 
+    const { selectedSector, selectedSupport } = this.state 
+    const { supports, sectors } = this.props
 
     let options = []
     let value = {}
@@ -254,28 +213,6 @@ class ClimateFunding extends PureComponent {
       `pages.national-context.climate-funding.labels.${kebabCase(field)}`
     );
 
-    /*if (multi) {
-      const absoluteMetric = metricSelected === METRIC_OPTIONS.ABSOLUTE_VALUE;
-      const disabled = apiSelected === API.indo &&
-        field === 'sector' &&
-        !absoluteMetric;
-
-      const values = castArray(value).filter(v => v);
-
-      return (
-        <Multiselect
-          key={field}
-          label={label}
-          placeholder={`Filter by ${startCase(field)}`}
-          options={options}
-          onValueChange={selected => this.handleFilterChange(field, selected)}
-          values={values}
-          theme={{ wrapper: dropdownStyles.select }}
-          hideResetButton
-          disabled={disabled}
-        />
-      );
-    }*/
     return (
       <Dropdown
         key={field}
@@ -302,7 +239,6 @@ class ClimateFunding extends PureComponent {
     const defaultColumns = Object.values(tableHeaders);
 
     const tableData = data.map(d => renameKeys(d, tableHeaders));
-    // console.log('tableData', tableData);
     const title = nt('title');
     const description = nt('description');
 
