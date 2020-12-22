@@ -1,12 +1,12 @@
-ActiveAdmin.register_page 'Indonesia Platform West Papua Locations' do
+ActiveAdmin.register_page 'Indonesia Platform Province Locations Members' do
   include DataUploader::SharedAdmin
 
-  section_name = 'west_papua_locations'
+  section_name = 'province_locations_members'
   platform_name = 'indonesia_platform'
 
   controller do
     def section_name
-      'west_papua_locations'
+      'province_locations_members'
     end
 
     def platform_name
@@ -14,11 +14,11 @@ ActiveAdmin.register_page 'Indonesia Platform West Papua Locations' do
     end
 
     def s3_folder_path
-      "#{CW_FILES_PREFIX}west_papua_locations"
+      "#{CW_FILES_PREFIX}province_locations_members"
     end
 
     def path
-      admin_indonesia_platform_west_papua_locations_path
+      admin_indonesia_platform_province_locations_members_path
     end
 
     def section
@@ -29,7 +29,7 @@ ActiveAdmin.register_page 'Indonesia Platform West Papua Locations' do
     end
 
     def import_worker
-      DataUploader::BaseImportWorker.perform_async(section.id, 'WestPapua::ImportLocations', current_admin_user.email)
+      DataUploader::BaseImportWorker.perform_async(section.id, 'Province::ImportLocationMembers', current_admin_user.email)
     end
 
     def section_repository
@@ -41,7 +41,7 @@ ActiveAdmin.register_page 'Indonesia Platform West Papua Locations' do
     end
   end
 
-  menu parent: 'West Papua Platform',
+  menu parent: 'Province Platform',
        label: section_name.split('_').map(&:capitalize).join(' '),
        if: proc { DataUploader::Helpers::Ability.can_view?(platform_name) }
 
@@ -59,11 +59,11 @@ ActiveAdmin.register_page 'Indonesia Platform West Papua Locations' do
   content do
     render partial: 'data_uploader/admin/form_upload_datasets', locals: {
       datasets: datasets_proc.call,
-      upload_path: admin_indonesia_platform_west_papua_locations_upload_datafile_path,
-      download_path: admin_indonesia_platform_west_papua_locations_download_datafiles_path,
+      upload_path: admin_indonesia_platform_province_locations_members_upload_datafile_path,
+      download_path: admin_indonesia_platform_province_locations_members_download_datafiles_path,
       download_single_data_file_path:
-          admin_indonesia_platform_west_papua_locations_download_datafile_path,
-      import_path: admin_indonesia_platform_west_papua_locations_run_importer_path,
+          admin_indonesia_platform_province_locations_members_download_datafile_path,
+      import_path: admin_indonesia_platform_province_locations_members_run_importer_path,
       import_button_disabled: section_proc.call.worker_logs.started.any?,
       logs: section_proc.call.worker_logs.order(created_at: :desc)
     }

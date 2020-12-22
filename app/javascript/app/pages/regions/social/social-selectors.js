@@ -40,17 +40,17 @@ const getModelOptions = createSelector(getTranslate, t => [
 const getDefaultIndicator = () => [
   {
     label: 'Human Development Index',
-    value: 'wp_hdi',
+    value: 'province_hdi',
     unit: 'unit',
   },
   {
     label: 'Healthcare Infrastructure',
-    value: 'wp_health_infrastructure',
+    value: 'province_health_infrastructure',
     unit: 'unit',
   },
 ]
 
-const section = 'wp_social'
+const section = 'province_social'
 const provinceISO = 'ID.PB'
 const code = 'code-kabupaten'
 
@@ -80,11 +80,11 @@ const getIndicatorSocial = createSelector(getIndicator, (indicators) => {
 
   const data = filter(indicators.values, function (datum) {
     return (
-      datum.indicator_code === 'wp_hdi' ||
-      datum.indicator_code === 'wp_literacy_rate' ||
-      datum.indicator_code === 'wp_illiterate' ||
-      datum.indicator_code === 'wp_health_infrastructure' ||
-      datum.indicator_code === 'wp_drinking_access'
+      datum.indicator_code === 'province_hdi' ||
+      datum.indicator_code === 'province_literacy_rate' ||
+      datum.indicator_code === 'province_illiterate' ||
+      datum.indicator_code === 'province_health_infrastructure' ||
+      datum.indicator_code === 'province_drinking_access'
     )
   })
 
@@ -102,8 +102,8 @@ const getIndicatorOptions = createSelector(
       unit: o.unit,
     }))
 
-    const edu = ['wp_hdi', 'wp_illiterate', 'wp_literacy_rate']
-    const health = ['wp_health_infrastructure', 'wp_drinking_access']
+    const edu = ['province_hdi', 'province_illiterate', 'province_literacy_rate']
+    const health = ['province_health_infrastructure', 'province_drinking_access']
     if (model.value === 'education') {
       return filter(indicators, function (o) {
         return edu.includes(o.value)
@@ -221,8 +221,8 @@ const getChartData = createSelector(
     if (!options || !options.indicator || !options.district) return null
     if (!model) return null
 
-    const edu = ['wp_hdi', 'wp_illiterate', 'wp_literacy_rate']
-    const health = ['wp_health_infrastructure', 'wp_drinking_access']
+    const edu = ['province_hdi', 'province_illiterate', 'province_literacy_rate']
+    const health = ['province_health_infrastructure', 'province_drinking_access']
 
     const selectedModel = model.value
     const selectedInd = options.indicator.value

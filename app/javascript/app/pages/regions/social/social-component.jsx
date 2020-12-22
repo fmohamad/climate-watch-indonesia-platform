@@ -170,7 +170,7 @@ class RegionPopulation extends PureComponent {
 
     const { isOpen } = this.state;
     const sources = [ 'PBdA2019n', 'PBdA2019o', 'PBdA2019p' ];
-    const section = 'wp_social';
+    const section = 'province_social';
     const downloadURI = `indicators.zip?section=${section}`;
     const shareableLink = `${window.location.href}`;
     const icons = { line: lineIcon, bar: barIcon };

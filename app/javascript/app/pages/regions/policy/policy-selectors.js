@@ -16,7 +16,7 @@ import {
 } from 'selectors/filters-selectors';
 import { getProvince } from 'selectors/provinces-selectors';
 
-const section = 'wp_policies_data';
+const section = 'province_policies_data';
 const provinceISO = 'ID.PB';
 
 const getParams = () => ({ section, location: provinceISO });

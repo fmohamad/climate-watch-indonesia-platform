@@ -211,8 +211,7 @@ ActiveRecord::Schema.define(version: 2020_09_17_045456) do
 
   create_table "historical_emissions_metrics", force: :cascade do |t|
     t.string "name", null: false
-    t.string "unit", null: false
-    t.index ["name", "unit"], name: "index_historical_emissions_metrics_on_name_and_unit", unique: true
+    t.text "unit"
   end
 
   create_table "historical_emissions_records", force: :cascade do |t|

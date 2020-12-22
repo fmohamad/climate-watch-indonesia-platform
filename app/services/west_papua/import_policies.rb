@@ -1,14 +1,14 @@
-class WestPapua::ImportPolicies
+class Province::ImportPolicies
   include ClimateWatchEngine::CSVImporter
 
   headers policies: [:section, :plc_code, :policy, :unit],
           policies_id: [:plc_code, :policy],
           policy_values: [:geoid, :plc_code, :source, :description]
 
-  POLICIES_FILEPATH = "#{CW_FILES_PREFIX}west_papua_policies/wp_policies.csv"
-  POLICIES_ID_FILEPATH = "#{CW_FILES_PREFIX}west_papua_policies/wp_policies_id.csv"
+  POLICIES_FILEPATH = "#{CW_FILES_PREFIX}province_policies/province_policies.csv"
+  POLICIES_ID_FILEPATH = "#{CW_FILES_PREFIX}province_policies/province_policies_id.csv"
   POLICY_VALUES_FILEPATHS = %W(
-    #{CW_FILES_PREFIX}west_papua_policies/wp_policies_data.csv
+    #{CW_FILES_PREFIX}province_policies/province_policies_data.csv
   )
 
   def call

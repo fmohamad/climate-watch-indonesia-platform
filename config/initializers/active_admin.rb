@@ -15,7 +15,7 @@ ActiveAdmin.setup do |config|
   config.namespace :admin do |admin|
     admin.build_menu do |menu|
       menu.add label: 'Indonesia Platform', if: proc{ %w[superuser admin admin_national].include?(current_admin_user.role) }, priority: 3
-      menu.add label: 'West Papua Platform', if: proc{ %w[superuser admin admin_wp].include?(current_admin_user.role) }, priority: 4
+      menu.add label: 'Province Platform', if: proc{ %w[superuser admin admin_province].include?(current_admin_user.role) }, priority: 4
     end
   end
 end

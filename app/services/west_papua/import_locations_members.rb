@@ -1,9 +1,9 @@
-class WestPapua::ImportLocationsMembers
+class Province::ImportLocationsMembers
   include ClimateWatchEngine::CSVImporter
 
   headers :iso_code3, :parent_iso_code3
 
-  LOCATIONS_GROUPINGS_FILEPATH = "#{CW_FILES_PREFIX}west_papua_locations_members/wp_locations_groupings.csv"
+  LOCATIONS_GROUPINGS_FILEPATH = "#{CW_FILES_PREFIX}province_locations_members/province_locations_groupings.csv"
 
   def call
     return unless valid_headers?(csv, LOCATIONS_GROUPINGS_FILEPATH, headers)

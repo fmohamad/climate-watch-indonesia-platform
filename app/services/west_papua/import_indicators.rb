@@ -1,16 +1,16 @@
-class WestPapua::ImportIndicators
+class Province::ImportIndicators
   include ClimateWatchEngine::CSVImporter
 
   headers indicators: [:section, :ind_code, :indicator, :unit],
           indicators_id: [:ind_code, :indicator],
           indicator_values: [:geoid, :ind_code, :source]
 
-  INDICATORS_FILEPATH = "#{CW_FILES_PREFIX}west_papua_indicators/wp_indicators.csv"
-  INDICATORS_ID_FILEPATH = "#{CW_FILES_PREFIX}west_papua_indicators/wp_indicators_id.csv"
+  INDICATORS_FILEPATH = "#{CW_FILES_PREFIX}province_indicators/province_indicators.csv"
+  INDICATORS_ID_FILEPATH = "#{CW_FILES_PREFIX}province_indicators/province_indicators_id.csv"
   INDICATOR_VALUE_FILEPATHS = %W(
-    #{CW_FILES_PREFIX}west_papua_indicators/wp_population.csv
-    #{CW_FILES_PREFIX}west_papua_indicators/wp_economic.csv
-    #{CW_FILES_PREFIX}west_papua_indicators/wp_social.csv
+    #{CW_FILES_PREFIX}province_indicators/province_population.csv
+    #{CW_FILES_PREFIX}province_indicators/province_economic.csv
+    #{CW_FILES_PREFIX}province_indicators/province_social.csv
   )
 
   def call

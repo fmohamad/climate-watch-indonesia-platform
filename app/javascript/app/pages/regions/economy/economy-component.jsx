@@ -170,7 +170,7 @@ class Economies extends PureComponent {
 
     const { isOpen } = this.state;
 
-    const section = 'wp_economic';
+    const section = 'province_economic';
     const downloadURI = `indicators.zip?section=${section}`;
 
     return (

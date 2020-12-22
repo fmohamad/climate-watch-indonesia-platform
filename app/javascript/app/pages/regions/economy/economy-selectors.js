@@ -25,7 +25,7 @@ import {
   getTooltipConfig
 } from 'utils/graphs';
 
-const section = 'wp_economic';
+const section = 'province_economic';
 const KABUPATEN = 'kabupaten';
 const SEKTOR = 'sektor';
 

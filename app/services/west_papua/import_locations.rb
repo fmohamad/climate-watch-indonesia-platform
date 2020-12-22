@@ -1,12 +1,12 @@
-class WestPapua::ImportLocations
+class Province::ImportLocations
   include ClimateWatchEngine::CSVImporter
 
   # headers :pik_name, :cait_name, :wri_standard_name, :iso_code3, :iso_code2,
   #         :unfccc_group, :location_type, :show_in_cw
   headers :wri_standard_name, :iso_code3, :iso_code2, :location_type, :capital_city
 
-  LOCATIONS_FILEPATH = "#{CW_FILES_PREFIX}west_papua_locations/wp_locations.csv"
-  LOCATIONS_ID_FILEPATH = "#{CW_FILES_PREFIX}west_papua_locations/wp_locations_id.csv"
+  LOCATIONS_FILEPATH = "#{CW_FILES_PREFIX}province_locations/province_locations.csv"
+  LOCATIONS_ID_FILEPATH = "#{CW_FILES_PREFIX}province_locations/province_locations_id.csv"
   LOCATIONS_CARTODB_URL = 'https://wri-01.carto.com/api/v2/sql?q=SELECT%20name_engli,iso,topojson,centroid%20FROM%20gadm28_countries'
 
   def call

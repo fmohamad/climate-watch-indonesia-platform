@@ -17,7 +17,7 @@ import { getProvince } from "selectors/provinces-selectors";
 
 import { ALL_SELECTED } from "constants/constants";
 
-const section = "wp_population";
+const section = "province_population";
 const code = "code-kabupaten";
 const LOCATION = "ID.PB";
 
@@ -60,10 +60,10 @@ export const getIndicatorPopulation = createSelector(
     if (isEmpty(indicators)) return null;
     const filterByInd = filter(indicators.values, function (data) {
       return (
-        data.indicator_code === "wp_pop_total" ||
-        data.indicator_code === "wp_pop_growth" ||
-        data.indicator_code === "wp_pop_density" ||
-        data.indicator_code === "wp_pop_sex_ratio"
+        data.indicator_code === "province_pop_total" ||
+        data.indicator_code === "province_pop_growth" ||
+        data.indicator_code === "province_pop_density" ||
+        data.indicator_code === "province_pop_sex_ratio"
       );
     });
 
@@ -75,7 +75,7 @@ const getIndicatorDistribution = createSelector(_getIndicator, (indicators) => {
   if (isEmpty(indicators)) return null;
 
   const filterByInd = filter(indicators.values, function (data) {
-    return data.indicator_code === "wp_pop_age_group";
+    return data.indicator_code === "province_pop_age_group";
   });
 
   return filterByInd;
@@ -168,22 +168,22 @@ const getCardData = createSelector(
 
 const getPopTotal = createSelector(getCardData, (data) => {
   if (!data) return null;
-  return filter(data, ["ind_code", "wp_pop_total"])[0].value;
+  return filter(data, ["ind_code", "province_pop_total"])[0].value;
 });
 
 const getPopGrowth = createSelector(getCardData, (data) => {
   if (!data) return null;
-  return filter(data, ["ind_code", "wp_pop_growth"])[0].value;
+  return filter(data, ["ind_code", "province_pop_growth"])[0].value;
 });
 
 const getPopDensity = createSelector(getCardData, (data) => {
   if (!data) return null;
-  return filter(data, ["ind_code", "wp_pop_density"])[0].value;
+  return filter(data, ["ind_code", "province_pop_density"])[0].value;
 });
 
 const getPopSexRatio = createSelector(getCardData, (data) => {
   if (!data) return null;
-  return filter(data, ["ind_code", "wp_pop_sex_ratio"])[0].value;
+  return filter(data, ["ind_code", "province_pop_sex_ratio"])[0].value;
 });
 
 const getChartData = createSelector(

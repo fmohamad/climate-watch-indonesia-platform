@@ -76,30 +76,30 @@ platforms:
         importer: ImportDataTranslations
         datasets:
           - translations
-      - name: west_papua_locations
-        menu: West Papua Platform
-        importer: WestPapua::ImportLocations
+      - name: province_locations
+        menu: Province Platform
+        importer: Province::ImportLocations
         datasets:
-          - wp_locations
-          - wp_locations_id
-      - name: west_papua_locations_members
-        menu: West Papua Platform
-        importer: WestPapua::ImportLocationMembers
+          - province_locations
+          - province_locations_id
+      - name: province_locations_members
+        menu: Province Platform
+        importer: Province::ImportLocationMembers
         datasets:
-          - wp_locations_groupings
-      - name: west_papua_indicators
-        menu: West Papua Platform
-        importer: WestPapua::ImportIndicators
+          - province_locations_groupings
+      - name: province_indicators
+        menu: Province Platform
+        importer: Province::ImportIndicators
         datasets:
-          - wp_indicators
-          - wp_indicators_id
-          - wp_population
-          - wp_economic
-          - wp_social
-      - name: west_papua_policies
-        menu: West Papua Platform
-        importer: WestPapua::ImportPolicies
+          - province_indicators
+          - province_indicators_id
+          - province_population
+          - province_economic
+          - province_social
+      - name: province_policies
+        menu: Province Platform
+        importer: Province::ImportPolicies
         datasets:
-          - wp_policies
-          - wp_policies_id
-          - wp_policies_data
+          - province_policies
+          - province_policies_id
+          - province_policies_data

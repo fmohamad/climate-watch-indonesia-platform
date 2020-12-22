@@ -206,7 +206,7 @@ class RegionPopulation extends PureComponent {
     const { isOpen } = this.state
     const sources = ['PBdA2019a', 'PBdA2019b','PBdA2019c','PBdA2019d']
 
-    const section = 'wp_population'
+    const section = 'province_population'
     const downloadURI = `indicators.zip?section=${section}`
     const shareableLink = `${window.location.href}`
     return (
